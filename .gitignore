@@ -1,3 +1,5 @@
 venv/
 __pycache__/
-.streamlit/secrets.toml
+.env
+node_modules/
+printf "venv/\n__pycache__/\n.env\nnode_modules/\n" > .gitignore

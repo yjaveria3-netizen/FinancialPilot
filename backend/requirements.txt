@@ -1,6 +1,8 @@
-streamlit
+fastapi
+uvicorn
+python-dotenv
+python-multipart
 pandas
-plotly
 numpy
 statsmodels
 scikit-learn
