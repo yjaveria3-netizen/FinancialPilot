@@ -77,6 +77,7 @@ def run_monte_carlo_simulation(params: dict | None = None) -> dict:
     hiring_count = int(params.get("hiring_count", 0))
     hiring_monthly_cost = float(params.get("hiring_monthly_cost", 4500.0))
     procurement_cost_pct = float(params.get("procurement_cost_pct", 0.0))
+    receivables_delay_days = int(params.get("receivables_delay_days", 0))
     days = max(7, min(int(params.get("days", 30)), 90))
     n_sims = max(100, min(int(params.get("simulations", 500)), 1000))
 
@@ -110,6 +111,14 @@ def run_monte_carlo_simulation(params: dict | None = None) -> dict:
 
     # Daily simulated cash flows
     sim_income = np.maximum(0.0, shifted_avg_income * noise_inc)
+
+    # Receivables collection shift (delay slows inflows early, acceleration boosts early)
+    if receivables_delay_days != 0:
+        delay_factor = max(-0.5, min(float(receivables_delay_days) * 0.025, 0.5))
+        day_indices = np.linspace(1.0, 0.2, days)
+        delay_modifiers = 1.0 - (delay_factor * day_indices)
+        sim_income = np.maximum(0.0, sim_income * delay_modifiers)
+
     sim_expenses = np.maximum(0.0, shifted_avg_expenses * noise_exp)
     daily_net = sim_income - sim_expenses
 
@@ -181,6 +190,7 @@ def run_monte_carlo_simulation(params: dict | None = None) -> dict:
         "risk_color": risk_color,
         "horizon_days": days,
         "simulations_count": n_sims,
+        "receivables_delay_days": receivables_delay_days,
     }
 
     normalized_params = {
@@ -188,6 +198,7 @@ def run_monte_carlo_simulation(params: dict | None = None) -> dict:
         "hiring_count": hiring_count,
         "hiring_monthly_cost": hiring_monthly_cost,
         "procurement_cost_pct": procurement_cost_pct,
+        "receivables_delay_days": receivables_delay_days,
         "days": days,
         "simulations": n_sims,
     }

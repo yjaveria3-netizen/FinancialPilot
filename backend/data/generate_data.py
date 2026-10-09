@@ -265,12 +265,31 @@ def generate_products():
     print(f"Generated products.csv ({len(df)} rows)")
 
 
-if __name__ == "__main__":
-    print("Generating FinPilot synthetic datasets...")
+def regenerate_all_data():
+    """Programmatic helper to re-run all synthetic generators."""
     generate_transactions()
     generate_invoices()
     generate_customers()
     generate_suppliers()
     generate_inventory()
     generate_products()
+    return {
+        "status": "ok",
+        "message": "Demo datasets successfully regenerated and synced.",
+        "timestamp": datetime.now().isoformat(),
+        "files_updated": [
+            "transactions.csv",
+            "invoices.csv",
+            "customers.csv",
+            "suppliers.csv",
+            "inventory.csv",
+            "products.csv"
+        ]
+    }
+
+
+if __name__ == "__main__":
+    print("Generating FinPilot synthetic datasets...")
+    res = regenerate_all_data()
     print("Done. All CSVs written to:", DATA_DIR)
+

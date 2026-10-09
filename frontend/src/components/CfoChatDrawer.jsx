@@ -18,6 +18,28 @@ export default function CfoChatDrawer() {
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
+  // Listen for Cash Crunch Crisis Event to auto-open drawer with survival protocol
+  useEffect(() => {
+    const handleCrisis = (e) => {
+      setIsOpen(true);
+      const advice =
+        e.detail?.advice ||
+        'CRISIS MODE DETECTED: An unexpected $59,000 cash drain and duplicate invoice flags were injected into the ledger. Projected runway is compromised. Recommendation: Halt non-critical disbursements, expedite receivables, and inspect invoice anomalies.';
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          isEmergency: true,
+          text: `🚨 URGENT CFO EMERGENCY ADVISORY:\n\n${advice}`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    };
+
+    window.addEventListener('finpilot:crisis', handleCrisis);
+    return () => window.removeEventListener('finpilot:crisis', handleCrisis);
+  }, []);
+
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -156,8 +178,10 @@ export default function CfoChatDrawer() {
                   }`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed ${
-                      m.role === 'user'
+                    className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed whitespace-pre-line ${
+                      m.isEmergency
+                        ? 'bg-rose-950/70 border border-rose-500/60 text-rose-100 rounded-bl-none shadow-xl font-medium'
+                        : m.role === 'user'
                         ? 'bg-primary text-white rounded-br-none shadow-lg'
                         : 'bg-dark/70 border border-border text-text rounded-bl-none shadow-md'
                     }`}

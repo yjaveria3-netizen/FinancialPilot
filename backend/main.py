@@ -19,6 +19,10 @@ from backend.modules.a_modules.anomaly_guard import detect_anomalies
 from backend.modules.a_modules.tax_assistant import calculate_tax_estimates
 from backend.modules.a_modules.scenario_planner import run_monte_carlo_simulation
 from backend.modules.a_modules.accountant_portal import get_verified_financials
+from backend.data.generate_data import regenerate_all_data
+from backend.modules.agent_banner import evaluate_proactive_risk
+from backend.modules.lender_dossier import compile_lender_dossier
+from backend.modules.demo_trigger import trigger_crisis_mode
 
 app = FastAPI(
     title="FinPilot API",
@@ -42,6 +46,63 @@ app.add_middleware(
 def health_check():
     """Quick liveness check for the API."""
     return {"status": "ok", "service": "FinPilot API", "version": "1.0.0"}
+
+
+@app.post("/api/reset-data", tags=["System"])
+def reset_demo_data():
+    """
+    Re-runs the synthetic data generator script to regenerate all CSV datasets
+    and returns a success confirmation.
+    """
+    try:
+        result = regenerate_all_data()
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Data regeneration error: {str(e)}")
+
+
+# ── Autonomous Agent: Proactive Risk & Action Engine ──────────────────────────
+@app.get("/api/risk-alert", tags=["Autonomous Agent"])
+def get_proactive_risk_alert():
+    """
+    Evaluates current cash runway, overdue invoices, and high-severity ledger anomalies.
+    Returns prioritized alert with automated Gemini action mitigation draft.
+    """
+    try:
+        result = evaluate_proactive_risk()
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Risk alert evaluation error: {str(e)}")
+
+
+@app.get("/api/export-dossier", tags=["Autonomous Agent"])
+def export_lender_dossier():
+    """
+    Compiles Cash Flow, Credit Readiness, Tax Summary, and Anomaly Audit Log
+    into a certified lender-ready compliance dossier with SHA-256 seal.
+    """
+    try:
+        result = compile_lender_dossier()
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Dossier compilation error: {str(e)}")
+
+
+@app.post("/api/trigger-crisis-mode", tags=["Autonomous Agent"])
+def trigger_crisis_simulation():
+    """
+    Zero-friction demo switch: injects high-severity mock anomalies and cash crunch
+    into the active datasets for live judging demonstration.
+    """
+    try:
+        result = trigger_crisis_mode()
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Crisis simulation error: {str(e)}")
 
 
 # ── Member A: Cash Flow Forecaster ────────────────────────────────────────────

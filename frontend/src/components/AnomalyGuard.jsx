@@ -28,6 +28,15 @@ export default function AnomalyGuard() {
     fetchData();
   }, [fetchData]);
 
+  // Global sync listener
+  useEffect(() => {
+    const handleRefresh = () => {
+      fetchData();
+    };
+    window.addEventListener('finpilot:refresh', handleRefresh);
+    return () => window.removeEventListener('finpilot:refresh', handleRefresh);
+  }, [fetchData]);
+
   // Quick filter buttons matching template design
   const filterOptions = [
     { key: 'ALL', label: 'All Anomalies' },
@@ -180,9 +189,13 @@ export default function AnomalyGuard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Total Flagged</div>
-          <div className="text-3xl font-bold font-secondary text-white">
-            {stats.totalCount}
-          </div>
+          {loading ? (
+            <div className="h-9 w-16 bg-white/10 rounded-lg animate-pulse my-1" />
+          ) : (
+            <div className="text-3xl font-bold font-secondary text-white">
+              {stats.totalCount}
+            </div>
+          )}
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-primary"></span>
             Across 3 audit algorithms
@@ -191,9 +204,13 @@ export default function AnomalyGuard() {
 
         <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">High Severity Risks</div>
-          <div className="text-3xl font-bold font-secondary text-rose-400 font-mono">
-            {stats.highCount}
-          </div>
+          {loading ? (
+            <div className="h-9 w-16 bg-white/10 rounded-lg animate-pulse my-1" />
+          ) : (
+            <div className="text-3xl font-bold font-secondary text-rose-400 font-mono">
+              {stats.highCount}
+            </div>
+          )}
           <div className="text-xs text-rose-400/80 mt-2 flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-rose-400 animate-pulse"></span>
             Requires immediate CPA review
@@ -202,9 +219,13 @@ export default function AnomalyGuard() {
 
         <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Potential Exposure</div>
-          <div className="text-3xl font-bold font-secondary text-white font-mono">
-            ${stats.totalExposure.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </div>
+          {loading ? (
+            <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
+          ) : (
+            <div className="text-3xl font-bold font-secondary text-white font-mono">
+              ${stats.totalExposure.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+          )}
           <div className="text-xs text-text-dark mt-2">
             Cumulative value under review
           </div>
@@ -287,9 +308,50 @@ export default function AnomalyGuard() {
         </div>
 
         {loading ? (
-          <div className="py-24 flex flex-col items-center justify-center gap-3">
-            <div className="size-10 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
-            <p className="text-xs text-text-dark">Analyzing invoices, cash transactions, and supply catalog...</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-border text-text-dark uppercase tracking-wider text-[11px] bg-white/[0.02]">
+                  <th className="py-4 px-6 font-semibold">Anomaly ID</th>
+                  <th className="py-4 px-6 font-semibold">Category</th>
+                  <th className="py-4 px-6 font-semibold">Severity</th>
+                  <th className="py-4 px-6 font-semibold">Item Reference</th>
+                  <th className="py-4 px-6 font-semibold">Flagged Amount</th>
+                  <th className="py-4 px-6 font-semibold min-w-[280px]">Why Flagged (Reason)</th>
+                  <th className="py-4 px-6 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-20 bg-white/10 rounded mb-1"></div>
+                      <div className="h-3 w-16 bg-white/5 rounded"></div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="h-6 w-24 bg-white/10 rounded-lg"></div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="h-6 w-28 bg-white/10 rounded-full"></div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-32 bg-white/10 rounded mb-1"></div>
+                      <div className="h-3 w-20 bg-white/5 rounded"></div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="h-5 w-20 bg-white/10 rounded"></div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="h-4 w-64 bg-white/10 rounded mb-1.5"></div>
+                      <div className="h-3 w-44 bg-white/5 rounded"></div>
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <div className="h-7 w-24 bg-white/10 rounded-xl ml-auto"></div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : filteredAnomalies.length === 0 ? (
           <div className="py-20 text-center space-y-3">

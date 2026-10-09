@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAccountantPortal } from '../api/client';
+import { getAccountantPortal, getLenderDossier } from '../api/client';
 import { IconAccountantPortal } from './Icons';
 
 export default function AccountantPortal() {
@@ -10,6 +10,8 @@ export default function AccountantPortal() {
   const [error, setError] = useState(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [dossierLoading, setDossierLoading] = useState(false);
+  const [dossierSuccess, setDossierSuccess] = useState(false);
 
   const fetchPortalData = useCallback(async (role) => {
     setLoading(true);
@@ -26,6 +28,15 @@ export default function AccountantPortal() {
 
   useEffect(() => {
     fetchPortalData(activeRole);
+  }, [activeRole, fetchPortalData]);
+
+  // Global sync listener
+  useEffect(() => {
+    const handleRefresh = () => {
+      fetchPortalData(activeRole);
+    };
+    window.addEventListener('finpilot:refresh', handleRefresh);
+    return () => window.removeEventListener('finpilot:refresh', handleRefresh);
   }, [activeRole, fetchPortalData]);
 
   const handleRoleChange = (newRole) => {
@@ -166,6 +177,31 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
     setTimeout(() => setDownloadSuccess(false), 3500);
   };
 
+  // One-Click Lender-Ready Compliance Dossier Export
+  const handleExportLenderDossier = async () => {
+    setDossierLoading(true);
+    try {
+      const res = await getLenderDossier();
+      const content = res.formatted_text_report || JSON.stringify(res, null, 2);
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `FinPilot_Lender_Ready_Compliance_Dossier_2024.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      setDossierSuccess(true);
+      setTimeout(() => setDossierSuccess(false), 4500);
+    } catch (err) {
+      console.error('Failed to export lender dossier:', err);
+    } finally {
+      setDossierLoading(false);
+    }
+  };
+
   const bs = data?.verified_statements?.balance_sheet;
   const is = data?.verified_statements?.income_statement;
   const cf = data?.verified_statements?.cash_flow;
@@ -217,6 +253,31 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
             </svg>
             Export Statement Package
           </button>
+
+          <button
+            type="button"
+            onClick={handleExportLenderDossier}
+            disabled={dossierLoading}
+            className="px-5 py-2.5 rounded-2xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 transition-all hover:scale-102 disabled:opacity-50"
+            title="Compile Cash, Credit, Tax, and Anomaly audit into a single certified compliance dossier"
+          >
+            <svg
+              className={`size-3.5 ${dossierLoading ? 'animate-spin' : ''}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            <span>{dossierLoading ? 'Compiling...' : '⚡ Generate Lender-Ready Dossier'}</span>
+          </button>
         </div>
       </div>
 
@@ -225,6 +286,14 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
         <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-3">
           <span className="text-base font-bold">✓</span>
           <span>Verified financial statements exported successfully.</span>
+        </div>
+      )}
+
+      {/* Dossier Download Alert */}
+      {dossierSuccess && (
+        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-3 animate-fadeIn">
+          <span className="text-base font-bold">✓</span>
+          <span>Comprehensive Lender-Ready Compliance Dossier compiled with SHA-256 seal and downloaded successfully!</span>
         </div>
       )}
 
@@ -334,9 +403,27 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
         </div>
 
         {loading ? (
-          <div className="py-24 flex flex-col items-center justify-center gap-3">
-            <div className="size-10 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
-            <p className="text-xs text-text-dark">Compiling verified statements...</p>
+          <div className="p-6 lg:p-8 space-y-6 animate-pulse">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4">
+                <div className="h-5 w-32 bg-white/10 rounded"></div>
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex justify-between py-1.5">
+                    <div className="h-4 w-40 bg-white/5 rounded"></div>
+                    <div className="h-4 w-20 bg-white/10 rounded"></div>
+                  </div>
+                ))}
+              </div>
+              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4">
+                <div className="h-5 w-36 bg-white/10 rounded"></div>
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex justify-between py-1.5">
+                    <div className="h-4 w-40 bg-white/5 rounded"></div>
+                    <div className="h-4 w-20 bg-white/10 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         ) : (
           <div className="p-6 lg:p-8">
