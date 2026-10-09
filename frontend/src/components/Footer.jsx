@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import ParticleCanvas from './ParticleCanvas';
 
 export default function Footer() {
   return (
     <footer className="section pb-0 relative overflow-hidden border-t border-border/40 mt-20">
+      {/* ── Moving Celestial Spore Dots in Footer ── */}
+      <ParticleCanvas count={65} />
+
       <div className="container mx-auto px-4 lg:px-8 pb-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Column 1 - Logo & Contact */}

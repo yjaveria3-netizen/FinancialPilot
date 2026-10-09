@@ -59,3 +59,16 @@ export const getAccountantPortal = (role = 'Auditor', token = null) =>
 
 export const healthCheck = () =>
   apiClient.get('/api/health').then((r) => r.data);
+
+export const resetDemoData = () =>
+  apiClient.post('/api/reset-data').then((r) => r.data);
+
+export const getRiskAlert = () =>
+  apiClient.get('/api/risk-alert').then((r) => r.data);
+
+export const getLenderDossier = () =>
+  apiClient.get('/api/export-dossier').then((r) => r.data);
+
+export const triggerCrisisMode = () =>
+  apiClient.post('/api/trigger-crisis-mode').then((r) => r.data);
+

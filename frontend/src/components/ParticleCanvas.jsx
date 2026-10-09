@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function ParticleCanvas() {
+export default function ParticleCanvas({ className = '', count = null }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -9,18 +9,11 @@ export default function ParticleCanvas() {
 
     const ctx = canvas.getContext('2d');
     let animationFrameId;
-
-    const setSize = () => {
-      const parent = canvas.parentElement;
-      canvas.width = parent ? parent.offsetWidth : window.innerWidth;
-      canvas.height = parent ? parent.offsetHeight : 800;
-    };
-    setSize();
-    window.addEventListener('resize', setSize);
+    let spores = [];
 
     const isMobile = window.innerWidth < 768;
-    // Tastefully balanced particle count (95 desktop, 45 mobile)
-    const particleCount = isMobile ? 45 : 95;
+    const defaultCount = isMobile ? 45 : 95;
+    const particleCount = count ?? defaultCount;
 
     class Spore {
       constructor() {
@@ -28,9 +21,11 @@ export default function ParticleCanvas() {
       }
 
       reset(initial = false) {
-        this.x = Math.random() * canvas.width;
-        this.y = initial ? Math.random() * canvas.height : canvas.height + Math.random() * 10;
-        // Subtle, crisp dot size (0.6px to 1.5px — very slightly larger)
+        this.x = Math.random() * (canvas.width || window.innerWidth);
+        this.y = initial
+          ? Math.random() * (canvas.height || 800)
+          : (canvas.height || 800) + Math.random() * 10;
+        // Subtle, crisp dot size (0.6px to 1.5px)
         this.size = Math.random() * 0.9 + 0.6;
         // Slow, graceful upward drift (0.05px to 0.16px per frame)
         this.speedY = -(Math.random() * 0.11 + 0.05);
@@ -56,7 +51,40 @@ export default function ParticleCanvas() {
       }
     }
 
-    const spores = Array.from({ length: particleCount }, () => new Spore());
+    const setSize = () => {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const newWidth = parent.offsetWidth || window.innerWidth;
+      const newHeight = parent.offsetHeight || 800;
+
+      if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        const oldHeight = canvas.height;
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // If height significantly increased, spread some spores across newly revealed area
+        if (oldHeight && newHeight > oldHeight + 100 && spores.length) {
+          spores.forEach((s) => {
+            if (Math.random() > 0.5) {
+              s.y = oldHeight + Math.random() * (newHeight - oldHeight);
+            }
+          });
+        }
+      }
+    };
+
+    setSize();
+    window.addEventListener('resize', setSize);
+
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined' && canvas.parentElement) {
+      resizeObserver = new ResizeObserver(() => {
+        setSize();
+      });
+      resizeObserver.observe(canvas.parentElement);
+    }
+
+    spores = Array.from({ length: particleCount }, () => new Spore());
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -72,13 +100,16 @@ export default function ParticleCanvas() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', setSize);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
     };
-  }, []);
+  }, [count]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0 block"
+      className={`absolute inset-0 w-full h-full pointer-events-none z-0 block ${className}`}
       style={{
         pointerEvents: 'none',
       }}

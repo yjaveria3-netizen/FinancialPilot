@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import InvoiceScannerModal from './InvoiceScannerModal';
+import { resetDemoData, triggerCrisisMode, getLenderDossier } from '../api/client';
 import {
   IconHome,
   IconCashFlow,
@@ -21,6 +22,77 @@ import {
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncToast, setSyncToast] = useState(false);
+  const [isTriggeringCrisis, setIsTriggeringCrisis] = useState(false);
+  const [crisisToast, setCrisisToast] = useState(false);
+  const [isExportingDossier, setIsExportingDossier] = useState(false);
+
+  const handleResetData = async () => {
+    setIsSyncing(true);
+    try {
+      await resetDemoData();
+      window.dispatchEvent(
+        new CustomEvent('finpilot:refresh', { detail: { timestamp: Date.now() } })
+      );
+      setSyncToast(true);
+      setTimeout(() => setSyncToast(false), 3500);
+    } catch (err) {
+      console.error('Failed to reset demo data:', err);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleSimulateCrisis = async () => {
+    setIsTriggeringCrisis(true);
+    try {
+      const res = await triggerCrisisMode();
+      // Notify all dashboard modules to re-fetch
+      window.dispatchEvent(
+        new CustomEvent('finpilot:refresh', { detail: { timestamp: Date.now(), crisis: true } })
+      );
+      // Dispatch crisis-specific event for CFO Chat Drawer and Risk Banner
+      window.dispatchEvent(
+        new CustomEvent('finpilot:crisis', {
+          detail: {
+            timestamp: Date.now(),
+            advice: res.emergency_advice,
+            message: res.message,
+            injectedOutflow: res.injected_outflow,
+          },
+        })
+      );
+      setCrisisToast(true);
+      setTimeout(() => setCrisisToast(false), 4500);
+    } catch (err) {
+      console.error('Failed to simulate cash crisis:', err);
+    } finally {
+      setIsTriggeringCrisis(false);
+    }
+  };
+
+  const handleExportDossier = async () => {
+    setIsExportingDossier(true);
+    try {
+      const dossier = await getLenderDossier();
+      const dataStr =
+        'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(dossier, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute(
+        'download',
+        `FinPilot-Lender-Dossier-${new Date().toISOString().split('T')[0]}.json`
+      );
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    } catch (err) {
+      console.error('Failed to export lender dossier:', err);
+    } finally {
+      setIsExportingDossier(false);
+    }
+  };
 
   // Close popup menu on Escape key
   useEffect(() => {
@@ -75,7 +147,7 @@ export default function Header() {
           to: '/scenario-planner',
           Icon: IconScenarioPlanner,
           desc: 'Monte Carlo what-if cash flow simulation models',
-          live: false,
+          live: true,
         },
       ],
     },
@@ -88,21 +160,21 @@ export default function Header() {
           to: '/anomaly-guard',
           Icon: IconAnomalyGuard,
           desc: 'Detect suspicious transactions & duplicate invoices',
-          live: false,
+          live: true,
         },
         {
           name: 'Tax & Compliance Assistant',
           to: '/tax-assistant',
           Icon: IconTaxAssistant,
           desc: 'Real-time tax liability estimates & deduction strategies',
-          live: false,
+          live: true,
         },
         {
           name: 'Accountant & Lender Portal',
           to: '/accountant-portal',
           Icon: IconAccountantPortal,
           desc: 'Export standardized GAAP P&L and Balance Sheet files',
-          live: false,
+          live: true,
         },
       ],
     },
@@ -154,7 +226,46 @@ export default function Header() {
             </Link>
 
             {/* Right: Invoice Scanner, Launch Hub & Animated 3-Line Menu Button */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
+              {/* Zero-Friction "Simulate Cash Crunch Crisis" Demo Switch */}
+              <button
+                type="button"
+                onClick={handleSimulateCrisis}
+                disabled={isTriggeringCrisis || isSyncing}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-white border border-rose-500/40 hover:border-rose-400 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shadow-sm shadow-rose-950/40"
+                title="⚡ Inject sudden cash crunch & high-severity duplicate invoice anomalies"
+              >
+                <span className="text-rose-400 font-bold animate-pulse">⚡</span>
+                <span className="hidden sm:inline">
+                  {isTriggeringCrisis ? 'Injecting...' : 'Crisis Mode'}
+                </span>
+              </button>
+
+              {/* Reset Demo Data Trigger */}
+              <button
+                type="button"
+                onClick={handleResetData}
+                disabled={isSyncing}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-emerald-500/50 text-xs font-medium transition-all cursor-pointer disabled:opacity-50"
+                title="Reset synthetic demo datasets & refresh active views"
+              >
+                <svg
+                  className={`size-3.5 text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                  <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                  <path d="M16 21h5v-5" />
+                </svg>
+                <span className="hidden sm:inline">{isSyncing ? 'Syncing...' : 'Reset'}</span>
+              </button>
+
               {/* Header Action: Invoice & Receipt Scanner Button */}
               <button
                 type="button"
@@ -163,7 +274,7 @@ export default function Header() {
                 title="Open Invoice & Receipt Scanner"
               >
                 <IconScanInvoice className="size-4 text-primary" />
-                <span className="hidden sm:inline">Scan Invoice</span>
+                <span className="hidden sm:inline">Scan</span>
               </button>
 
               {/* Direct Hub Link */}
@@ -211,6 +322,22 @@ export default function Header() {
           </nav>
         </div>
       </header>
+
+      {/* ── Demo Data Reset Toast Notification ── */}
+      {syncToast && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-dark/95 border border-emerald-500/40 text-emerald-300 text-xs font-medium shadow-2xl backdrop-blur-xl flex items-center gap-2.5 animate-fadeIn">
+          <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Demo datasets regenerated successfully. All active views synced!</span>
+        </div>
+      )}
+
+      {/* ── Cash Crunch Crisis Toast Notification ── */}
+      {crisisToast && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-dark/95 border border-rose-500/60 text-rose-300 text-xs font-medium shadow-2xl backdrop-blur-xl flex items-center gap-2.5 animate-fadeIn">
+          <span className="size-2 rounded-full bg-rose-500 animate-ping" />
+          <span>⚡ Cash Crunch Crisis Simulated! $59k outflow & anomalies injected. AI CFO alert active.</span>
+        </div>
+      )}
 
       {/* ── Invoice & Receipt Scanner Modal ── */}
       <InvoiceScannerModal isOpen={scannerOpen} onClose={() => setScannerOpen(false)} />
@@ -325,6 +452,26 @@ export default function Header() {
                 >
                   FastAPI Backend Docs
                 </a>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={handleExportDossier}
+                  disabled={isExportingDossier}
+                  className="hover:text-primary text-primary/90 transition-colors cursor-pointer flex items-center gap-1 font-medium disabled:opacity-50"
+                  title="Export Bank & Lender Compliance Dossier (.JSON)"
+                >
+                  <span className="text-primary font-bold">📜</span>
+                  <span>{isExportingDossier ? 'Compiling Dossier...' : 'Lender Dossier'}</span>
+                </button>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={handleResetData}
+                  disabled={isSyncing}
+                  className="hover:text-emerald-400 text-emerald-400/80 transition-colors cursor-pointer flex items-center gap-1 font-medium"
+                >
+                  <span className={isSyncing ? 'animate-spin inline-block' : ''}>↻</span> Reset Demo Data
+                </button>
               </div>
 
               <Link

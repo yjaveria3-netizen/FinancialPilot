@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -82,11 +82,14 @@ export default function ScenarioPlanner() {
   const [salesChange, setSalesChange] = useState(0);
   const [hiringCount, setHiringCount] = useState(0);
   const [procurementCost, setProcurementCost] = useState(0);
+  const [receivablesDelay, setReceivablesDelay] = useState(0);
   const [horizonDays, setHorizonDays] = useState(30);
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const debounceRef = useRef(null);
+  const initialLoadRef = useRef(false);
 
   const runSimulation = useCallback(
     async (overrideParams = null) => {
@@ -97,6 +100,7 @@ export default function ScenarioPlanner() {
           sales_change_pct: salesChange,
           hiring_count: hiringCount,
           procurement_cost_pct: procurementCost,
+          receivables_delay_days: receivablesDelay,
           days: horizonDays,
           simulations: 500,
         };
@@ -108,23 +112,47 @@ export default function ScenarioPlanner() {
         setLoading(false);
       }
     },
-    [salesChange, hiringCount, procurementCost, horizonDays]
+    [salesChange, hiringCount, procurementCost, receivablesDelay, horizonDays]
   );
 
-  // Initial load
+  // Live auto-run on slider movement with fast debounce
   useEffect(() => {
-    runSimulation();
+    if (!initialLoadRef.current) {
+      initialLoadRef.current = true;
+      runSimulation();
+      return;
+    }
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      runSimulation();
+    }, 130);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [salesChange, hiringCount, procurementCost, receivablesDelay, horizonDays, runSimulation]);
+
+  // Global sync listener
+  useEffect(() => {
+    const handleRefresh = () => {
+      runSimulation();
+    };
+    window.addEventListener('finpilot:refresh', handleRefresh);
+    return () => window.removeEventListener('finpilot:refresh', handleRefresh);
   }, [runSimulation]);
 
   const handleReset = () => {
     setSalesChange(0);
     setHiringCount(0);
     setProcurementCost(0);
+    setReceivablesDelay(0);
     setHorizonDays(30);
     runSimulation({
       sales_change_pct: 0,
       hiring_count: 0,
       procurement_cost_pct: 0,
+      receivables_delay_days: 0,
       days: 30,
       simulations: 500,
     });
@@ -213,27 +241,35 @@ export default function ScenarioPlanner() {
             <p className="text-xs text-text-dark">Adjust variables to test balance resilience against downside risks</p>
           </div>
 
-          {/* Horizon Pills */}
-          <div className="flex gap-2 self-start sm:self-auto">
-            {[30, 60, 90].map((d) => (
-              <button
-                key={d}
-                type="button"
-                onClick={() => setHorizonDays(d)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  horizonDays === d
-                    ? 'btn-primary text-white'
-                    : 'bg-white/5 border border-border text-text-dark hover:text-white'
-                }`}
-              >
-                {d} Days
-              </button>
-            ))}
+          {/* Horizon Pills & Live Status */}
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            {loading && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-[11px] text-primary font-semibold animate-pulse">
+                <span className="size-1.5 rounded-full bg-primary animate-ping" />
+                Live Recalculating 500 Paths...
+              </span>
+            )}
+            <div className="flex gap-2">
+              {[30, 60, 90].map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setHorizonDays(d)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                    horizonDays === d
+                      ? 'btn-primary text-white'
+                      : 'bg-white/5 border border-border text-text-dark hover:text-white'
+                  }`}
+                >
+                  {d} Days
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* 3 Interactive Sliders */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* 4 Interactive Live-Linked Sliders */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* 1. Sales Change Slider */}
           <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3">
             <div className="flex justify-between items-center text-xs">
@@ -299,14 +335,14 @@ export default function ScenarioPlanner() {
               <span>+15 Staff</span>
             </div>
             <div className="text-[11px] text-text-dark pt-1">
-              Est. Payroll Drag: <strong className="text-zinc-300 font-mono">+${(hiringCount * 4500).toLocaleString()}/mo</strong>
+              Est. Payroll: <strong className="text-zinc-300 font-mono">+${(hiringCount * 4500).toLocaleString()}/mo</strong>
             </div>
           </div>
 
           {/* 3. Procurement Cost Slider */}
           <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-semibold text-white">Procurement / Raw Materials</span>
+              <span className="font-semibold text-white">Procurement Costs</span>
               <span
                 className={`font-mono font-bold text-sm ${
                   procurementCost > 0 ? 'text-rose-400' : procurementCost < 0 ? 'text-emerald-400' : 'text-zinc-300'
@@ -340,6 +376,58 @@ export default function ScenarioPlanner() {
                   }`}
                 >
                   {val > 0 ? `+${val}%` : `${val}%`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 4. Receivables Collection Shift Slider */}
+          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3">
+            <div className="flex justify-between items-center text-xs">
+              <span className="font-semibold text-white">Collections Shift</span>
+              <span
+                className={`font-mono font-bold text-sm ${
+                  receivablesDelay > 0
+                    ? 'text-rose-400'
+                    : receivablesDelay < 0
+                    ? 'text-emerald-400'
+                    : 'text-zinc-300'
+                }`}
+              >
+                {receivablesDelay > 0
+                  ? `+${receivablesDelay}d Delay`
+                  : receivablesDelay < 0
+                  ? `${receivablesDelay}d Fast`
+                  : '0d Normal'}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="-15"
+              max="30"
+              step="5"
+              value={receivablesDelay}
+              onChange={(e) => setReceivablesDelay(Number(e.target.value))}
+              className="w-full accent-primary cursor-pointer"
+            />
+            <div className="flex justify-between text-[10px] text-text-dark">
+              <span>-15d Fast</span>
+              <span>0d Baseline</span>
+              <span>+30d Delinquent</span>
+            </div>
+            <div className="flex gap-1.5 pt-1">
+              {[-10, 0, 15, 30].map((val) => (
+                <button
+                  key={val}
+                  type="button"
+                  onClick={() => setReceivablesDelay(val)}
+                  className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold cursor-pointer ${
+                    receivablesDelay === val
+                      ? 'bg-primary/20 text-primary border border-primary/40'
+                      : 'bg-white/5 text-zinc-400'
+                  }`}
+                >
+                  {val > 0 ? `+${val}d` : `${val}d`}
                 </button>
               ))}
             </div>

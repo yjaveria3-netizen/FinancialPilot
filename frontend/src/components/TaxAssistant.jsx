@@ -51,6 +51,15 @@ export default function TaxAssistant() {
     fetchData();
   }, [fetchData]);
 
+  // Global sync listener
+  useEffect(() => {
+    const handleRefresh = () => {
+      fetchData();
+    };
+    window.addEventListener('finpilot:refresh', handleRefresh);
+    return () => window.removeEventListener('finpilot:refresh', handleRefresh);
+  }, [fetchData]);
+
   // Deadlines filtering
   const filteredDeadlines = useMemo(() => {
     if (!data?.filing_deadlines) return [];
@@ -240,9 +249,50 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
       )}
 
       {loading ? (
-        <div className="py-24 flex flex-col items-center justify-center gap-3">
-          <div className="size-10 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
-          <p className="text-xs text-text-dark">Compiling ledger revenues, deductibles, and Gemini AI accountant advisory...</p>
+        <div className="space-y-8 animate-pulse">
+          {/* Top KPI Skeleton Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="rounded-3xl bg-light border border-border p-6 space-y-3">
+                <div className="h-3 w-28 bg-white/10 rounded"></div>
+                <div className="h-9 w-36 bg-white/20 rounded"></div>
+                <div className="h-3 w-44 bg-white/10 rounded"></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Section 1 & 2 Skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-7 rounded-4xl bg-light border border-border p-8 space-y-6">
+              <div className="h-6 w-56 bg-white/15 rounded"></div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="h-24 bg-white/5 rounded-2xl"></div>
+                <div className="h-24 bg-white/5 rounded-2xl"></div>
+              </div>
+              <div className="space-y-3 pt-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="h-10 bg-white/5 rounded-xl"></div>
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-5 rounded-4xl bg-light border border-border p-8 space-y-4">
+              <div className="h-6 w-48 bg-white/15 rounded"></div>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-20 bg-white/5 rounded-2xl"></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 3 Skeleton: AI Memo */}
+          <div className="rounded-4xl bg-light border border-border p-8 space-y-4">
+            <div className="h-6 w-64 bg-white/15 rounded"></div>
+            <div className="h-20 bg-white/5 rounded-2xl"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="h-40 bg-white/5 rounded-2xl"></div>
+              <div className="h-40 bg-white/5 rounded-2xl"></div>
+              <div className="h-40 bg-white/5 rounded-2xl"></div>
+            </div>
+          </div>
         </div>
       ) : (
         <>
@@ -434,7 +484,18 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
 
               {/* Interactive Timeline List */}
               <div className="space-y-4 overflow-y-auto max-h-[460px] pr-1">
-                {filteredDeadlines.map((item, index) => {
+                {filteredDeadlines.length === 0 ? (
+                  <div className="py-12 text-center space-y-2">
+                    <div className="size-10 rounded-full bg-white/5 text-text-dark mx-auto flex items-center justify-center text-sm">
+                      ✓
+                    </div>
+                    <div className="text-xs font-semibold text-white">No filing deadlines in this category</div>
+                    <p className="text-[11px] text-text-dark max-w-xs mx-auto">
+                      All statutory deadlines for this category are compliant or not scheduled.
+                    </p>
+                  </div>
+                ) : (
+                  filteredDeadlines.map((item, index) => {
                   const isUrgent = item.days_remaining <= 30;
                   const isApproaching = item.days_remaining <= 60 && !isUrgent;
 
@@ -479,7 +540,8 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                       </div>
                     </div>
                   );
-                })}
+                })
+              )}
               </div>
             </div>
           </div>
