@@ -45,5 +45,11 @@ export const getCashForecast = (days = 30) =>
 export const getCreditScore = () =>
   apiClient.get('/api/credit-score').then((r) => r.data);
 
+export const getAnomalies = () =>
+  apiClient.get('/api/anomalies').then((r) => r.data);
+
+export const getTaxSummary = () =>
+  apiClient.get('/api/tax-summary').then((r) => r.data);
+
 export const healthCheck = () =>
   apiClient.get('/api/health').then((r) => r.data);

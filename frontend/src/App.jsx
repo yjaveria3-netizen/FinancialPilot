@@ -4,6 +4,8 @@ import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import CashFlowPage from './pages/CashFlowPage';
 import CreditScorePage from './pages/CreditScorePage';
+import AnomalyGuard from './components/AnomalyGuard';
+import TaxAssistant from './components/TaxAssistant';
 import ComingSoon from './pages/ComingSoon';
 import {
   IconAnomalyGuard,
@@ -34,28 +36,10 @@ export default function App() {
           <Route path="credit-score" element={<CreditScorePage />} />
 
           {/* 4. Anomaly & Fraud Guard */}
-          <Route
-            path="anomaly-guard"
-            element={
-              <ComingSoon
-                title="Anomaly & Fraud Guard"
-                icon={<IconAnomalyGuard className="size-10 text-primary" />}
-                assignee="Compliance & Risk"
-              />
-            }
-          />
+          <Route path="anomaly-guard" element={<AnomalyGuard />} />
 
           {/* 5. Tax & Compliance Assistant */}
-          <Route
-            path="tax-assistant"
-            element={
-              <ComingSoon
-                title="Tax & Compliance Assistant"
-                icon={<IconTaxAssistant className="size-10 text-primary" />}
-                assignee="Tax Intelligence"
-              />
-            }
-          />
+          <Route path="tax-assistant" element={<TaxAssistant />} />
 
           {/* 6. Scenario Planner */}
           <Route

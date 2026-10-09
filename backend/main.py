@@ -15,6 +15,8 @@ import traceback
 
 from backend.modules.a_modules.cash_forecast import forecast_cash
 from backend.modules.a_modules.credit_score  import calculate_credit_score
+from backend.modules.a_modules.anomaly_guard import detect_anomalies
+from backend.modules.a_modules.tax_assistant import calculate_tax_estimates
 
 app = FastAPI(
     title="FinPilot API",
@@ -81,6 +83,47 @@ def get_credit_score():
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Credit score error: {str(e)}")
+
+
+# ── Member A: Anomaly and Fraud Guard ────────────────────────────────────────
+@app.get("/api/anomalies", tags=["Member A — Risk & Compliance"])
+def get_anomalies():
+    """
+    Returns detected financial anomalies & fraud risks.
+    Analyzes duplicate invoices, unusual payment outflows (z > 2.5),
+    and supplier inventory unit cost spikes.
+    """
+    try:
+        result = detect_anomalies()
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Data file not found: {e}. Run /backend/data/generate_data.py first."
+        )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Anomaly detection error: {str(e)}")
+
+
+# ── Member A: Tax and Compliance Assistant ───────────────────────────────────
+@app.get("/api/tax-summary", tags=["Member A — Tax & Compliance"])
+def get_tax_summary():
+    """
+    Returns estimated tax liabilities, deductible aggregations,
+    upcoming compliance deadlines with countdown days, and a Gemini AI executive summary for accountants.
+    """
+    try:
+        result = calculate_tax_estimates()
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Data file not found: {e}. Run /backend/data/generate_data.py first."
+        )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Tax summary error: {str(e)}")
 
 
 # ── Member B Stubs (to be implemented) ────────────────────────────────────────

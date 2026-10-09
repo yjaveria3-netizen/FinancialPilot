@@ -57,6 +57,51 @@ def generate_transactions():
                 "account":     "Main Checking",
                 "status":      random.choice(["cleared", "pending"]),
             })
+    # Inject benchmark unusual payment anomalies (z > 2.5)
+    rows.append({
+        "data_label":  LABEL,
+        "date":        "2024-11-15",
+        "transaction_id": f"TXN-{len(rows)+1:05d}",
+        "type":        "expense",
+        "category":    "Supplier Payment",
+        "amount":      18450.00,
+        "description": "Emergency bulk fabric procurement",
+        "account":     "Main Checking",
+        "status":      "cleared",
+    })
+    rows.append({
+        "data_label":  LABEL,
+        "date":        "2024-11-28",
+        "transaction_id": f"TXN-{len(rows)+1:05d}",
+        "type":        "expense",
+        "category":    "Marketing",
+        "amount":      8900.00,
+        "description": "Unbudgeted Q4 agency blitz campaign",
+        "account":     "Main Checking",
+        "status":      "cleared",
+    })
+    rows.append({
+        "data_label":  LABEL,
+        "date":        "2024-12-05",
+        "transaction_id": f"TXN-{len(rows)+1:05d}",
+        "type":        "expense",
+        "category":    "Utilities",
+        "amount":      4850.00,
+        "description": "Spike in industrial facility heating and power",
+        "account":     "Main Checking",
+        "status":      "cleared",
+    })
+    rows.append({
+        "data_label":  LABEL,
+        "date":        "2024-12-18",
+        "transaction_id": f"TXN-{len(rows)+1:05d}",
+        "type":        "expense",
+        "category":    "Salaries",
+        "amount":      4100.00,
+        "description": "Year-end overtime disbursement",
+        "account":     "Main Checking",
+        "status":      "cleared",
+    })
     df = pd.DataFrame(rows)
     df.to_csv(DATA_DIR / "transactions.csv", index=False)
     print(f"Generated transactions.csv ({len(df)} rows)")
@@ -82,6 +127,51 @@ def generate_invoices():
             "paid_date":    paid_date,
             "description":  "Professional services",
         })
+    # Inject benchmark duplicate invoice anomalies
+    rows.append({
+        "data_label":   LABEL,
+        "invoice_id":   "INV-0201",
+        "customer_id":  "CUST-012",
+        "issue_date":   "2024-10-12",
+        "due_date":     "2024-11-12",
+        "amount":       8450.00,
+        "status":       "unpaid",
+        "paid_date":    "",
+        "description":  "Garment manufacturing - Batch 41",
+    })
+    rows.append({
+        "data_label":   LABEL,
+        "invoice_id":   "INV-0202",
+        "customer_id":  "CUST-012",
+        "issue_date":   "2024-10-15",
+        "due_date":     "2024-11-15",
+        "amount":       8450.00,
+        "status":       "unpaid",
+        "paid_date":    "",
+        "description":  "Garment manufacturing - Batch 41 duplicate",
+    })
+    rows.append({
+        "data_label":   LABEL,
+        "invoice_id":   "INV-0203",
+        "customer_id":  "CUST-038",
+        "issue_date":   "2024-09-02",
+        "due_date":     "2024-10-02",
+        "amount":       3210.50,
+        "status":       "overdue",
+        "paid_date":    "",
+        "description":  "Raw textile finishing services",
+    })
+    rows.append({
+        "data_label":   LABEL,
+        "invoice_id":   "INV-0204",
+        "customer_id":  "CUST-038",
+        "issue_date":   "2024-09-06",
+        "due_date":     "2024-10-06",
+        "amount":       3210.50,
+        "status":       "overdue",
+        "paid_date":    "",
+        "description":  "Raw textile finishing services duplicate",
+    })
     df = pd.DataFrame(rows)
     df.to_csv(DATA_DIR / "invoices.csv", index=False)
     print(f"Generated invoices.csv ({len(df)} rows)")
