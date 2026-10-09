@@ -51,5 +51,11 @@ export const getAnomalies = () =>
 export const getTaxSummary = () =>
   apiClient.get('/api/tax-summary').then((r) => r.data);
 
+export const simulateScenario = (params = {}) =>
+  apiClient.post('/api/simulate-scenario', params).then((r) => r.data);
+
+export const getAccountantPortal = (role = 'Auditor', token = null) =>
+  apiClient.get('/api/accountant-portal', { params: { role, token } }).then((r) => r.data);
+
 export const healthCheck = () =>
   apiClient.get('/api/health').then((r) => r.data);

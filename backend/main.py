@@ -17,6 +17,8 @@ from backend.modules.a_modules.cash_forecast import forecast_cash
 from backend.modules.a_modules.credit_score  import calculate_credit_score
 from backend.modules.a_modules.anomaly_guard import detect_anomalies
 from backend.modules.a_modules.tax_assistant import calculate_tax_estimates
+from backend.modules.a_modules.scenario_planner import run_monte_carlo_simulation
+from backend.modules.a_modules.accountant_portal import get_verified_financials
 
 app = FastAPI(
     title="FinPilot API",
@@ -124,6 +126,50 @@ def get_tax_summary():
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Tax summary error: {str(e)}")
+
+
+# ── Member A: Scenario Planner (Monte Carlo) ─────────────────────────────────
+@app.post("/api/simulate-scenario", tags=["Member A — Scenario Modeling"])
+def simulate_scenario(body: dict | None = None):
+    """
+    Executes a multi-variable Monte Carlo simulation covering cash runway,
+    procurement price shifts, and hiring payroll.
+    Returns percentile confidence fan data (P10 to P90) and Gemini AI executive analysis.
+    """
+    try:
+        result = run_monte_carlo_simulation(params=body or {})
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Data file not found: {e}. Run /backend/data/generate_data.py first."
+        )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Scenario simulation error: {str(e)}")
+
+
+# ── Member A: Accountant and Lender Portal ────────────────────────────────────
+@app.get("/api/accountant-portal", tags=["Member A — Reporting & Audit"])
+def get_portal_financials(
+    role: str = Query(default="Auditor", description="Role view: Auditor, Lender, or Accountant"),
+    token: str | None = Query(default=None, description="Consent verification token")
+):
+    """
+    Returns GAAP-compliant verified financial statements, underwriting ratios,
+    immutable audit logs, and consent access flags.
+    """
+    try:
+        result = get_verified_financials(role=role, consent_token=token)
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Data file not found: {e}. Run /backend/data/generate_data.py first."
+        )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Accountant portal error: {str(e)}")
 
 
 # ── Member B Stubs (to be implemented) ────────────────────────────────────────

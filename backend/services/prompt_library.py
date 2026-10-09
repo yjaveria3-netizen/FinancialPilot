@@ -104,3 +104,33 @@ Write a formal, comprehensive, 3-section Executive Tax Summary tailored specific
 
 Tone: Authoritative, audit-ready, analytical, and structured with clear section headers. Do not use generic disclaimers.
 """
+
+
+def scenario_planner_prompt(params: dict, impact_summary: dict) -> str:
+    """Prompt for Scenario Planner Monte Carlo simulation executive analysis."""
+    return f"""
+You are a senior financial risk analyst and CFO advisor. An executive is analyzing a Monte Carlo financial simulation run for their enterprise.
+
+SCENARIO PARAMETERS APPLIED:
+- Sales Revenue Shift: {params.get('sales_change_pct', 0.0):+.1f}%
+- Additional Headcount / Hiring: +{params.get('hiring_count', 0)} employees (Est. ${params.get('hiring_monthly_cost', 0):,.2f}/month)
+- Procurement & Raw Material Cost Shift: {params.get('procurement_cost_pct', 0.0):+.1f}%
+- Forecast Horizon: {params.get('days', 30)} days ({params.get('simulations', 500)} stochastic trials)
+
+SIMULATION OUTCOMES:
+- Baseline Projected Ending Cash: ${impact_summary.get('baseline_ending_cash', 0):,.2f}
+- Median Expected Ending Cash (P50): ${impact_summary.get('ending_cash_p50', 0):,.2f}
+- Worst-Case Stress Ending Cash (P10): ${impact_summary.get('ending_cash_p10', 0):,.2f}
+- Bullish Optimistic Ending Cash (P90): ${impact_summary.get('ending_cash_p90', 0):,.2f}
+- Net Cash Impact vs Baseline: ${impact_summary.get('net_cash_impact', 0):+,.2f}
+- Cash Shortfall / Insolvency Risk Probability: {impact_summary.get('shortfall_probability', 0):.1f}%
+- Projected Procurement Cost Shift: ${impact_summary.get('procurement_cost_delta', 0):+,.2f}
+- Credit Risk & Debt Capacity Exposure: {impact_summary.get('credit_risk_impact', 'Moderate')}
+
+Write a concise, professional 3-part Executive Simulation Review for the executive leadership team:
+1. RUNWAY & LIQUIDITY TRAJECTORY: Summarize the expected vs baseline cash position and whether the business maintains safe operating runway under stress (P10).
+2. SENSITIVITY & COST DRIVERS: Evaluate how the combination of sales shifts, hiring payroll, and procurement inflation drives the variance.
+3. STRATEGIC RECOMMENDATIONS: Provide 2-3 specific financial mitigation decisions (e.g., credit line drawdown triggers, phased hiring milestones, supplier term adjustments).
+
+Tone: Analytical, objective, and executive-ready. Format with clear section titles.
+"""

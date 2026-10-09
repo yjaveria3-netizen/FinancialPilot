@@ -6,6 +6,8 @@ import CashFlowPage from './pages/CashFlowPage';
 import CreditScorePage from './pages/CreditScorePage';
 import AnomalyGuard from './components/AnomalyGuard';
 import TaxAssistant from './components/TaxAssistant';
+import ScenarioPlanner from './components/ScenarioPlanner';
+import AccountantPortal from './components/AccountantPortal';
 import ComingSoon from './pages/ComingSoon';
 import {
   IconAnomalyGuard,
@@ -42,16 +44,7 @@ export default function App() {
           <Route path="tax-assistant" element={<TaxAssistant />} />
 
           {/* 6. Scenario Planner */}
-          <Route
-            path="scenario-planner"
-            element={
-              <ComingSoon
-                title="Scenario Planner"
-                icon={<IconScenarioPlanner className="size-10 text-primary" />}
-                assignee="Monte Carlo Modeling"
-              />
-            }
-          />
+          <Route path="scenario-planner" element={<ScenarioPlanner />} />
 
           {/* 7. ProcureAI */}
           <Route
@@ -102,16 +95,7 @@ export default function App() {
           />
 
           {/* 11. Accountant & Lender Portal */}
-          <Route
-            path="accountant-portal"
-            element={
-              <ComingSoon
-                title="Accountant & Lender Portal"
-                icon={<IconAccountantPortal className="size-10 text-primary" />}
-                assignee="Reporting & Audit"
-              />
-            }
-          />
+          <Route path="accountant-portal" element={<AccountantPortal />} />
 
           {/* 12. AI CFO Chat */}
           <Route
