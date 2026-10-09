@@ -1,5 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Data (synthetic CSVs are regenerated, not committed)
+backend/data/*.csv
+
+# Node / Frontend
+node_modules/
+dist/
+.next/
+.nuxt/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
 venv/
 __pycache__/
 .env
 node_modules/
-printf "venv/\n__pycache__/\n.env\nnode_modules/\n" > .gitignore
