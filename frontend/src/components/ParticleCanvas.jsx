@@ -19,8 +19,8 @@ export default function ParticleCanvas() {
     window.addEventListener('resize', setSize);
 
     const isMobile = window.innerWidth < 768;
-    // Moderately sparse, tasteful particle count (60 desktop, 28 mobile)
-    const particleCount = isMobile ? 28 : 60;
+    // Tastefully balanced particle count (95 desktop, 45 mobile)
+    const particleCount = isMobile ? 45 : 95;
 
     class Spore {
       constructor() {
@@ -30,8 +30,8 @@ export default function ParticleCanvas() {
       reset(initial = false) {
         this.x = Math.random() * canvas.width;
         this.y = initial ? Math.random() * canvas.height : canvas.height + Math.random() * 10;
-        // Small, crisp dot size (0.35px to 1.25px)
-        this.size = Math.random() * 0.9 + 0.35;
+        // Subtle, crisp dot size (0.6px to 1.5px — very slightly larger)
+        this.size = Math.random() * 0.9 + 0.6;
         // Slow, graceful upward drift (0.05px to 0.16px per frame)
         this.speedY = -(Math.random() * 0.11 + 0.05);
         this.wobble = Math.random() * 0.9;
