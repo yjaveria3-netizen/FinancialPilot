@@ -23,12 +23,16 @@ from backend.data.generate_data import regenerate_all_data
 from backend.modules.agent_banner import evaluate_proactive_risk
 from backend.modules.lender_dossier import compile_lender_dossier
 from backend.modules.demo_trigger import trigger_crisis_mode
+from backend.modules.whatsapp_agent import get_overdue_invoices, mark_invoice_paid
+from backend.routers.whatsapp import router as whatsapp_router
 
 app = FastAPI(
     title="FinPilot API",
     description="Backend API for FinPilot — AI-powered financial intelligence for SMBs.",
     version="1.0.0",
 )
+
+app.include_router(whatsapp_router)
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
 # Allow the React dev server (port 3000 / 5173) to call this API.
@@ -103,6 +107,48 @@ def trigger_crisis_simulation():
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Crisis simulation error: {str(e)}")
+
+
+# ── Autonomous Agent: WhatsApp Automated Collection & Reconciliation Agent ────
+@app.get("/api/whatsapp-reminders", tags=["Autonomous Agent — WhatsApp Collector"])
+def get_whatsapp_reminders():
+    """
+    Returns active collection targets from invoices.csv with calculated days overdue,
+    Gemini AI-generated polite reminder copy, and direct WhatsApp Click-to-Chat intent links.
+    """
+    try:
+        result = get_overdue_invoices()
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Data file not found: {e}. Run /backend/data/generate_data.py first."
+        )
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"WhatsApp reminders error: {str(e)}")
+
+
+@app.post("/api/invoices/{invoice_id}/mark-paid", tags=["Autonomous Agent — WhatsApp Collector"])
+def mark_invoice_as_paid(invoice_id: str):
+    """
+    Updates the invoice status in invoices.csv from Pending/Unpaid/Overdue to 'Paid',
+    timestamps paid_date, automatically reconciles cash flow, and removes it
+    from the active collection list.
+    """
+    try:
+        result = mark_invoice_paid(invoice_id=invoice_id)
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Data file not found: {e}."
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Mark paid reconciliation error: {str(e)}")
 
 
 # ── Member A: Cash Flow Forecaster ────────────────────────────────────────────

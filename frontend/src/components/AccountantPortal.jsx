@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getAccountantPortal, getLenderDossier } from '../api/client';
 import { IconAccountantPortal } from './Icons';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AccountantPortal() {
+  const { t, translateGeminiContent } = useLanguage();
   const [activeRole, setActiveRole] = useState('Auditor');
   const [statementTab, setStatementTab] = useState('BALANCE_SHEET');
   const [data, setData] = useState(null);
@@ -213,13 +215,13 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
             <IconAccountantPortal className="size-4" />
-            GAAP Certified Workpapers • External Underwriting Portal
+            {t('ap_badge', 'GAAP Certified Workpapers • External Underwriting Portal')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
-            Accountant &amp; Lender <span className="text-primary font-normal">Portal</span>
+            {t('ap_title_1', 'Accountant & Lender')} <span className="text-primary font-normal">{t('ap_title_2', 'Portal')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
-            Read-only external portal for CPA auditors, bank lenders, and credit underwriters
+            {t('ap_subtitle', 'Read-only external portal for CPA auditors, bank lenders, and credit underwriters')}
           </p>
         </div>
 
@@ -229,21 +231,21 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
             type="button"
             onClick={handleExportCSV}
             disabled={!data || loading}
-            className="btn-outline px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all"
+            className="btn-outline px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)]"
           >
             <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" x2="12" y1="15" y2="3" />
             </svg>
-            Export CSV
+            {t('ap_export_csv', 'Export CSV')}
           </button>
 
           <button
             type="button"
             onClick={handleExportPackage}
             disabled={!data || loading}
-            className="btn-primary px-5 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20 transition-all"
+            className="btn-primary px-5 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20 transition-all hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)]"
           >
             <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="18" x="3" y="3" rx="2" />
@@ -251,14 +253,14 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
               <path d="M7 12h10" />
               <path d="M7 17h10" />
             </svg>
-            Export Statement Package
+            {t('ap_export_pkg', 'Export Statement Package')}
           </button>
 
           <button
             type="button"
             onClick={handleExportLenderDossier}
             disabled={dossierLoading}
-            className="px-5 py-2.5 rounded-2xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-950/40 transition-all hover:scale-102 disabled:opacity-50"
+            className="px-5 py-2.5 rounded-2xl text-xs font-bold bg-[#376E6F] hover:bg-[#4E8B8C] text-white flex items-center gap-2 cursor-pointer shadow-lg shadow-[#376E6F]/20 transition-all hover:scale-102 disabled:opacity-50"
             title="Compile Cash, Credit, Tax, and Anomaly audit into a single certified compliance dossier"
           >
             <svg
@@ -276,50 +278,50 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
               <line x1="16" y1="17" x2="8" y2="17" />
               <polyline points="10 9 9 9 8 9" />
             </svg>
-            <span>{dossierLoading ? 'Compiling...' : '⚡ Generate Lender-Ready Dossier'}</span>
+            <span>{dossierLoading ? t('ap_compiling', 'Compiling...') : t('ap_generate_dossier', '⚡ Generate Lender-Ready Dossier')}</span>
           </button>
         </div>
       </div>
 
       {/* Download Alert */}
       {downloadSuccess && (
-        <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-secondary/15 border border-secondary/30 text-secondary-light text-xs flex items-center gap-3">
           <span className="text-base font-bold">✓</span>
-          <span>Verified financial statements exported successfully.</span>
+          <span>{t('ap_export_success', 'Verified financial statements exported successfully.')}</span>
         </div>
       )}
 
       {/* Dossier Download Alert */}
       {dossierSuccess && (
-        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-3 animate-fadeIn">
+        <div className="p-4 rounded-2xl bg-secondary/20 border border-secondary/40 text-secondary-light text-xs flex items-center gap-3 animate-fadeIn">
           <span className="text-base font-bold">✓</span>
-          <span>Comprehensive Lender-Ready Compliance Dossier compiled with SHA-256 seal and downloaded successfully!</span>
+          <span>{t('ap_dossier_success', 'Comprehensive Lender-Ready Compliance Dossier compiled with SHA-256 seal and downloaded successfully!')}</span>
         </div>
       )}
 
       {/* Certified Read-Only Banner & Role Switcher */}
-      <div className="rounded-3xl bg-light border border-border p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="rounded-3xl card-electric p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Read-Only Watermark Badge */}
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
+          <div className="size-10 rounded-2xl bg-secondary/15 border border-secondary/30 flex items-center justify-center text-secondary-light font-bold shrink-0">
             🔒
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-white">Certified Read-Only View</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                Write Controls Locked
+              <span className="text-sm font-bold text-white">{t('ap_readonly_badge', 'Certified Read-Only View')}</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary/15 text-secondary-light border border-secondary/30">
+                {t('ap_write_locked', 'Write Controls Locked')}
               </span>
             </div>
             <p className="text-xs text-text-dark mt-0.5">
-              Cryptographically signed snapshot • Checksum: <strong className="text-zinc-300 font-mono">{data?.consent_status?.cryptographic_hash}</strong>
+              {t('ap_checksum', 'Cryptographically signed snapshot • Checksum:')} <strong className="text-zinc-300 font-mono">{data?.consent_status?.cryptographic_hash}</strong>
             </p>
           </div>
         </div>
 
         {/* Role Switcher Simulation */}
         <div className="flex items-center gap-2 self-start lg:self-auto bg-white/5 border border-border rounded-2xl p-1.5">
-          <span className="text-[11px] text-text-dark px-2 font-medium">Viewing as:</span>
+          <span className="text-[11px] text-text-dark px-2 font-medium">{t('ap_viewing_as', 'Viewing as:')}</span>
           {['Auditor', 'Lender', 'Accountant'].map((r) => (
             <button
               key={r}
@@ -331,41 +333,41 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   : 'text-text-dark hover:text-white'
               }`}
             >
-              {r}
+              {r === 'Auditor' ? t('ap_role_auditor', 'Auditor') : r === 'Lender' ? t('ap_role_lender', 'Lender') : t('ap_role_accountant', 'Accountant')}
             </button>
           ))}
         </div>
       </div>
 
       {/* Role-Specific Underwriting & Audit Focus Strip */}
-      <div className="rounded-4xl bg-light border border-border p-6 lg:p-8 space-y-6">
+      <div className="rounded-4xl card-electric p-6 lg:p-8 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
           <div>
             <div className="text-xs uppercase tracking-wider text-primary font-semibold mb-1">
-              Active Underwriting Lens: {activeRole}
+              {t('ap_underwriting_lens', 'Active Underwriting Lens:')} {activeRole === 'Auditor' ? t('ap_role_auditor', 'Auditor') : activeRole === 'Lender' ? t('ap_role_lender', 'Lender') : t('ap_role_accountant', 'Accountant')}
             </div>
             <h3 className="text-xl font-bold font-secondary text-white">
-              {data?.role_insights?.focus_title}
+              {translateGeminiContent(data?.role_insights?.focus_title)}
             </h3>
             <p className="text-xs text-zinc-300 mt-1">
-              {data?.role_insights?.audit_opinion}
+              {translateGeminiContent(data?.role_insights?.audit_opinion)}
             </p>
           </div>
 
           <div className="px-3.5 py-1.5 rounded-xl bg-white/[0.02] border border-border text-xs text-text-dark self-start md:self-auto">
-            Controls Rating: <strong className="text-emerald-400 font-semibold">{data?.role_insights?.controls_rating}</strong>
+            {t('ap_controls_rating', 'Controls Rating:')} <strong className="text-secondary-light font-semibold">{translateGeminiContent(data?.role_insights?.controls_rating)}</strong>
           </div>
         </div>
 
         {/* 4 Role KPI Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {data?.role_insights?.key_metrics?.map((m, idx) => (
-            <div key={idx} className="p-4 rounded-2xl bg-white/[0.02] border border-border space-y-1">
-              <div className="text-[11px] text-text-dark truncate">{m.name}</div>
+            <div key={idx} className="p-4 rounded-2xl bg-white/[0.02] border border-border space-y-1 hover:border-[#DA7B93]/40 transition-colors">
+              <div className="text-[11px] text-text-dark truncate">{translateGeminiContent(m.name)}</div>
               <div className="text-xl font-bold font-mono text-white">{m.value}</div>
-              <div className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="size-1 rounded-full bg-emerald-400"></span>
-                {m.status}
+              <div className="text-[10px] text-secondary-light font-semibold flex items-center gap-1">
+                <span className="size-1 rounded-full bg-secondary-light"></span>
+                {translateGeminiContent(m.status)}
               </div>
             </div>
           ))}
@@ -373,14 +375,14 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
       </div>
 
       {/* Financial Statement Tabs & Explorer */}
-      <div className="rounded-4xl bg-light border border-border overflow-hidden">
+      <div className="rounded-4xl card-electric overflow-hidden">
         {/* Navigation Tabs */}
         <div className="p-6 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex gap-2">
             {[
-              { key: 'BALANCE_SHEET', label: 'Balance Sheet' },
-              { key: 'INCOME_STATEMENT', label: 'Income Statement (P&L)' },
-              { key: 'CASH_FLOW', label: 'Cash Flow Statement' },
+              { key: 'BALANCE_SHEET', label: t('ap_balance_sheet', 'Balance Sheet') },
+              { key: 'INCOME_STATEMENT', label: t('ap_income_statement', 'Income Statement (P&L)') },
+              { key: 'CASH_FLOW', label: t('ap_cash_flow', 'Cash Flow Statement') },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -388,7 +390,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                 onClick={() => setStatementTab(tab.key)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   statementTab === tab.key
-                    ? 'btn-primary text-white'
+                    ? 'btn-primary text-white shadow-md shadow-primary/20'
                     : 'bg-white/5 border border-border text-text-dark hover:text-white'
                 }`}
               >
@@ -398,7 +400,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
           </div>
 
           <div className="text-xs text-text-dark font-mono">
-            {data?.company_profile?.reporting_currency} • Accrual Basis
+            {data?.company_profile?.reporting_currency} • {t('ap_accrual_basis', 'Accrual Basis')}
           </div>
         </div>
 
@@ -432,27 +434,27 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
               <div className="space-y-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* ASSETS */}
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4">
+                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-[#DA7B93]/40 transition-colors">
                     <div className="flex justify-between items-center pb-3 border-b border-border">
-                      <h4 className="text-sm font-bold uppercase tracking-wider text-white">Current Assets</h4>
-                      <span className="text-xs text-text-dark">In USD</span>
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-white">{t('ap_current_assets', 'Current Assets')}</h4>
+                      <span className="text-xs text-text-dark">{t('ap_in_usd', 'In USD')}</span>
                     </div>
 
                     <div className="space-y-3 text-xs">
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-zinc-300">Cash and Cash Equivalents</span>
+                        <span className="text-zinc-300">{t('ap_cash_equiv', 'Cash and Cash Equivalents')}</span>
                         <span className="font-mono text-white font-semibold">
                           ${bs.assets?.cash_and_equivalents?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-zinc-300">Accounts Receivable (Net)</span>
+                        <span className="text-zinc-300">{t('ap_ar_net', 'Accounts Receivable (Net)')}</span>
                         <span className="font-mono text-white font-semibold">
                           ${bs.assets?.accounts_receivable_net?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-zinc-300">Inventory (Lower of Cost or Market)</span>
+                        <span className="text-zinc-300">{t('ap_inventory', 'Inventory (Lower of Cost or Market)')}</span>
                         <span className="font-mono text-white font-semibold">
                           ${bs.assets?.inventory_valuation?.toLocaleString()}
                         </span>
@@ -460,7 +462,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     </div>
 
                     <div className="pt-3 border-t border-border flex justify-between items-center text-sm font-bold">
-                      <span className="text-white">TOTAL CURRENT ASSETS</span>
+                      <span className="text-white">{t('ap_total_current_assets', 'TOTAL CURRENT ASSETS')}</span>
                       <span className="font-mono text-primary text-base">
                         ${bs.assets?.total_current_assets?.toLocaleString()}
                       </span>
@@ -468,40 +470,40 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   </div>
 
                   {/* LIABILITIES & EQUITY */}
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4">
+                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-[#DA7B93]/40 transition-colors">
                     <div className="flex justify-between items-center pb-3 border-b border-border">
-                      <h4 className="text-sm font-bold uppercase tracking-wider text-white">Liabilities &amp; Equity</h4>
-                      <span className="text-xs text-text-dark">In USD</span>
+                      <h4 className="text-sm font-bold uppercase tracking-wider text-white">{t('ap_liab_equity', 'Liabilities & Equity')}</h4>
+                      <span className="text-xs text-text-dark">{t('ap_in_usd', 'In USD')}</span>
                     </div>
 
                     <div className="space-y-3 text-xs">
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-zinc-300">Accounts Payable (Supplier AP)</span>
+                        <span className="text-zinc-300">{t('ap_ap_supplier', 'Accounts Payable (Supplier AP)')}</span>
                         <span className="font-mono text-white font-semibold">
                           ${bs.liabilities?.accounts_payable?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-zinc-300">Accrued Operational Expenses</span>
+                        <span className="text-zinc-300">{t('ap_accrued_opex', 'Accrued Operational Expenses')}</span>
                         <span className="font-mono text-white font-semibold">
                           ${bs.liabilities?.accrued_operating_expenses?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
-                        <span className="text-zinc-300">Short-term Debt Obligations</span>
+                        <span className="text-zinc-300">{t('ap_short_term_debt', 'Short-term Debt Obligations')}</span>
                         <span className="font-mono text-white font-semibold">
                           ${bs.liabilities?.short_term_debt?.toLocaleString()}
                         </span>
                       </div>
                       <div className="pt-2 border-t border-white/5 flex justify-between items-center text-xs font-semibold text-zinc-300">
-                        <span>Total Current Liabilities</span>
+                        <span>{t('ap_total_current_liab', 'Total Current Liabilities')}</span>
                         <span className="font-mono text-white">
                           ${bs.liabilities?.total_current_liabilities?.toLocaleString()}
                         </span>
                       </div>
 
                       <div className="pt-2 border-t border-white/5 flex justify-between items-center text-xs font-semibold text-zinc-300">
-                        <span>Retained Earnings &amp; Equity</span>
+                        <span>{t('ap_retained_equity', 'Retained Earnings & Equity')}</span>
                         <span className="font-mono text-emerald-400">
                           ${bs.equity?.total_equity?.toLocaleString()}
                         </span>
@@ -509,7 +511,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     </div>
 
                     <div className="pt-3 border-t border-border flex justify-between items-center text-sm font-bold">
-                      <span className="text-white">TOTAL LIABILITIES &amp; EQUITY</span>
+                      <span className="text-white">{t('ap_total_liab_equity', 'TOTAL LIABILITIES & EQUITY')}</span>
                       <span className="font-mono text-primary text-base">
                         ${bs.total_liabilities_and_equity?.toLocaleString()}
                       </span>
@@ -520,82 +522,82 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                 <div className="p-4 rounded-2xl bg-white/[0.015] border border-border flex items-center justify-between text-xs text-text-dark">
                   <div className="flex items-center gap-2">
                     <span className="text-emerald-400 font-bold">✓</span>
-                    <span>Accounting Equation Verified: Assets = Liabilities + Equity (Balanced)</span>
+                    <span>{t('ap_balanced_verified', 'Accounting Equation Verified: Assets = Liabilities + Equity (Balanced)')}</span>
                   </div>
-                  <span className="font-mono text-[11px] text-zinc-400">0 Variance</span>
+                  <span className="font-mono text-[11px] text-zinc-400">{t('ap_variance', '0 Variance')}</span>
                 </div>
               </div>
             )}
 
             {/* 2. INCOME STATEMENT (P&L) */}
             {statementTab === 'INCOME_STATEMENT' && is && (
-              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-6">
+              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-6 hover:border-[#DA7B93]/40 transition-colors">
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
-                    <h4 className="text-base font-bold text-white">Statement of Operations (P&amp;L)</h4>
-                    <p className="text-xs text-text-dark">Fiscal Year-to-Date Accrual Accounting</p>
+                    <h4 className="text-base font-bold text-white">{t('ap_statement_ops', 'Statement of Operations (P&L)')}</h4>
+                    <p className="text-xs text-text-dark">{t('ap_fiscal_accrual', 'Fiscal Year-to-Date Accrual Accounting')}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    Net Margin: {is.net_margin_pct}%
+                    {t('ap_net_margin', 'Net Margin:')} {is.net_margin_pct}%
                   </span>
                 </div>
 
                 <div className="space-y-4 text-xs">
                   {/* Revenue */}
                   <div className="flex justify-between items-center py-2 border-b border-white/5 font-semibold">
-                    <span className="text-white text-sm">GROSS REVENUE</span>
+                    <span className="text-white text-sm">{t('ap_gross_revenue', 'GROSS REVENUE')}</span>
                     <span className="font-mono text-emerald-400 text-sm">${is.gross_revenue?.toLocaleString()}</span>
                   </div>
 
                   {/* COGS */}
                   <div className="flex justify-between items-center py-1 pl-4 text-zinc-300">
-                    <span>Less: Cost of Goods Sold (Raw Material COGS)</span>
+                    <span>{t('ap_cogs', 'Less: Cost of Goods Sold (Raw Material COGS)')}</span>
                     <span className="font-mono text-rose-400">-${is.cost_of_goods_sold?.toLocaleString()}</span>
                   </div>
 
                   {/* Gross Profit */}
                   <div className="flex justify-between items-center py-2.5 px-3 rounded-xl bg-white/[0.02] font-bold text-white">
-                    <span>GROSS PROFIT</span>
+                    <span>{t('ap_gross_profit', 'GROSS PROFIT')}</span>
                     <span className="font-mono text-primary text-sm">${is.gross_profit?.toLocaleString()}</span>
                   </div>
 
                   {/* OpEx Breakdown */}
                   <div className="pl-4 space-y-2 pt-2 text-zinc-300">
-                    <div className="font-semibold text-text-dark uppercase tracking-wider text-[11px]">Operating Expenditures (SG&amp;A)</div>
+                    <div className="font-semibold text-text-dark uppercase tracking-wider text-[11px]">{t('ap_opex_header', 'Operating Expenditures (SG&A)')}</div>
                     <div className="flex justify-between py-0.5">
-                      <span>• Direct &amp; Operational Payroll</span>
+                      <span>{t('ap_opex_payroll', '• Direct & Operational Payroll')}</span>
                       <span className="font-mono text-zinc-200">-${is.operating_expenses?.salaries?.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-0.5">
-                      <span>• Factory Facility Leases (Rent)</span>
+                      <span>{t('ap_opex_rent', '• Factory Facility Leases (Rent)')}</span>
                       <span className="font-mono text-zinc-200">-${is.operating_expenses?.rent?.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-0.5">
-                      <span>• Industrial Steam &amp; Power (Utilities)</span>
+                      <span>{t('ap_opex_utilities', '• Industrial Steam & Power (Utilities)')}</span>
                       <span className="font-mono text-zinc-200">-${is.operating_expenses?.utilities?.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-0.5">
-                      <span>• Wholesale Promotion &amp; SG&amp;A (Marketing)</span>
+                      <span>{t('ap_opex_marketing', '• Wholesale Promotion & SG&A (Marketing)')}</span>
                       <span className="font-mono text-zinc-200">-${is.operating_expenses?.marketing?.toLocaleString()}</span>
                     </div>
                   </div>
 
                   {/* Operating Income */}
                   <div className="flex justify-between items-center py-2.5 px-3 rounded-xl bg-white/[0.02] font-bold text-white">
-                    <span>OPERATING INCOME (EBITDA)</span>
+                    <span>{t('ap_operating_income', 'OPERATING INCOME (EBITDA)')}</span>
                     <span className="font-mono text-white text-sm">${is.operating_income?.toLocaleString()}</span>
                   </div>
 
                   {/* Tax Provision */}
                   <div className="flex justify-between items-center py-1 pl-4 text-zinc-300">
-                    <span>Less: Accrued Tax Provisions</span>
+                    <span>{t('ap_tax_provision', 'Less: Accrued Tax Provisions')}</span>
                     <span className="font-mono text-rose-400">-${is.tax_provision?.toLocaleString()}</span>
                   </div>
 
                   {/* Net Income */}
                   <div className="pt-4 border-t border-border flex justify-between items-center text-base font-bold text-white">
-                    <span>NET INCOME</span>
-                    <span className="font-mono text-emerald-400 text-lg">${is.net_income?.toLocaleString()}</span>
+                    <span>{t('ap_net_income', 'NET INCOME')}</span>
+                    <span className="font-mono text-secondary-light text-lg">${is.net_income?.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -603,32 +605,32 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
 
             {/* 3. CASH FLOW STATEMENT */}
             {statementTab === 'CASH_FLOW' && cf && (
-              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-6">
+              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-6 hover:border-[#DA7B93]/40 transition-colors">
                 <div className="flex justify-between items-center pb-4 border-b border-border">
                   <div>
-                    <h4 className="text-base font-bold text-white">Statement of Cash Flows</h4>
-                    <p className="text-xs text-text-dark">Cash Accounting Reconciliation</p>
+                    <h4 className="text-base font-bold text-white">{t('ap_cf_title', 'Statement of Cash Flows')}</h4>
+                    <p className="text-xs text-text-dark">{t('ap_cf_reconciliation', 'Cash Accounting Reconciliation')}</p>
                   </div>
                 </div>
 
                 <div className="space-y-4 text-xs">
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
-                    <span className="text-white font-semibold">Cash Flows from Operating Activities</span>
-                    <span className="font-mono text-emerald-400 font-bold">${cf.operating_activities?.toLocaleString()}</span>
+                    <span className="text-white font-semibold">{t('ap_cf_operating', 'Cash Flows from Operating Activities')}</span>
+                    <span className="font-mono text-secondary-light font-bold">${cf.operating_activities?.toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
-                    <span className="text-white font-semibold">Cash Flows from Investing Activities</span>
+                    <span className="text-white font-semibold">{t('ap_cf_investing', 'Cash Flows from Investing Activities')}</span>
                     <span className="font-mono text-rose-400 font-bold">${cf.investing_activities?.toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
-                    <span className="text-white font-semibold">Cash Flows from Financing Activities</span>
+                    <span className="text-white font-semibold">{t('ap_cf_financing', 'Cash Flows from Financing Activities')}</span>
                     <span className="font-mono text-rose-400 font-bold">${cf.financing_activities?.toLocaleString()}</span>
                   </div>
 
                   <div className="pt-4 border-t border-border flex justify-between items-center text-sm font-bold text-white">
-                    <span>Ending Cash &amp; Liquid Reserves</span>
+                    <span>{t('ap_cf_ending', 'Ending Cash & Liquid Reserves')}</span>
                     <span className="font-mono text-primary text-base">${cf.ending_cash?.toLocaleString()}</span>
                   </div>
                 </div>
@@ -641,31 +643,31 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
       {/* External Consent Management & Immutable Audit Trail */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Consent Token Management (5 cols) */}
-        <div className="lg:col-span-5 rounded-4xl bg-light border border-border p-6 lg:p-8 space-y-5">
+        <div className="lg:col-span-5 rounded-4xl card-electric p-6 lg:p-8 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-border">
-            <h3 className="text-base font-bold font-secondary text-white">Data Consent &amp; Sharing Link</h3>
+            <h3 className="text-base font-bold font-secondary text-white">{t('ap_consent_title', 'Data Consent & Sharing Link')}</h3>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/10 text-primary border border-primary/20">
-              Active Grant
+              {t('ap_active_grant', 'Active Grant')}
             </span>
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-border space-y-1.5">
-              <div className="text-[11px] text-text-dark">Consent Access Token</div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-border space-y-1.5 hover:border-[#DA7B93]/40 transition-colors">
+              <div className="text-[11px] text-text-dark">{t('ap_token_label', 'Consent Access Token')}</div>
               <div className="font-mono text-xs font-semibold text-white truncate">
                 {data?.consent_status?.consent_token}
               </div>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-border space-y-1">
-              <div className="text-[11px] text-text-dark">Granted By</div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-border space-y-1 hover:border-[#DA7B93]/40 transition-colors">
+              <div className="text-[11px] text-text-dark">{t('ap_granted_by', 'Granted By')}</div>
               <div className="text-xs font-semibold text-zinc-300">
                 {data?.consent_status?.granted_by}
               </div>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-border space-y-1">
-              <div className="text-[11px] text-text-dark">Access Expiration</div>
+            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-border space-y-1 hover:border-[#DA7B93]/40 transition-colors">
+              <div className="text-[11px] text-text-dark">{t('ap_access_exp', 'Access Expiration')}</div>
               <div className="text-xs font-semibold text-zinc-300 font-mono">
                 {data?.consent_status?.expires_at}
               </div>
@@ -675,12 +677,12 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
           <button
             type="button"
             onClick={handleCopyLink}
-            className="w-full py-2.5 rounded-xl text-xs font-semibold btn-outline text-white flex items-center justify-center gap-2 cursor-pointer transition-all"
+            className="w-full py-2.5 rounded-xl text-xs font-semibold btn-outline text-white flex items-center justify-center gap-2 cursor-pointer transition-all hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)]"
           >
             {linkCopied ? (
               <>
-                <span className="text-emerald-400 font-bold">✓</span>
-                <span className="text-emerald-300">Sharing Link Copied to Clipboard</span>
+                <span className="text-secondary-light font-bold">✓</span>
+                <span className="text-secondary-light">{t('ap_copied', 'Sharing Link Copied to Clipboard')}</span>
               </>
             ) : (
               <>
@@ -688,30 +690,30 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                 </svg>
-                Copy External Read-Only Link
+                {t('ap_copy_link', 'Copy External Read-Only Link')}
               </>
             )}
           </button>
         </div>
 
         {/* Portal Access Audit Trail (7 cols) */}
-        <div className="lg:col-span-7 rounded-4xl bg-light border border-border p-6 lg:p-8 space-y-5">
+        <div className="lg:col-span-7 rounded-4xl card-electric p-6 lg:p-8 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-border">
             <div>
-              <h3 className="text-base font-bold font-secondary text-white">Immutable Portal Access Audit Log</h3>
-              <p className="text-xs text-text-dark">Timestamped ledger access events</p>
+              <h3 className="text-base font-bold font-secondary text-white">{t('ap_audit_title', 'Immutable Portal Access Audit Log')}</h3>
+              <p className="text-xs text-text-dark">{t('ap_audit_subtitle', 'Timestamped ledger access events')}</p>
             </div>
-            <div className="size-2 rounded-full bg-emerald-400 animate-pulse"></div>
+            <div className="size-2 rounded-full bg-secondary-light animate-pulse"></div>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-border text-text-dark uppercase tracking-wider text-[10px]">
-                  <th className="py-2.5 px-3">Timestamp</th>
-                  <th className="py-2.5 px-3">Actor &amp; Role</th>
-                  <th className="py-2.5 px-3">Action</th>
-                  <th className="py-2.5 px-3 text-right">Verification</th>
+                  <th className="py-2.5 px-3">{t('ap_col_timestamp', 'Timestamp')}</th>
+                  <th className="py-2.5 px-3">{t('ap_col_actor_role', 'Actor & Role')}</th>
+                  <th className="py-2.5 px-3">{t('ap_col_action', 'Action')}</th>
+                  <th className="py-2.5 px-3 text-right">{t('ap_col_verification', 'Verification')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -722,14 +724,14 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     </td>
                     <td className="py-3 px-3">
                       <div className="font-semibold text-white">{entry.actor}</div>
-                      <span className="text-[10px] text-primary">{entry.role}</span>
+                      <span className="text-[10px] text-primary">{translateGeminiContent(entry.role)}</span>
                     </td>
                     <td className="py-3 px-3 text-zinc-300 text-[11px]">
-                      {entry.action}
+                      {translateGeminiContent(entry.action)}
                     </td>
                     <td className="py-3 px-3 text-right">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
-                        {entry.verification_status}
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary/15 text-secondary-light border border-secondary/30 whitespace-nowrap">
+                        {translateGeminiContent(entry.verification_status)}
                       </span>
                     </td>
                   </tr>

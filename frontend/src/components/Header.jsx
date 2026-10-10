@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import InvoiceScannerModal from './InvoiceScannerModal';
 import { resetDemoData, triggerCrisisMode, getLenderDossier } from '../api/client';
+import { useLanguage } from '../context/LanguageContext';
 import {
   IconHome,
   IconCashFlow,
@@ -16,10 +17,12 @@ import {
   IconPricingAdvisor,
   IconNegotiation,
   IconScanInvoice,
+  IconWhatsApp,
   IconClose,
 } from './Icons';
 
 export default function Header() {
+  const { lang, setLang, t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -115,99 +118,106 @@ export default function Header() {
     }
   }, [menuOpen, scannerOpen]);
 
-  // Clean, professional feature categories (No emojis, no Member A/B)
+  // Clean, localized feature categories
   const featureCategories = [
     {
-      group: 'Cash & Financial Health',
-      badge: 'Core Engine',
+      group: t('group_cash', 'Cash & Financial Health'),
+      badge: t('badge_core', 'Core Engine'),
       items: [
         {
-          name: 'Morning Dashboard',
+          name: t('nav_dashboard', 'Morning Dashboard'),
           to: '/dashboard',
           Icon: IconHome,
-          desc: '7/30/90-day cash summary cards & daily runway health',
+          desc: t('desc_dashboard', '7/30/90-day cash summary cards & daily runway health'),
           live: true,
         },
         {
-          name: 'Cash Flow Forecaster',
+          name: t('nav_cash_flow', 'Cash Flow Forecaster'),
           to: '/cash-flow',
           Icon: IconCashFlow,
-          desc: '30/60/90-day cash trajectory projection with volatility modeling',
+          desc: t('desc_cash_flow', '30/60/90-day cash trajectory projection with volatility modeling'),
           live: true,
         },
         {
-          name: 'Credit Readiness Score',
+          name: t('nav_credit_score', 'Credit Readiness Score'),
           to: '/credit-score',
           Icon: IconCreditScore,
-          desc: '0–100 bankability score with 4 underwriting pillars & Gemini tips',
+          desc: t('desc_credit_score', '0–100 bankability score with 4 underwriting pillars & Gemini tips'),
           live: true,
         },
         {
-          name: 'Scenario Planner',
+          name: t('nav_scenario', 'Scenario Planner'),
           to: '/scenario-planner',
           Icon: IconScenarioPlanner,
-          desc: 'Monte Carlo what-if cash flow simulation models',
+          desc: t('desc_scenario', 'Monte Carlo what-if cash flow simulation models'),
+          live: true,
+        },
+        {
+          name: t('nav_whatsapp', 'WhatsApp Collection Agent'),
+          to: '/whatsapp-collector',
+          Icon: IconWhatsApp,
+          desc: t('desc_whatsapp', 'AI-automated overdue follow-ups & 1-click cash reconciliation'),
           live: true,
         },
       ],
     },
     {
-      group: 'Compliance & Governance',
-      badge: 'Assurance',
+      group: t('group_compliance', 'Compliance & Governance'),
+      badge: t('badge_security', 'Assurance'),
       items: [
         {
-          name: 'Anomaly & Fraud Guard',
+          name: t('nav_anomaly', 'Anomaly & Fraud Guard'),
           to: '/anomaly-guard',
           Icon: IconAnomalyGuard,
-          desc: 'Detect suspicious transactions & duplicate invoices',
+          desc: t('desc_anomaly', 'Detect suspicious transactions & duplicate invoices'),
           live: true,
         },
         {
-          name: 'Tax & Compliance Assistant',
+          name: t('nav_tax', 'Tax & Compliance Assistant'),
           to: '/tax-assistant',
           Icon: IconTaxAssistant,
-          desc: 'Real-time tax liability estimates & deduction strategies',
+          desc: t('desc_tax', 'Real-time tax liability estimates & deduction strategies'),
           live: true,
         },
         {
-          name: 'Accountant & Lender Portal',
+          name: t('nav_accountant', 'Accountant & Lender Portal'),
           to: '/accountant-portal',
           Icon: IconAccountantPortal,
-          desc: 'Export standardized GAAP P&L and Balance Sheet files',
+          desc: t('desc_accountant', 'Export standardized GAAP P&L and Balance Sheet files'),
           live: true,
         },
       ],
     },
     {
-      group: 'Operations & Procurement AI',
-      badge: 'Intelligence',
+      group: t('group_supply', 'Supply Chain & Commerce'),
+      badge: t('badge_growth', 'Intelligence'),
       items: [
         {
           name: 'ProcureAI',
           to: '/procure-ai',
           Icon: IconProcureAi,
-          desc: 'Supplier spend intelligence & lead-time analytics',
+          desc: t('desc_procure', 'Supplier spend intelligence & lead-time analytics'),
           live: false,
         },
         {
-          name: 'Inventory Alerts',
+          name: t('nav_inventory', 'Inventory Alerts'),
           to: '/inventory',
           Icon: IconInventory,
-          desc: 'Low stock warnings & automated reorder thresholds',
+          desc: t('desc_inventory', 'Low stock warnings & automated reorder thresholds'),
           live: false,
         },
         {
-          name: 'Pricing Advisor',
+          name: t('nav_pricing', 'Pricing Advisor'),
           to: '/pricing-advisor',
           Icon: IconPricingAdvisor,
-          desc: 'Margin optimization & price elasticity analysis',
+          desc: t('desc_pricing', 'Margin optimization & price elasticity analysis'),
           live: false,
         },
         {
-          name: 'Negotiation Copilot',
+          name: t('nav_negotiation', 'Negotiation Copilot'),
           to: '/negotiation-copilot',
           Icon: IconNegotiation,
-          desc: 'AI-generated supplier negotiation briefs',
+          desc: t('desc_negotiation', 'AI-generated supplier negotiation briefs'),
           live: false,
         },
       ],
@@ -216,28 +226,51 @@ export default function Header() {
 
   return (
     <>
-      {/* ── Compact, Non-Overwidth Floating Pill Navbar ── */}
-      <header className="header z-40 w-full fixed top-0 left-0 right-0 py-4 transition-all duration-300">
-        <div className="max-w-3xl mx-auto px-4">
-          <nav className="flex items-center justify-between bg-dark/80 backdrop-blur-xl border border-border/80 rounded-full px-5 py-2.5 shadow-2xl transition-all hover:border-primary/40">
-            {/* Left: Financial Pilot Brand Logo */}
+      {/* ── Compact, Rectangular Floating Glassmorphic Navbar with Sleek Rounded Corners ── */}
+      <header className="header z-40 w-full fixed top-0 left-0 right-0 py-2.5 transition-all duration-300">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <nav className="flex items-center justify-between bg-[#2E151B]/80 backdrop-blur-xl border border-[#4D2330]/80 rounded-xl px-5 py-2.5 shadow-xl transition-all hover:border-primary/50">
+            {/* Left: Financial Pilot Brand Logo (Strictly English preserved) */}
             <Link to="/" onClick={() => setMenuOpen(false)} className="shrink-0 flex items-center">
               <Logo />
             </Link>
 
-            {/* Right: Invoice Scanner, Launch Hub & Animated 3-Line Menu Button */}
+            {/* Right: Language Switcher, Crisis Mode, Scanner & Hub */}
             <div className="flex items-center gap-2">
+              {/* Trilingual Language Switcher (EN / اردو / 中文) */}
+              <div className="flex items-center p-0.5 rounded-xl bg-white/5 border border-border/80 text-xs shadow-inner">
+                {[
+                  { code: 'en', label: 'EN' },
+                  { code: 'ur', label: 'اردو' },
+                  { code: 'zh', label: '中文' },
+                ].map((item) => (
+                  <button
+                    key={item.code}
+                    type="button"
+                    onClick={() => setLang(item.code)}
+                    className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                      lang === item.code
+                        ? 'bg-primary text-white shadow-sm shadow-primary/40'
+                        : 'text-text-dark hover:text-white'
+                    }`}
+                    title={`Switch language to ${item.label}`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
               {/* Zero-Friction "Simulate Cash Crunch Crisis" Demo Switch */}
               <button
                 type="button"
                 onClick={handleSimulateCrisis}
                 disabled={isTriggeringCrisis || isSyncing}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-white border border-rose-500/40 hover:border-rose-400 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shadow-sm shadow-rose-950/40"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-white border border-rose-500/40 hover:border-rose-400 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50 shadow-sm shadow-rose-950/40"
                 title="⚡ Inject sudden cash crunch & high-severity duplicate invoice anomalies"
               >
                 <span className="text-rose-400 font-bold animate-pulse">⚡</span>
                 <span className="hidden sm:inline">
-                  {isTriggeringCrisis ? 'Injecting...' : 'Crisis Mode'}
+                  {isTriggeringCrisis ? t('crisis_injecting', 'Injecting...') : t('crisis_mode', 'Crisis Mode')}
                 </span>
               </button>
 
@@ -246,11 +279,11 @@ export default function Header() {
                 type="button"
                 onClick={handleResetData}
                 disabled={isSyncing}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-emerald-500/50 text-xs font-medium transition-all cursor-pointer disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-secondary/50 text-xs font-medium transition-all cursor-pointer disabled:opacity-50"
                 title="Reset synthetic demo datasets & refresh active views"
               >
                 <svg
-                  className={`size-3.5 text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`}
+                  className={`size-3.5 text-secondary-light ${isSyncing ? 'animate-spin' : ''}`}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -263,41 +296,40 @@ export default function Header() {
                   <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
                   <path d="M16 21h5v-5" />
                 </svg>
-                <span className="hidden sm:inline">{isSyncing ? 'Syncing...' : 'Reset'}</span>
+                <span className="hidden sm:inline">{isSyncing ? t('syncing', 'Syncing...') : t('reset_data', 'Reset')}</span>
               </button>
 
               {/* Header Action: Invoice & Receipt Scanner Button */}
               <button
                 type="button"
                 onClick={() => setScannerOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-primary/50 text-xs font-medium transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-primary/50 text-xs font-medium transition-all cursor-pointer"
                 title="Open Invoice & Receipt Scanner"
               >
                 <IconScanInvoice className="size-4 text-primary" />
-                <span className="hidden sm:inline">Scan</span>
+                <span className="hidden sm:inline">{t('scan_invoice', 'Scan')}</span>
               </button>
 
               {/* Direct Hub Link */}
               <Link
                 to="/dashboard"
-                className="btn btn-primary btn-sm text-xs py-1.5 px-4 hidden xs:inline-flex"
+                className="btn btn-primary btn-sm text-xs py-1.5 px-4 hidden xs:inline-flex rounded-xl"
               >
-                Launch Hub
+                {t('launch_hub', 'Launch Hub')}
               </Link>
 
               {/* Animated 3-Line Hamburger to Cross Button */}
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className={`size-10 rounded-full flex items-center justify-center border transition-all duration-300 cursor-pointer ${
+                className={`size-10 rounded-xl flex items-center justify-center border transition-all duration-300 cursor-pointer ${
                   menuOpen
                     ? 'bg-secondary/25 text-white border-secondary shadow-lg shadow-secondary/25'
                     : 'bg-light/80 border-border text-white hover:border-primary/60 hover:bg-white/10'
                 }`}
                 aria-label={menuOpen ? 'Close feature menu' : 'Open feature menu'}
-                title={menuOpen ? 'Close feature menu' : 'Open feature menu'}
               >
-                <div className="relative w-5 h-4 flex items-center justify-center pointer-events-none">
+                <div className="relative size-5 flex items-center justify-center">
                   {/* Line 1 (Top) */}
                   <span
                     className={`absolute h-[2px] w-5 bg-white rounded-full transition-all duration-300 ease-in-out ${
@@ -344,21 +376,21 @@ export default function Header() {
 
       {/* ── Pop-Up Features Modal Overlay (With Animated Cross to Close) ── */}
       {menuOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 backdrop-blur-2xl bg-body/90 animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 backdrop-blur-2xl bg-body/90 transition-all duration-300 animate-fadeIn">
           {/* Backdrop click to close */}
           <div
             className="absolute inset-0 -z-10"
             onClick={() => setMenuOpen(false)}
           />
 
-          {/* Modal Container */}
-          <div className="relative w-full max-w-5xl max-h-[90vh] bg-light/95 border border-border rounded-4xl p-6 sm:p-10 shadow-2xl overflow-y-auto">
+          {/* Modal Container with entrance scale animation and zero scrollbar */}
+          <div className="relative w-full max-w-5xl max-h-[90vh] bg-light/95 border border-border rounded-4xl p-5 sm:p-8 shadow-2xl overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden transform transition-all duration-300 scale-100 animate-scaleUp">
             {/* Top Bar of Modal */}
             <div className="flex items-center justify-between pb-6 border-b border-border/80 mb-8">
               <div className="flex items-center gap-3">
                 <Logo />
                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-semibold hidden sm:inline">
-                  Complete Financial Suite
+                  {t('complete_financial_suite', 'Complete Financial Suite')}
                 </span>
               </div>
 
@@ -366,7 +398,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
-                className="size-10 rounded-full bg-dark/70 border border-border text-text hover:text-white hover:border-secondary hover:bg-secondary/20 transition-all flex items-center justify-center cursor-pointer"
+                className="size-10 rounded-xl bg-dark/70 border border-border text-text hover:text-white hover:border-secondary hover:bg-secondary/20 transition-all flex items-center justify-center cursor-pointer"
                 aria-label="Close feature menu"
               >
                 <IconClose className="size-4" />
@@ -406,11 +438,11 @@ export default function Header() {
                               </span>
                               {item.live ? (
                                 <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.2 rounded-full font-semibold">
-                                  Live
+                                  {t('live', 'Live')}
                                 </span>
                               ) : (
                                 <span className="text-[10px] bg-white/5 text-text-dark px-1.5 py-0.2 rounded font-mono">
-                                  Active
+                                  {t('active_state', 'Active')}
                                 </span>
                               )}
                             </div>
@@ -430,7 +462,7 @@ export default function Header() {
             <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4 text-xs text-text-dark">
                 <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">
-                  Home Landing
+                  {t('home_landing', 'Home Landing')}
                 </Link>
                 <span>•</span>
                 <button
@@ -441,7 +473,7 @@ export default function Header() {
                   }}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  OCR Invoice Scanner
+                  {t('ocr_invoice_scanner', 'OCR Invoice Scanner')}
                 </button>
                 <span>•</span>
                 <a
@@ -450,7 +482,7 @@ export default function Header() {
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  FastAPI Backend Docs
+                  {t('api_docs', 'FastAPI Backend Docs')}
                 </a>
                 <span>•</span>
                 <button
@@ -461,7 +493,7 @@ export default function Header() {
                   title="Export Bank & Lender Compliance Dossier (.JSON)"
                 >
                   <span className="text-primary font-bold">📜</span>
-                  <span>{isExportingDossier ? 'Compiling Dossier...' : 'Lender Dossier'}</span>
+                  <span>{isExportingDossier ? 'Compiling Dossier...' : t('lender_dossier', 'Lender Dossier')}</span>
                 </button>
                 <span>•</span>
                 <button
@@ -470,16 +502,16 @@ export default function Header() {
                   disabled={isSyncing}
                   className="hover:text-emerald-400 text-emerald-400/80 transition-colors cursor-pointer flex items-center gap-1 font-medium"
                 >
-                  <span className={isSyncing ? 'animate-spin inline-block' : ''}>↻</span> Reset Demo Data
+                  <span className={isSyncing ? 'animate-spin inline-block' : ''}>↻</span> {t('reset_demo_data', 'Reset Demo Data')}
                 </button>
               </div>
 
               <Link
                 to="/dashboard"
                 onClick={() => setMenuOpen(false)}
-                className="btn btn-primary w-full sm:w-auto text-xs py-2 px-5"
+                className="btn btn-primary w-full sm:w-auto text-xs py-2 px-5 rounded-xl"
               >
-                Launch Financial Pilot Hub →
+                {t('launch_hub_arrow', 'Launch Financial Pilot Hub →')}
               </Link>
             </div>
           </div>

@@ -6,6 +6,82 @@ body {
   @apply bg-body text-base  font-primary font-normal leading-relaxed text-text antialiased;
 }
 
+/* Urdu & Arabic Script Typography Refinement — Prevent congestion & overly bold weight */
+html[lang="ur"],
+body.lang-ur,
+.lang-ur {
+  font-family: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', 'Urdu Typesetting', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif !important;
+  font-weight: 400;
+  letter-spacing: 0.015em !important;
+  word-spacing: 0.1em;
+  line-height: 1.9 !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[lang="ur"] h1,
+html[lang="ur"] h2,
+html[lang="ur"] h3,
+html[lang="ur"] h4,
+html[lang="ur"] h5,
+html[lang="ur"] h6,
+body.lang-ur h1,
+body.lang-ur h2,
+body.lang-ur h3,
+body.lang-ur h4,
+body.lang-ur h5,
+body.lang-ur h6 {
+  font-family: 'Noto Sans Arabic', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: normal !important;
+  line-height: 1.65 !important;
+  text-transform: none !important;
+}
+
+/* De-congest bold elements in Urdu so text is crisp and readable */
+html[lang="ur"] .font-bold,
+body.lang-ur .font-bold {
+  font-weight: 600 !important;
+}
+
+html[lang="ur"] .font-extrabold,
+body.lang-ur .font-extrabold,
+html[lang="ur"] .font-black,
+body.lang-ur .font-black {
+  font-weight: 600 !important;
+}
+
+html[lang="ur"] strong,
+html[lang="ur"] b,
+body.lang-ur strong,
+body.lang-ur b {
+  font-weight: 600 !important;
+}
+
+html[lang="ur"] p,
+body.lang-ur p {
+  line-height: 1.85 !important;
+}
+
+html[lang="ur"] *,
+body.lang-ur * {
+  letter-spacing: normal !important;
+}
+
+html[lang="ur"] [class*="uppercase"],
+body.lang-ur [class*="uppercase"],
+html[lang="ur"] [class*="tracking-"],
+body.lang-ur [class*="tracking-"] {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+html[lang="ur"] .font-mono,
+body.lang-ur .font-mono {
+  direction: ltr !important;
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
 h1,
 h2,
 h3,

@@ -153,8 +153,8 @@ export default function VideoShowcase() {
                 y2="5.62488"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="var(--color-primary-light, #4D36D0)" />
-                <stop offset="1" stopColor="var(--color-primary, #937AFF)" />
+                <stop stopColor="var(--color-primary-light, #F2A3B5)" />
+                <stop offset="1" stopColor="var(--color-primary, #DA7B93)" />
               </linearGradient>
             </defs>
           </svg>

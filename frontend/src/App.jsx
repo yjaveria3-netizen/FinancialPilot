@@ -8,6 +8,7 @@ import AnomalyGuard from './components/AnomalyGuard';
 import TaxAssistant from './components/TaxAssistant';
 import ScenarioPlanner from './components/ScenarioPlanner';
 import AccountantPortal from './components/AccountantPortal';
+import WhatsAppCollector from './components/WhatsAppCollector';
 import ComingSoon from './pages/ComingSoon';
 import {
   IconAnomalyGuard,
@@ -21,10 +22,12 @@ import {
   IconCfoChat,
   IconScanInvoice,
 } from './components/Icons';
+import { LanguageProvider } from './context/LanguageContext';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Main Public Landing Page */}
@@ -97,6 +100,10 @@ export default function App() {
           {/* 11. Accountant & Lender Portal */}
           <Route path="accountant-portal" element={<AccountantPortal />} />
 
+          {/* 12. WhatsApp Automated Collection Agent */}
+          <Route path="whatsapp-collector" element={<WhatsAppCollector />} />
+          <Route path="whatsapp-agent" element={<WhatsAppCollector />} />
+
           {/* 12. AI CFO Chat */}
           <Route
             path="cfo-chat"
@@ -135,5 +142,6 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+  </LanguageProvider>
   );
 }

@@ -1,32 +1,32 @@
 export default function CosmicBackground() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* ── 1. Top Luminous Purple Halo ── */}
+      {/* ── 1. Top Luminous Rose Glow ── */}
       <div
         className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] xl:w-[75rem] xl:h-[75rem] rounded-full blur-3xl pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle, var(--color-primary, #937AFF) 0%, color-mix(in srgb, var(--color-primary, #937AFF) 78%, transparent) 22%, transparent 70%)',
+            'radial-gradient(circle, var(--color-primary, #DA7B93) 0%, color-mix(in srgb, var(--color-primary, #DA7B93) 78%, transparent) 22%, transparent 70%)',
           opacity: 0.8,
         }}
       />
 
-      {/* ── 2. Middle Softened Purple Shadow Blob (Subtle, non-overpowering ambient glow) ── */}
+      {/* ── 2. Middle Softened Plum Shadow Blob ── */}
       <div
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] sm:w-[65rem] lg:w-[80rem] h-[28rem] lg:h-[36rem] rounded-full blur-[130px] pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(147, 122, 255, 0.11) 0%, rgba(77, 54, 208, 0.05) 40%, transparent 72%)',
+            'radial-gradient(ellipse at center, rgba(218, 123, 147, 0.12) 0%, rgba(46, 21, 27, 0.05) 40%, transparent 72%)',
           opacity: 0.65,
         }}
       />
 
-      {/* ── 3. Bottom Ambient Purple Glow ── */}
+      {/* ── 3. Bottom Ambient Plum Glow ── */}
       <div
         className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-[60rem] lg:w-[75rem] h-[50rem] rounded-full blur-3xl pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle, color-mix(in srgb, var(--color-primary, #937AFF) 40%, transparent) 0%, rgba(77, 54, 208, 0.22) 35%, transparent 75%)',
+            'radial-gradient(circle, color-mix(in srgb, var(--color-primary, #DA7B93) 40%, transparent) 0%, rgba(218, 123, 147, 0.18) 35%, transparent 75%)',
           opacity: 0.65,
         }}
       />
@@ -61,7 +61,7 @@ export default function CosmicBackground() {
             <ellipse
               cx="143"
               cy="252.378"
-              fill="var(--color-primary-light, #4D36D0)"
+              fill="var(--color-primary-light, #F2A3B5)"
               fillOpacity="0.5"
               rx="143"
               ry="252.378"
@@ -130,8 +130,8 @@ export default function CosmicBackground() {
             y2="203.106"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--color-primary, #937AFF)" />
-            <stop offset="1" stopColor="var(--color-primary, #937AFF)" stopOpacity="0" />
+            <stop stopColor="var(--color-primary, #DA7B93)" />
+            <stop offset="1" stopColor="var(--color-primary, #DA7B93)" stopOpacity="0" />
           </linearGradient>
           <linearGradient
             id="bg_d-mesh"
@@ -141,8 +141,8 @@ export default function CosmicBackground() {
             y2="213.574"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--color-primary, #937AFF)" />
-            <stop offset="1" stopColor="var(--color-primary, #937AFF)" stopOpacity="0" />
+            <stop stopColor="var(--color-primary, #DA7B93)" />
+            <stop offset="1" stopColor="var(--color-primary, #DA7B93)" stopOpacity="0" />
           </linearGradient>
           <linearGradient
             id="bg_f-mesh"
@@ -152,8 +152,8 @@ export default function CosmicBackground() {
             y2="276.359"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--color-primary, #937AFF)" />
-            <stop offset="1" stopColor="var(--color-primary, #937AFF)" stopOpacity="0" />
+            <stop stopColor="var(--color-primary, #DA7B93)" />
+            <stop offset="1" stopColor="var(--color-primary, #DA7B93)" stopOpacity="0" />
           </linearGradient>
         </defs>
       </svg>
