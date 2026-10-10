@@ -12,6 +12,8 @@ All endpoints follow the function contract:
   - Never contain business logic directly
 """
 import sys
+import os
+import asyncio
 from pathlib import Path
 
 # Add project root and backend dir to sys.path so imports work regardless of working directory (e.g. Render rootDir: backend)
@@ -42,6 +44,30 @@ from backend.routers.whatsapp import router as whatsapp_router
 
 from contextlib import asynccontextmanager
 
+async def _self_keep_alive_task():
+    """Background task to keep Render free tier awake by pinging its public URL periodically."""
+    render_url = os.environ.get("RENDER_EXTERNAL_URL") or os.environ.get("RENDER_URL")
+    if not render_url:
+        print("[KeepAlive] Local environment: RENDER_EXTERNAL_URL not set (self-ping inactive).")
+        return
+
+    import httpx
+    ping_url = f"{render_url.rstrip('/')}/api/health"
+    print(f"[KeepAlive] Automatic Render keep-alive enabled for {ping_url}")
+
+    # Wait 45 seconds after initial launch before first ping
+    await asyncio.sleep(45)
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        while True:
+            try:
+                resp = await client.get(ping_url)
+                print(f"[KeepAlive] Ping {ping_url} -> {resp.status_code} OK (Render active)")
+            except Exception as e:
+                print(f"[KeepAlive] Ping notice: {e}")
+            # Ping every 2 minutes (120s) to keep Render awake safely under the 15-min limit
+            await asyncio.sleep(120)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Ensure mock CSV datasets exist so endpoints never fail on fresh cloud deployments."""
@@ -54,7 +80,12 @@ async def lifespan(app: FastAPI):
             print("[Startup] Seed data successfully generated.")
         except Exception as exc:
             print(f"[Startup] Warning during seed data generation: {exc}")
-    yield
+    
+    keep_alive_task = asyncio.create_task(_self_keep_alive_task())
+    try:
+        yield
+    finally:
+        keep_alive_task.cancel()
 
 app = FastAPI(
     title="FinPilot API",

@@ -446,7 +446,7 @@ export default function WhatsAppCollector() {
     }
   };
 
-  // Single Target: 100% Autonomous Headless Playwright Send (Zero manual action, no page opening)
+  // Single Target: Autonomous Background Send
   const handleAutoSendSingleReminder = async (item) => {
     if (!item) return;
     setProcessingId(item.invoice_id);
@@ -498,17 +498,17 @@ export default function WhatsAppCollector() {
     }
   };
 
-  // Master Action: Batch Send All Reminders (100% Autonomous Headless Playwright Background Service)
+  // Master Action: Batch Send All Reminders (Background Queue Service)
   const handleSendAllReminders = async () => {
     if (!filteredReminders.length || isDispatchingAll) return;
     setIsDispatchingAll(true);
 
     const dispatchingMsg =
       lang === 'ur'
-        ? '⚡ خودکار پلے رائٹ بوٹ فعال: تمام یاد دہانیاں پس منظر میں بھیجی جا رہی ہیں — دستی کارروائی کی ضرورت نہیں!'
+        ? '⚡ خودکار بوٹ فعال: تمام یاد دہانیاں پس منظر میں بھیجی جا رہی ہیں — دستی کارروائی کی ضرورت نہیں!'
         : lang === 'zh'
         ? '⚡ 后台自主 AI 机器人已启动：正在完全后台自动派发提醒，无需任何手动操作！'
-        : '⚡ Autonomous Playwright Bot: Reminders sending 100% headlessly in the background — zero manual clicking required!';
+        : '⚡ Autonomous Bot: Reminders sending in the background — zero manual clicking required!';
     setToastMessage(dispatchingMsg);
 
     try {
@@ -988,7 +988,7 @@ export default function WhatsAppCollector() {
                             onClick={() => handleAutoSendSingleReminder(item)}
                             disabled={isProcessing}
                             className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-secondary hover:bg-secondary-light text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-secondary/20 active:scale-95 whitespace-nowrap disabled:opacity-50"
-                            title="Send reminder completely automatically in background via Playwright bot (Zero manual action)"
+                            title="Send reminder automatically in background (Zero manual action)"
                           >
                             <span className={isProcessing ? 'animate-spin inline-block' : ''}>
                               {isProcessing ? '↻' : '🤖'}
@@ -1179,7 +1179,7 @@ export default function WhatsAppCollector() {
                     await handleAutoSendSingleReminder(updatedItem);
                   }}
                   className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-semibold bg-secondary hover:bg-secondary-light text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-secondary/30 cursor-pointer font-medium"
-                  title="Dispatch completely automatically in background via Playwright bot (Zero manual action required)"
+                  title="Dispatch automatically in background (Zero manual action required)"
                 >
                   <span>🤖</span>
                   <span>{t('btn_auto_send_bot', 'Auto-Send Headless')}</span>
