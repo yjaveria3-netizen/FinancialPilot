@@ -14,7 +14,7 @@ export default function HeroBanner() {
           {/* Heading with exact styling */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-secondary text-white leading-tight mb-6">
             The AI Financial Co-Pilot for{' '}
-            <span className="text-primary italic">Growing Businesses</span>
+            <span className="text-primary">Growing Businesses</span>
           </h1>
 
           {/* Subtitle */}
