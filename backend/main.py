@@ -11,6 +11,17 @@ All endpoints follow the function contract:
   - Serialize the result to JSON
   - Never contain business logic directly
 """
+import sys
+from pathlib import Path
+
+# Add project root and backend dir to sys.path so imports work regardless of working directory (e.g. Render rootDir: backend)
+BACKEND_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = BACKEND_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -29,24 +40,47 @@ from backend.modules.demo_trigger import trigger_crisis_mode
 from backend.modules.whatsapp_agent import get_overdue_invoices, mark_invoice_paid
 from backend.routers.whatsapp import router as whatsapp_router
 
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Ensure mock CSV datasets exist so endpoints never fail on fresh cloud deployments."""
+    data_dir = BACKEND_DIR / "data"
+    required = ["transactions.csv", "invoices.csv", "customers.csv", "suppliers.csv", "inventory.csv", "products.csv"]
+    if not all((data_dir / f).exists() for f in required):
+        try:
+            print("[Startup] Initializing missing CSV mock data...")
+            regenerate_all_data()
+            print("[Startup] Seed data successfully generated.")
+        except Exception as exc:
+            print(f"[Startup] Warning during seed data generation: {exc}")
+    yield
+
 app = FastAPI(
     title="FinPilot API",
     description="Backend API for FinPilot — AI-powered financial intelligence for SMBs.",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 app.include_router(whatsapp_router)
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-# Allow the React dev server (port 3000 / 5173) to call this API.
+# Allow both local development and production deployments (e.g., Vercel, Netlify, Render)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000"],
-    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
+    ],
+    allow_origin_regex=r"^https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # ── Health Check ──────────────────────────────────────────────────────────────
