@@ -35,7 +35,7 @@ export default function CreditScorePage() {
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
           {t('credit_readiness', 'Credit Readiness')}{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">{t('score_engine_tool', 'Score')}</span>
+          <span className="text-secondary-light font-bold">{t('score_engine_tool', 'Score')}</span>
         </h1>
         <p className="text-sm text-text-dark mt-1">
           {t(
@@ -59,8 +59,8 @@ export default function CreditScorePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Gauge Card (1 col) — Clean organic floating card */}
           <div className="rounded-4xl card-electric p-8 flex flex-col items-center justify-center text-center relative overflow-hidden group">
-            <div className="absolute -top-24 -right-24 size-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 size-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-24 -right-24 size-48 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 size-48 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10 flex flex-col items-center">
               <div className="text-xs uppercase tracking-wider text-text-dark font-semibold mb-6 flex items-center gap-2">

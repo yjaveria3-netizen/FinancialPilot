@@ -24,6 +24,7 @@ import {
 export default function Header() {
   const { lang, setLang, t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
   const [scannerOpen, setScannerOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncToast, setSyncToast] = useState(false);
@@ -109,13 +110,16 @@ export default function Header() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Lock body scroll when popup is open
+  // Lock body scroll when popup or scanner modal is open
   useEffect(() => {
     if (menuOpen || scannerOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [menuOpen, scannerOpen]);
 
   // Clean, localized feature categories
@@ -150,13 +154,6 @@ export default function Header() {
           to: '/scenario-planner',
           Icon: IconScenarioPlanner,
           desc: t('desc_scenario', 'Monte Carlo what-if cash flow simulation models'),
-          live: true,
-        },
-        {
-          name: t('nav_whatsapp', 'WhatsApp Collection Agent'),
-          to: '/whatsapp-collector',
-          Icon: IconWhatsApp,
-          desc: t('desc_whatsapp', 'AI-automated overdue follow-ups & 1-click cash reconciliation'),
           live: true,
         },
       ],
@@ -231,7 +228,7 @@ export default function Header() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <nav className="flex items-center justify-between bg-[#2E151B]/80 backdrop-blur-xl border border-[#4D2330]/80 rounded-xl px-5 py-2.5 shadow-xl transition-all hover:border-secondary/50">
             {/* Left: Financial Pilot Brand Logo (Strictly English preserved) */}
-            <Link to="/" onClick={() => setMenuOpen(false)} className="shrink-0 flex items-center">
+            <Link to="/" onClick={closeMenu} className="shrink-0 flex items-center">
               <Logo />
             </Link>
 
@@ -318,34 +315,41 @@ export default function Header() {
                 {t('launch_hub', 'Launch Hub')}
               </Link>
 
-              {/* Animated 3-Line Hamburger to Cross Button */}
+              {/* Animated 3-Dot to Cross Button */}
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className={`size-10 rounded-xl flex items-center justify-center border transition-all duration-300 cursor-pointer ${
+                className={`group size-10 rounded-xl flex items-center justify-center border transition-all duration-300 cursor-pointer ${
                   menuOpen
-                    ? 'bg-secondary/25 text-white border-secondary shadow-lg shadow-secondary/25'
-                    : 'bg-light/80 border-border text-white hover:border-secondary/60 hover:bg-white/10'
+                    ? 'bg-secondary/25 text-white border-secondary shadow-lg shadow-secondary/25 ring-2 ring-secondary/30'
+                    : 'bg-light/80 border-border text-white hover:border-secondary/60 hover:bg-white/10 hover:shadow-md'
                 }`}
-                aria-label={menuOpen ? 'Close feature menu' : 'Open feature menu'}
+                aria-label={menuOpen ? t('close_menu', 'Close feature menu') : t('open_menu', 'Open feature menu')}
+                title={menuOpen ? 'Close feature menu' : 'Open feature suite (Three-dot Hub)'}
               >
-                <div className="relative size-5 flex items-center justify-center">
-                  {/* Line 1 (Top) */}
+                <div className="relative size-5 flex items-center justify-center pointer-events-none">
+                  {/* Dot 1 (Top) -> Morphs to First Cross Arm */}
                   <span
-                    className={`absolute h-[2px] w-5 bg-white rounded-full transition-all duration-300 ease-in-out ${
-                      menuOpen ? 'rotate-45 translate-y-0' : '-translate-y-1.5'
+                    className={`absolute rounded-full transition-all duration-300 ease-in-out ${
+                      menuOpen
+                        ? 'w-5 h-[2px] rotate-45 translate-y-0 bg-white'
+                        : 'w-1.5 h-1.5 -translate-y-2 bg-white/90 group-hover:bg-secondary-light group-hover:scale-125'
                     }`}
                   />
-                  {/* Line 2 (Middle) */}
+                  {/* Dot 2 (Center) -> Fades/scales out */}
                   <span
-                    className={`absolute h-[2px] w-5 bg-white rounded-full transition-all duration-300 ease-in-out ${
-                      menuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
+                    className={`absolute rounded-full transition-all duration-300 ease-in-out ${
+                      menuOpen
+                        ? 'w-5 h-[2px] opacity-0 scale-0 translate-y-0 bg-white'
+                        : 'w-1.5 h-1.5 opacity-100 scale-100 translate-y-0 bg-white/90 group-hover:bg-secondary-light group-hover:scale-125'
                     }`}
                   />
-                  {/* Line 3 (Bottom) */}
+                  {/* Dot 3 (Bottom) -> Morphs to Second Cross Arm */}
                   <span
-                    className={`absolute h-[2px] w-5 bg-white rounded-full transition-all duration-300 ease-in-out ${
-                      menuOpen ? '-rotate-45 translate-y-0' : 'translate-y-1.5'
+                    className={`absolute rounded-full transition-all duration-300 ease-in-out ${
+                      menuOpen
+                        ? 'w-5 h-[2px] -rotate-45 translate-y-0 bg-white'
+                        : 'w-1.5 h-1.5 translate-y-2 bg-white/90 group-hover:bg-secondary-light group-hover:scale-125'
                     }`}
                   />
                 </div>
@@ -374,149 +378,153 @@ export default function Header() {
       {/* ── Invoice & Receipt Scanner Modal ── */}
       <InvoiceScannerModal isOpen={scannerOpen} onClose={() => setScannerOpen(false)} />
 
-      {/* ── Pop-Up Features Modal Overlay (With Animated Cross to Close) ── */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 backdrop-blur-2xl bg-body/90 transition-all duration-300 animate-fadeIn">
-          {/* Backdrop click to close */}
-          <div
-            className="absolute inset-0 -z-10"
-            onClick={() => setMenuOpen(false)}
-          />
+      {/* ── Pop-Up Features Modal Overlay (With Smooth Open & Close Transitions) ── */}
+      <div
+        className={`nav-popup-overlay ${menuOpen ? 'is-open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Features and Modules Suite"
+      >
+        {/* Backdrop click to close */}
+        <div
+          className="absolute inset-0 -z-10 cursor-pointer"
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
 
-          {/* Modal Container with entrance scale animation and zero scrollbar */}
-          <div className="relative w-full max-w-5xl max-h-[90vh] bg-light/95 border border-border rounded-4xl p-5 sm:p-8 shadow-2xl overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden transform transition-all duration-300 scale-100 animate-scaleUp">
-            {/* Top Bar of Modal */}
-            <div className="flex items-center justify-between pb-6 border-b border-border/80 mb-8">
-              <div className="flex items-center gap-3">
-                <Logo />
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-secondary/20 text-secondary-light border border-secondary/30 font-semibold hidden sm:inline">
-                  {t('complete_financial_suite', 'Complete Financial Suite')}
-                </span>
+        {/* Modal Container with entrance and smooth exit scale animation and zero scrollbar */}
+        <div className="nav-popup-panel bg-light/95 border border-border rounded-4xl p-5 sm:p-8 shadow-2xl overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {/* Top Bar of Modal */}
+          <div className="flex items-center justify-between pb-6 border-b border-border/80 mb-8">
+            <div className="flex items-center gap-3">
+              <Logo />
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-secondary/20 text-secondary-light border border-secondary/30 font-semibold hidden sm:inline">
+                {t('complete_financial_suite', 'Complete Financial Suite')}
+              </span>
+            </div>
+
+            {/* Close Button (X) */}
+            <button
+              type="button"
+              onClick={() => setMenuOpen(false)}
+              className="size-10 rounded-xl bg-dark/70 border border-border text-text hover:text-white hover:border-secondary hover:bg-secondary/20 transition-all flex items-center justify-center cursor-pointer group shadow-sm hover:shadow-secondary/20"
+              aria-label="Close feature menu"
+            >
+              <IconClose className="size-4 group-hover:rotate-90 transition-transform duration-200" />
+            </button>
+          </div>
+
+          {/* Feature Categories */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {featureCategories.map((group) => (
+              <div key={group.group} className="space-y-4">
+                <div className="flex items-center justify-between border-b border-border/50 pb-2">
+                  <h4 className="text-xs uppercase font-bold tracking-wider text-secondary-light">
+                    {group.group}
+                  </h4>
+                  <span className="text-[10px] text-text-dark bg-white/5 px-2 py-0.5 rounded font-mono">
+                    {group.badge}
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  {group.items.map((item) => {
+                    const { Icon } = item;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.to}
+                        onClick={() => setMenuOpen(false)}
+                        className="group flex items-start gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-border transition-all"
+                      >
+                        <div className="size-5 shrink-0 mt-0.5 text-secondary-light group-hover:scale-110 transition-transform">
+                          <Icon className="size-5" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold text-white group-hover:text-secondary-light transition-colors">
+                              {item.name}
+                            </span>
+                            {item.live ? (
+                              <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.2 rounded-full font-semibold">
+                                {t('live', 'Live')}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] bg-white/5 text-text-dark px-1.5 py-0.2 rounded font-mono">
+                                {t('active_state', 'Active')}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-text-dark mt-0.5 line-clamp-1">
+                            {item.desc}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
+            ))}
+          </div>
 
-              {/* Close Button (X) */}
+          {/* Bottom Modal Navigation & Actions */}
+          <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4 text-xs text-text-dark flex-wrap">
+              <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">
+                {t('home_landing', 'Home Landing')}
+              </Link>
+              <span>•</span>
               <button
                 type="button"
-                onClick={() => setMenuOpen(false)}
-                className="size-10 rounded-xl bg-dark/70 border border-border text-text hover:text-white hover:border-secondary hover:bg-secondary/20 transition-all flex items-center justify-center cursor-pointer"
-                aria-label="Close feature menu"
+                onClick={() => {
+                  setMenuOpen(false);
+                  setScannerOpen(true);
+                }}
+                className="hover:text-white transition-colors cursor-pointer"
               >
-                <IconClose className="size-4" />
+                {t('ocr_invoice_scanner', 'OCR Invoice Scanner')}
+              </button>
+              <span>•</span>
+              <a
+                href="http://localhost:8000/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                {t('api_docs', 'FastAPI Backend Docs')}
+              </a>
+              <span>•</span>
+              <button
+                type="button"
+                onClick={handleExportDossier}
+                disabled={isExportingDossier}
+                className="hover:text-secondary-light text-secondary-light/90 transition-colors cursor-pointer flex items-center gap-1 font-medium disabled:opacity-50"
+                title="Export Bank & Lender Compliance Dossier (.JSON)"
+              >
+                <span className="text-secondary-light font-bold">📜</span>
+                <span>{isExportingDossier ? 'Compiling Dossier...' : t('lender_dossier', 'Lender Dossier')}</span>
+              </button>
+              <span>•</span>
+              <button
+                type="button"
+                onClick={handleResetData}
+                disabled={isSyncing}
+                className="hover:text-emerald-400 text-emerald-400/80 transition-colors cursor-pointer flex items-center gap-1 font-medium"
+              >
+                <span className={isSyncing ? 'animate-spin inline-block' : ''}>↻</span> {t('reset_demo_data', 'Reset Demo Data')}
               </button>
             </div>
 
-            {/* Feature Categories */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              {featureCategories.map((group) => (
-                <div key={group.group} className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-border/50 pb-2">
-                    <h4 className="text-xs uppercase font-bold tracking-wider text-secondary-light">
-                      {group.group}
-                    </h4>
-                    <span className="text-[10px] text-text-dark bg-white/5 px-2 py-0.5 rounded font-mono">
-                      {group.badge}
-                    </span>
-                  </div>
-
-                  <div className="space-y-2">
-                    {group.items.map((item) => {
-                      const { Icon } = item;
-                      return (
-                        <Link
-                          key={item.name}
-                          to={item.to}
-                          onClick={() => setMenuOpen(false)}
-                          className="group flex items-start gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-border transition-all"
-                        >
-                          <div className="size-5 shrink-0 mt-0.5 text-secondary-light group-hover:scale-110 transition-transform">
-                            <Icon className="size-5" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-semibold text-white group-hover:text-secondary-light transition-colors">
-                                {item.name}
-                              </span>
-                              {item.live ? (
-                                <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.2 rounded-full font-semibold">
-                                  {t('live', 'Live')}
-                                </span>
-                              ) : (
-                                <span className="text-[10px] bg-white/5 text-text-dark px-1.5 py-0.2 rounded font-mono">
-                                  {t('active_state', 'Active')}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-text-dark mt-0.5 line-clamp-1">
-                              {item.desc}
-                            </p>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Bottom Modal Navigation & Actions */}
-            <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4 text-xs text-text-dark">
-                <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-white transition-colors">
-                  {t('home_landing', 'Home Landing')}
-                </Link>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    setScannerOpen(true);
-                  }}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  {t('ocr_invoice_scanner', 'OCR Invoice Scanner')}
-                </button>
-                <span>•</span>
-                <a
-                  href="http://localhost:8000/docs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  {t('api_docs', 'FastAPI Backend Docs')}
-                </a>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={handleExportDossier}
-                  disabled={isExportingDossier}
-                  className="hover:text-secondary-light text-secondary-light/90 transition-colors cursor-pointer flex items-center gap-1 font-medium disabled:opacity-50"
-                  title="Export Bank & Lender Compliance Dossier (.JSON)"
-                >
-                  <span className="text-secondary-light font-bold">📜</span>
-                  <span>{isExportingDossier ? 'Compiling Dossier...' : t('lender_dossier', 'Lender Dossier')}</span>
-                </button>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={handleResetData}
-                  disabled={isSyncing}
-                  className="hover:text-emerald-400 text-emerald-400/80 transition-colors cursor-pointer flex items-center gap-1 font-medium"
-                >
-                  <span className={isSyncing ? 'animate-spin inline-block' : ''}>↻</span> {t('reset_demo_data', 'Reset Demo Data')}
-                </button>
-              </div>
-
-              <Link
-                to="/dashboard"
-                onClick={() => setMenuOpen(false)}
-                className="btn btn-primary w-full sm:w-auto text-xs py-2 px-5 rounded-xl"
-              >
-                {t('launch_hub_arrow', 'Launch Financial Pilot Hub →')}
-              </Link>
-            </div>
+            <Link
+              to="/dashboard"
+              onClick={() => setMenuOpen(false)}
+              className="btn btn-primary w-full sm:w-auto text-xs py-2 px-5 rounded-xl shrink-0"
+            >
+              {t('launch_hub_arrow', 'Launch Financial Pilot Hub →')}
+            </Link>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }

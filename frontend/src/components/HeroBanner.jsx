@@ -17,7 +17,7 @@ export default function HeroBanner() {
           {/* Heading with exact styling */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-secondary text-white leading-tight mb-6">
             {t('hero_banner_title_1', 'The AI Financial Co-Pilot for')}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-extrabold drop-shadow-[0_0_20px_rgba(63,191,168,0.35)]">
+            <span className="text-secondary-light font-extrabold drop-shadow-[0_0_20px_rgba(63,191,168,0.35)]">
               {t('hero_banner_title_2', 'Growing Businesses')}
             </span>
           </h1>

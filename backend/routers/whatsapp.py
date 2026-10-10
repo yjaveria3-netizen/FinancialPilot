@@ -1,22 +1,29 @@
 """
-FinPilot — WhatsApp Automation Router
+FinPilot — WhatsApp Automation Router (Disabled)
 Module: /backend/routers/whatsapp.py
-
-Endpoints:
-- POST /api/whatsapp/bulk-send:
-  Accepts collection queue payload from frontend, schedules Playwright background
-  task asynchronously via FastAPI BackgroundTasks, and returns an immediate 200 OK.
-- GET /api/whatsapp/status:
-  Returns current Playwright session and dispatch telemetry.
 """
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from typing import List, Optional, Any
+from typing import List, Optional
 from datetime import datetime
 
-from backend.services.whatsapp_automation import send_bulk_reminders, clean_phone_number
+from backend.services.whatsapp_automation import (
+    get_connection_status,
+    save_connection_state,
+    disconnect_session,
+    generate_pairing_qr,
+)
 
 router = APIRouter(prefix="/api/whatsapp", tags=["WhatsApp Automation"])
+
+
+class ConnectPayload(BaseModel):
+    phone: Optional[str] = None
+    sender_name: Optional[str] = None
+
+
+class QrRequestPayload(BaseModel):
+    phone: Optional[str] = None
 
 
 class ReminderItem(BaseModel):
@@ -36,61 +43,63 @@ class BulkSendPayload(BaseModel):
     reminders: List[ReminderItem] = Field(default_factory=list)
 
 
-# In-memory latest dispatch report cache
+@router.get("/connection")
+def get_whatsapp_connection():
+    """Returns current paired device status."""
+    return get_connection_status()
+
+
+@router.post("/qr-code")
+async def request_pairing_qr(payload: Optional[QrRequestPayload] = None):
+    """Generates an authentic scannable QR Code data URL for linking."""
+    phone = payload.phone if payload else "+92 3224154788"
+    return await generate_pairing_qr(phone)
+
+
+@router.post("/confirm-pairing")
+def confirm_device_pairing(payload: ConnectPayload):
+    """Confirms device pairing."""
+    return save_connection_state(payload.phone or "+92 3224154788", payload.sender_name)
+
+
+@router.post("/disconnect")
+def disconnect_device():
+    """Unlinks current WhatsApp device."""
+    return disconnect_session()
+
+
+@router.post("/launch-login-window")
+def launch_login_window():
+    """Feature disabled."""
+    return {
+        "status": "disabled",
+        "message": "WhatsApp desktop login window is disabled."
+    }
+
+
+# In-memory dispatch status cache
 _LATEST_DISPATCH_LOG: dict = {
-    "status": "idle",
+    "status": "disabled",
     "last_run": None,
     "dispatched_count": 0,
-    "total": 0
+    "total": 0,
+    "message": "WhatsApp feature is disabled."
 }
 
 
-async def _run_background_dispatch(reminders_dicts: list[dict]):
-    """Asynchronous worker triggered by BackgroundTasks."""
-    global _LATEST_DISPATCH_LOG
-    _LATEST_DISPATCH_LOG["status"] = "in_progress"
-    _LATEST_DISPATCH_LOG["last_run"] = datetime.now().isoformat()
-    _LATEST_DISPATCH_LOG["total"] = len(reminders_dicts)
-
-    try:
-        report = await send_bulk_reminders(reminders_dicts)
-        _LATEST_DISPATCH_LOG["status"] = "completed"
-        _LATEST_DISPATCH_LOG["dispatched_count"] = report.get("dispatched_count", len(reminders_dicts))
-        _LATEST_DISPATCH_LOG["report"] = report
-    except Exception as e:
-        print(f"[WhatsAppRouter] Background dispatch error: {e}")
-        _LATEST_DISPATCH_LOG["status"] = "error"
-        _LATEST_DISPATCH_LOG["error"] = str(e)
-
-
 @router.post("/bulk-send")
-async def bulk_send_whatsapp_reminders(
-    payload: BulkSendPayload,
-    background_tasks: BackgroundTasks
-):
-    """
-    Asynchronously queues Playwright bulk WhatsApp dispatch.
-    Returns immediately with 200 OK so frontend UI never blocks.
-    """
-    reminders = payload.reminders
-    if not reminders:
-        raise HTTPException(status_code=400, detail="Reminders list cannot be empty.")
-
-    reminders_dicts = [r.model_dump() for r in reminders]
-    
-    # Schedule Playwright dispatch in the background
-    background_tasks.add_task(_run_background_dispatch, reminders_dicts)
-
+async def bulk_send_whatsapp_reminders(payload: BulkSendPayload):
+    """Returns disabled status immediately without scheduling background tasks."""
     return {
-        "status": "success",
-        "message": "Bulk WhatsApp Queue Dispatched Successfully",
-        "queued_targets": len(reminders),
+        "status": "disabled",
+        "message": "WhatsApp bulk sending is currently disabled.",
+        "queued_targets": 0,
         "dispatched_at": datetime.now().isoformat(),
-        "mode": "playwright_background_worker"
+        "mode": "disabled"
     }
 
 
 @router.get("/status")
 def get_whatsapp_automation_status():
-    """Returns the telemetry log of the last automated background run."""
+    """Returns the telemetry log."""
     return _LATEST_DISPATCH_LOG

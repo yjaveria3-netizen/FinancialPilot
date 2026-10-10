@@ -102,25 +102,7 @@ export default function ElectricProgressBar({
             width: `${pct}%`,
             boxShadow: `0 0 10px ${theme.glowColor}`
           }}
-        >
-          {/* Flowing Electric Current Sheen */}
-          {pct > 5 && (
-            <div className={`electric-bar-sheen delay-current-${delayIndex % 4}`} />
-          )}
-
-          {/* Stable Rock-Solid Vertically Centered Spark Node */}
-          {pct > 3 && (
-            <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center pointer-events-none pr-0.5">
-              <span
-                className="size-1.5 rounded-full bg-white block"
-                style={{
-                  boxShadow: `0 0 4px #FFFFFF, 0 0 8px ${theme.sparkColor}, 0 0 12px ${theme.sparkColor}`,
-                  animation: 'electricSparkFlicker 1.8s ease-in-out infinite'
-                }}
-              />
-            </div>
-          )}
-        </div>
+        />
       </div>
 
       {/* Optional Explanation Text */}

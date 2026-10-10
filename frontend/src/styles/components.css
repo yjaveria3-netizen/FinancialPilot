@@ -60,7 +60,7 @@
 
 /* Highlight */
 .hasHighlight strong {
-  @apply text-primary;
+  @apply text-secondary-light font-bold;
 }
 
 /* notice */
@@ -84,12 +84,12 @@
 }
 
 .notice.note {
-  @apply text-primary;
+  @apply text-secondary-light;
   @apply border-current;
 }
 
 .notice.tip {
-  @apply text-primary-light;
+  @apply text-secondary-light;
   @apply border-current;
 }
 
