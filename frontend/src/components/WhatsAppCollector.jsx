@@ -460,7 +460,7 @@ export default function WhatsAppCollector() {
             {t('total_overdue', 'Total Overdue Capital')}
           </div>
           <div className="text-2xl sm:text-3xl font-bold font-mono text-secondary-light">
-            ${totalOverdueCapital.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rs. {totalOverdueCapital.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-[11px] text-text-dark mt-2 flex items-center gap-1.5">
             <span className="text-secondary-light font-semibold">•</span>
@@ -502,7 +502,7 @@ export default function WhatsAppCollector() {
             {t('reconciled_session', 'Reconciled This Session')}
           </div>
           <div className="text-2xl sm:text-3xl font-bold font-mono text-secondary-light">
-            ${sessionReconciledAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rs. {sessionReconciledAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-[11px] text-secondary-light mt-2 flex items-center gap-1.5">
             <IconCheck className="size-3 text-secondary-light" />
@@ -691,7 +691,7 @@ export default function WhatsAppCollector() {
                       {/* Amount */}
                       <td className="py-4 px-6 align-middle">
                         <div className="font-mono font-bold text-white text-sm">
-                          ${Number(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          Rs. {Number(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </div>
                       </td>
 
@@ -827,7 +827,7 @@ export default function WhatsAppCollector() {
               <div>
                 <span className="text-[10px] text-text-dark uppercase tracking-wider block">Outstanding</span>
                 <span className="font-mono font-bold text-secondary-light">
-                  ${Number(activeModalItem.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  Rs. {Number(activeModalItem.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div>

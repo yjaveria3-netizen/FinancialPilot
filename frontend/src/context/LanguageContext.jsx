@@ -5,7 +5,7 @@ export const LanguageContext = createContext({
   setLang: () => {},
   t: (key, fallback) => fallback || key,
   formatNumber: (n) => String(n),
-  formatCurrency: (n) => `$${Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+  formatCurrency: (n) => `Rs. ${Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
 });
 
 export const TRANSLATIONS = {
@@ -521,7 +521,7 @@ export const TRANSLATIONS = {
     ap_balance_sheet: 'Balance Sheet',
     ap_income_statement: 'Income Statement (P&L)',
     ap_cash_flow: 'Cash Flow Statement',
-    ap_in_usd: 'In USD',
+    ap_in_usd: 'In PKR',
     ap_accrual_basis: 'Accrual Basis',
     ap_current_assets: 'Current Assets',
     ap_cash_equiv: 'Cash and Cash Equivalents',
@@ -1740,7 +1740,7 @@ export const TRANSLATIONS = {
     ap_balance_sheet: '资产负债表',
     ap_income_statement: '利润表 (损益表)',
     ap_cash_flow: '现金流量表',
-    ap_in_usd: '单位：美元 (USD)',
+    ap_in_usd: '单位：美元 (PKR)',
     ap_accrual_basis: '权责发生制',
     ap_current_assets: '流动资产',
     ap_cash_equiv: '货币资金及现金等价物',
@@ -1878,7 +1878,7 @@ export function LanguageProvider({ children }) {
     return Number(val).toLocaleString('en-US');
   };
 
-  const formatCurrency = (val, currency = '$') => {
+  const formatCurrency = (val, currency = 'Rs. ') => {
     const num = Number(val) || 0;
     return `${currency}${num.toLocaleString('en-US', {
       minimumFractionDigits: 2,

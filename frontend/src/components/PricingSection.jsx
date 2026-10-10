@@ -133,7 +133,7 @@ export default function PricingSection() {
 
                   <div className="flex items-baseline gap-1 mb-8">
                     <span className="text-4xl sm:text-5xl font-bold font-secondary text-white font-mono">
-                      ${price}
+                      Rs. {price}
                     </span>
                     <span className="text-xs text-text-dark font-mono">
                       {t('pricing_per_month', '/month')}

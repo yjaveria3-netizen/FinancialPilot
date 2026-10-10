@@ -112,7 +112,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                   className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-secondary/60"
                 >
                   <IconLightning className="size-3.5 text-secondary-light" />
-                  <span>{t('scan_sample_1', 'Acme Freight Bill ($3,480)')}</span>
+                  <span>{t('scan_sample_1', 'Acme Freight Bill (Rs. 3,480)')}</span>
                 </button>
                 <button
                   type="button"
@@ -120,7 +120,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                   className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-secondary/60"
                 >
                   <IconLightning className="size-3.5 text-secondary-light" />
-                  <span>{t('scan_sample_2', 'Cloud Infrastructure ($1,850)')}</span>
+                  <span>{t('scan_sample_2', 'Cloud Infrastructure (Rs. 1,850)')}</span>
                 </button>
               </div>
             </div>
@@ -191,13 +191,13 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                   {scannedResult.lineItems.map((item, i) => (
                     <div key={i} className="flex justify-between text-text">
                       <span>{item.desc} (x{item.qty})</span>
-                      <span className="font-mono text-white">${item.total.toFixed(2)}</span>
+                      <span className="font-mono text-white">Rs. {item.total.toFixed(2)}</span>
                     </div>
                   ))}
                   <div className="flex justify-between font-bold text-sm text-white pt-2 border-t border-border/40">
                     <span>{t('scan_total_amount', 'Total Amount')}</span>
                     <span className="text-secondary-light font-mono font-bold">
-                      ${scannedResult.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      Rs. {scannedResult.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>

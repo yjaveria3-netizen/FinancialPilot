@@ -65,7 +65,7 @@ Fiscal Period,${data.company_profile?.fiscal_period}
 Accounting Basis,Accrual
 Certification Hash,${data.consent_status?.cryptographic_hash}
 
-BALANCE SHEET SUMMARY,AMOUNT (USD)
+BALANCE SHEET SUMMARY,AMOUNT (PKR)
 Cash and Cash Equivalents,${bs.assets.cash_and_equivalents}
 Accounts Receivable (Net),${bs.assets.accounts_receivable_net}
 Inventory Valuation,${bs.assets.inventory_valuation}
@@ -79,7 +79,7 @@ TOTAL CURRENT LIABILITIES,${bs.liabilities.total_current_liabilities}
 Retained Earnings & Equity,${bs.equity.total_equity}
 TOTAL LIABILITIES AND EQUITY,${bs.total_liabilities_and_equity}
 
-INCOME STATEMENT (P&L),AMOUNT (USD)
+INCOME STATEMENT (P&L),AMOUNT (PKR)
 Gross Revenue,${is.gross_revenue}
 Cost of Goods Sold (COGS),${is.cost_of_goods_sold}
 GROSS PROFIT,${is.gross_profit}
@@ -130,27 +130,27 @@ Controls Status:    ${data.role_insights?.controls_rating}
 KEY FINANCIAL HEALTH & UNDERWRITING RATIOS:
 - Current Ratio:              ${data.verified_statements?.ratios?.current_ratio}x
 - Quick Ratio:                ${data.verified_statements?.ratios?.quick_ratio}x
-- Working Capital:            $${Number(data.verified_statements?.ratios?.working_capital || 0).toLocaleString()}
+- Working Capital:            Rs. ${Number(data.verified_statements?.ratios?.working_capital || 0).toLocaleString()}
 - Debt Service Coverage DSCR: ${data.verified_statements?.ratios?.dscr}x
 - Gross Profit Margin:        ${data.verified_statements?.ratios?.gross_margin_pct}%
 - Net Profit Margin:          ${data.verified_statements?.ratios?.net_margin_pct}%
 
 BALANCE SHEET OVERVIEW:
-- Total Current Assets:       $${Number(data.verified_statements?.balance_sheet?.assets?.total_current_assets || 0).toLocaleString()}
-  * Cash & Equivalents:       $${Number(data.verified_statements?.balance_sheet?.assets?.cash_and_equivalents || 0).toLocaleString()}
-  * Accounts Receivable:      $${Number(data.verified_statements?.balance_sheet?.assets?.accounts_receivable_net || 0).toLocaleString()}
-  * Inventory (COGS Basis):   $${Number(data.verified_statements?.balance_sheet?.assets?.inventory_valuation || 0).toLocaleString()}
+- Total Current Assets:       Rs. ${Number(data.verified_statements?.balance_sheet?.assets?.total_current_assets || 0).toLocaleString()}
+  * Cash & Equivalents:       Rs. ${Number(data.verified_statements?.balance_sheet?.assets?.cash_and_equivalents || 0).toLocaleString()}
+  * Accounts Receivable:      Rs. ${Number(data.verified_statements?.balance_sheet?.assets?.accounts_receivable_net || 0).toLocaleString()}
+  * Inventory (COGS Basis):   Rs. ${Number(data.verified_statements?.balance_sheet?.assets?.inventory_valuation || 0).toLocaleString()}
 
-- Total Current Liabilities:  $${Number(data.verified_statements?.balance_sheet?.liabilities?.total_current_liabilities || 0).toLocaleString()}
-- Total Stockholders Equity:  $${Number(data.verified_statements?.balance_sheet?.equity?.total_equity || 0).toLocaleString()}
+- Total Current Liabilities:  Rs. ${Number(data.verified_statements?.balance_sheet?.liabilities?.total_current_liabilities || 0).toLocaleString()}
+- Total Stockholders Equity:  Rs. ${Number(data.verified_statements?.balance_sheet?.equity?.total_equity || 0).toLocaleString()}
 
 INCOME STATEMENT (P&L):
-- Gross Revenue YTD:          $${Number(data.verified_statements?.income_statement?.gross_revenue || 0).toLocaleString()}
-- Cost of Goods Sold (COGS):  $${Number(data.verified_statements?.income_statement?.cost_of_goods_sold || 0).toLocaleString()}
-- Gross Profit:               $${Number(data.verified_statements?.income_statement?.gross_profit || 0).toLocaleString()}
-- Total Operating Expenses:   $${Number(data.verified_statements?.income_statement?.operating_expenses?.total_opex || 0).toLocaleString()}
-- Operating Income:           $${Number(data.verified_statements?.income_statement?.operating_income || 0).toLocaleString()}
-- Net Income:                 $${Number(data.verified_statements?.income_statement?.net_income || 0).toLocaleString()}
+- Gross Revenue YTD:          Rs. ${Number(data.verified_statements?.income_statement?.gross_revenue || 0).toLocaleString()}
+- Cost of Goods Sold (COGS):  Rs. ${Number(data.verified_statements?.income_statement?.cost_of_goods_sold || 0).toLocaleString()}
+- Gross Profit:               Rs. ${Number(data.verified_statements?.income_statement?.gross_profit || 0).toLocaleString()}
+- Total Operating Expenses:   Rs. ${Number(data.verified_statements?.income_statement?.operating_expenses?.total_opex || 0).toLocaleString()}
+- Operating Income:           Rs. ${Number(data.verified_statements?.income_statement?.operating_income || 0).toLocaleString()}
+- Net Income:                 Rs. ${Number(data.verified_statements?.income_statement?.net_income || 0).toLocaleString()}
 
 IMMUTABLE AUDIT TRAIL LOGS:
 ${data.audit_trail
@@ -437,26 +437,26 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-[#DA7B93]/40 transition-colors">
                     <div className="flex justify-between items-center pb-3 border-b border-border">
                       <h4 className="text-sm font-bold uppercase tracking-wider text-white">{t('ap_current_assets', 'Current Assets')}</h4>
-                      <span className="text-xs text-text-dark">{t('ap_in_usd', 'In USD')}</span>
+                      <span className="text-xs text-text-dark">{t('ap_in_usd', 'In PKR')}</span>
                     </div>
 
                     <div className="space-y-3 text-xs">
                       <div className="flex justify-between items-center py-1">
                         <span className="text-zinc-300">{t('ap_cash_equiv', 'Cash and Cash Equivalents')}</span>
                         <span className="font-mono text-white font-semibold">
-                          ${bs.assets?.cash_and_equivalents?.toLocaleString()}
+                          Rs. {bs.assets?.cash_and_equivalents?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
                         <span className="text-zinc-300">{t('ap_ar_net', 'Accounts Receivable (Net)')}</span>
                         <span className="font-mono text-white font-semibold">
-                          ${bs.assets?.accounts_receivable_net?.toLocaleString()}
+                          Rs. {bs.assets?.accounts_receivable_net?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
                         <span className="text-zinc-300">{t('ap_inventory', 'Inventory (Lower of Cost or Market)')}</span>
                         <span className="font-mono text-white font-semibold">
-                          ${bs.assets?.inventory_valuation?.toLocaleString()}
+                          Rs. {bs.assets?.inventory_valuation?.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -464,7 +464,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     <div className="pt-3 border-t border-border flex justify-between items-center text-sm font-bold">
                       <span className="text-white">{t('ap_total_current_assets', 'TOTAL CURRENT ASSETS')}</span>
                       <span className="font-mono text-secondary-light text-base">
-                        ${bs.assets?.total_current_assets?.toLocaleString()}
+                        Rs. {bs.assets?.total_current_assets?.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -473,39 +473,39 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-[#DA7B93]/40 transition-colors">
                     <div className="flex justify-between items-center pb-3 border-b border-border">
                       <h4 className="text-sm font-bold uppercase tracking-wider text-white">{t('ap_liab_equity', 'Liabilities & Equity')}</h4>
-                      <span className="text-xs text-text-dark">{t('ap_in_usd', 'In USD')}</span>
+                      <span className="text-xs text-text-dark">{t('ap_in_usd', 'In PKR')}</span>
                     </div>
 
                     <div className="space-y-3 text-xs">
                       <div className="flex justify-between items-center py-1">
                         <span className="text-zinc-300">{t('ap_ap_supplier', 'Accounts Payable (Supplier AP)')}</span>
                         <span className="font-mono text-white font-semibold">
-                          ${bs.liabilities?.accounts_payable?.toLocaleString()}
+                          Rs. {bs.liabilities?.accounts_payable?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
                         <span className="text-zinc-300">{t('ap_accrued_opex', 'Accrued Operational Expenses')}</span>
                         <span className="font-mono text-white font-semibold">
-                          ${bs.liabilities?.accrued_operating_expenses?.toLocaleString()}
+                          Rs. {bs.liabilities?.accrued_operating_expenses?.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-1">
                         <span className="text-zinc-300">{t('ap_short_term_debt', 'Short-term Debt Obligations')}</span>
                         <span className="font-mono text-white font-semibold">
-                          ${bs.liabilities?.short_term_debt?.toLocaleString()}
+                          Rs. {bs.liabilities?.short_term_debt?.toLocaleString()}
                         </span>
                       </div>
                       <div className="pt-2 border-t border-white/5 flex justify-between items-center text-xs font-semibold text-zinc-300">
                         <span>{t('ap_total_current_liab', 'Total Current Liabilities')}</span>
                         <span className="font-mono text-white">
-                          ${bs.liabilities?.total_current_liabilities?.toLocaleString()}
+                          Rs. {bs.liabilities?.total_current_liabilities?.toLocaleString()}
                         </span>
                       </div>
 
                       <div className="pt-2 border-t border-white/5 flex justify-between items-center text-xs font-semibold text-zinc-300">
                         <span>{t('ap_retained_equity', 'Retained Earnings & Equity')}</span>
                         <span className="font-mono text-emerald-400">
-                          ${bs.equity?.total_equity?.toLocaleString()}
+                          Rs. {bs.equity?.total_equity?.toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -513,7 +513,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     <div className="pt-3 border-t border-border flex justify-between items-center text-sm font-bold">
                       <span className="text-white">{t('ap_total_liab_equity', 'TOTAL LIABILITIES & EQUITY')}</span>
                       <span className="font-mono text-secondary-light text-base">
-                        ${bs.total_liabilities_and_equity?.toLocaleString()}
+                        Rs. {bs.total_liabilities_and_equity?.toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -546,19 +546,19 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   {/* Revenue */}
                   <div className="flex justify-between items-center py-2 border-b border-white/5 font-semibold">
                     <span className="text-white text-sm">{t('ap_gross_revenue', 'GROSS REVENUE')}</span>
-                    <span className="font-mono text-emerald-400 text-sm">${is.gross_revenue?.toLocaleString()}</span>
+                    <span className="font-mono text-emerald-400 text-sm">Rs. {is.gross_revenue?.toLocaleString()}</span>
                   </div>
 
                   {/* COGS */}
                   <div className="flex justify-between items-center py-1 pl-4 text-zinc-300">
                     <span>{t('ap_cogs', 'Less: Cost of Goods Sold (Raw Material COGS)')}</span>
-                    <span className="font-mono text-rose-400">-${is.cost_of_goods_sold?.toLocaleString()}</span>
+                    <span className="font-mono text-rose-400">-Rs. {is.cost_of_goods_sold?.toLocaleString()}</span>
                   </div>
 
                   {/* Gross Profit */}
                   <div className="flex justify-between items-center py-2.5 px-3 rounded-xl bg-white/[0.02] font-bold text-white">
                     <span>{t('ap_gross_profit', 'GROSS PROFIT')}</span>
-                    <span className="font-mono text-secondary-light text-sm">${is.gross_profit?.toLocaleString()}</span>
+                    <span className="font-mono text-secondary-light text-sm">Rs. {is.gross_profit?.toLocaleString()}</span>
                   </div>
 
                   {/* OpEx Breakdown */}
@@ -566,38 +566,38 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     <div className="font-semibold text-text-dark uppercase tracking-wider text-[11px]">{t('ap_opex_header', 'Operating Expenditures (SG&A)')}</div>
                     <div className="flex justify-between py-0.5">
                       <span>{t('ap_opex_payroll', '• Direct & Operational Payroll')}</span>
-                      <span className="font-mono text-zinc-200">-${is.operating_expenses?.salaries?.toLocaleString()}</span>
+                      <span className="font-mono text-zinc-200">-Rs. {is.operating_expenses?.salaries?.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-0.5">
                       <span>{t('ap_opex_rent', '• Factory Facility Leases (Rent)')}</span>
-                      <span className="font-mono text-zinc-200">-${is.operating_expenses?.rent?.toLocaleString()}</span>
+                      <span className="font-mono text-zinc-200">-Rs. {is.operating_expenses?.rent?.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-0.5">
                       <span>{t('ap_opex_utilities', '• Industrial Steam & Power (Utilities)')}</span>
-                      <span className="font-mono text-zinc-200">-${is.operating_expenses?.utilities?.toLocaleString()}</span>
+                      <span className="font-mono text-zinc-200">-Rs. {is.operating_expenses?.utilities?.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between py-0.5">
                       <span>{t('ap_opex_marketing', '• Wholesale Promotion & SG&A (Marketing)')}</span>
-                      <span className="font-mono text-zinc-200">-${is.operating_expenses?.marketing?.toLocaleString()}</span>
+                      <span className="font-mono text-zinc-200">-Rs. {is.operating_expenses?.marketing?.toLocaleString()}</span>
                     </div>
                   </div>
 
                   {/* Operating Income */}
                   <div className="flex justify-between items-center py-2.5 px-3 rounded-xl bg-white/[0.02] font-bold text-white">
                     <span>{t('ap_operating_income', 'OPERATING INCOME (EBITDA)')}</span>
-                    <span className="font-mono text-white text-sm">${is.operating_income?.toLocaleString()}</span>
+                    <span className="font-mono text-white text-sm">Rs. {is.operating_income?.toLocaleString()}</span>
                   </div>
 
                   {/* Tax Provision */}
                   <div className="flex justify-between items-center py-1 pl-4 text-zinc-300">
                     <span>{t('ap_tax_provision', 'Less: Accrued Tax Provisions')}</span>
-                    <span className="font-mono text-rose-400">-${is.tax_provision?.toLocaleString()}</span>
+                    <span className="font-mono text-rose-400">-Rs. {is.tax_provision?.toLocaleString()}</span>
                   </div>
 
                   {/* Net Income */}
                   <div className="pt-4 border-t border-border flex justify-between items-center text-base font-bold text-white">
                     <span>{t('ap_net_income', 'NET INCOME')}</span>
-                    <span className="font-mono text-secondary-light text-lg">${is.net_income?.toLocaleString()}</span>
+                    <span className="font-mono text-secondary-light text-lg">Rs. {is.net_income?.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -616,22 +616,22 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                 <div className="space-y-4 text-xs">
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-white font-semibold">{t('ap_cf_operating', 'Cash Flows from Operating Activities')}</span>
-                    <span className="font-mono text-secondary-light font-bold">${cf.operating_activities?.toLocaleString()}</span>
+                    <span className="font-mono text-secondary-light font-bold">Rs. {cf.operating_activities?.toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-white font-semibold">{t('ap_cf_investing', 'Cash Flows from Investing Activities')}</span>
-                    <span className="font-mono text-rose-400 font-bold">${cf.investing_activities?.toLocaleString()}</span>
+                    <span className="font-mono text-rose-400 font-bold">Rs. {cf.investing_activities?.toLocaleString()}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-white font-semibold">{t('ap_cf_financing', 'Cash Flows from Financing Activities')}</span>
-                    <span className="font-mono text-rose-400 font-bold">${cf.financing_activities?.toLocaleString()}</span>
+                    <span className="font-mono text-rose-400 font-bold">Rs. {cf.financing_activities?.toLocaleString()}</span>
                   </div>
 
                   <div className="pt-4 border-t border-border flex justify-between items-center text-sm font-bold text-white">
                     <span>{t('ap_cf_ending', 'Ending Cash & Liquid Reserves')}</span>
-                    <span className="font-mono text-secondary-light text-base">${cf.ending_cash?.toLocaleString()}</span>
+                    <span className="font-mono text-secondary-light text-base">Rs. {cf.ending_cash?.toLocaleString()}</span>
                   </div>
                 </div>
               </div>

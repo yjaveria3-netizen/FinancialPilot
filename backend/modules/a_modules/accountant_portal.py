@@ -151,7 +151,7 @@ def get_verified_financials(role: str = "Auditor", consent_token: str | None = N
                 {"name": "Current Ratio", "value": f"{current_ratio:.2f}x", "status": "Benchmark > 2.0x"},
                 {"name": "Quick Ratio", "value": f"{quick_ratio:.2f}x", "status": "Benchmark > 1.2x"},
                 {"name": "Debt Service Coverage (DSCR)", "value": f"{dscr:.2f}x", "status": "Strong (>1.35x)"},
-                {"name": "Net Working Capital", "value": f"${working_capital:,.2f}", "status": "Positive"},
+                {"name": "Net Working Capital", "value": f"Rs. {working_capital:,.2f}", "status": "Positive"},
             ],
         },
         "Accountant": {
@@ -162,7 +162,7 @@ def get_verified_financials(role: str = "Auditor", consent_token: str | None = N
             "key_metrics": [
                 {"name": "Gross Profit Margin", "value": f"{gross_margin_pct:.1f}%", "status": "Healthy"},
                 {"name": "Operating Margin (EBITDA)", "value": f"{round(operating_income / gross_revenue * 100, 1)}%", "status": "Above Target"},
-                {"name": "Tax Provision Accrued", "value": f"${tax_provision:,.2f}", "status": "Current"},
+                {"name": "Tax Provision Accrued", "value": f"Rs. {tax_provision:,.2f}", "status": "Current"},
                 {"name": "Net Profit Margin", "value": f"{net_margin_pct:.1f}%", "status": "Solid"},
             ],
         },
@@ -212,7 +212,7 @@ def get_verified_financials(role: str = "Auditor", consent_token: str | None = N
             "name": "FinPilot Garment Manufacturing LLC",
             "ein": "XX-XXX8921",
             "fiscal_period": "Fiscal YTD 2024 (Accrual Basis)",
-            "reporting_currency": "USD ($)",
+            "reporting_currency": "PKR ($)",
             "certified_date": date.today().isoformat(),
         },
         "active_role": role_norm,

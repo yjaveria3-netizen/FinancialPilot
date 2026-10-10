@@ -367,7 +367,7 @@ export default function Header() {
       {crisisToast && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-dark/95 border border-rose-500/60 text-rose-300 text-xs font-medium shadow-2xl backdrop-blur-xl flex items-center gap-2.5 animate-fadeIn">
           <span className="size-2 rounded-full bg-rose-500 animate-ping" />
-          <span>⚡ Cash Crunch Crisis Simulated! $59k outflow & anomalies injected. AI CFO alert active.</span>
+          <span>⚡ Cash Crunch Crisis Simulated! Rs. 59k outflow & anomalies injected. AI CFO alert active.</span>
         </div>
       )}
 

@@ -90,7 +90,7 @@ FINPILOT AUTONOMOUS MITIGATION NOTICE — TRANSMISSION DISPATCH
 Generated: ${new Date().toLocaleString('en-US')}
 Target Account: ${alertData.target_invoice?.entity || 'Client'}
 Invoice ID: ${alertData.target_invoice?.invoice_id || 'N/A'}
-Amount: $${alertData.target_invoice?.amount?.toLocaleString('en-US') || '0'}
+Amount: Rs. ${alertData.target_invoice?.amount?.toLocaleString('en-US') || '0'}
 ================================================================================
 TO: ${toEmail}
 SUBJECT: ${subject}
@@ -281,7 +281,7 @@ ${bodyText}
                   <div className="bg-white/5 border border-border rounded-xl px-3.5 py-2 text-white font-mono flex justify-between items-center">
                     <span>{alertData.target_invoice?.invoice_id || 'INV-0203'}</span>
                     <span className="text-secondary-light font-bold">
-                      ${alertData.target_invoice?.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      Rs. {alertData.target_invoice?.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>

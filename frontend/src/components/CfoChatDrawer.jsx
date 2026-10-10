@@ -26,7 +26,7 @@ export default function CfoChatDrawer() {
       setIsOpen(true);
       const advice =
         e.detail?.advice ||
-        'CRISIS MODE DETECTED: An unexpected $59,000 cash drain and duplicate invoice flags were injected into the ledger. Projected runway is compromised. Recommendation: Halt non-critical disbursements, expedite receivables, and inspect invoice anomalies.';
+        'CRISIS MODE DETECTED: An unexpected Rs. 59,000 cash drain and duplicate invoice flags were injected into the ledger. Projected runway is compromised. Recommendation: Halt non-critical disbursements, expedite receivables, and inspect invoice anomalies.';
       setMessages((prev) => [
         ...prev,
         {
@@ -79,16 +79,16 @@ export default function CfoChatDrawer() {
 
       if (q.includes('cash') || q.includes('forecast')) {
         reply =
-          'Based on our 30-day projection, cash starts at ~$42,500 and increases to ~$48,200 with normal variance. Low cash alert threshold is set at $5,000 and is not currently breached. You have $28,400 in receivables pending collection.';
+          'Based on our 30-day projection, cash starts at ~Rs. 42,500 and increases to ~Rs. 48,200 with normal variance. Low cash alert threshold is set at Rs. 5,000 and is not currently breached. You have Rs. 28,400 in receivables pending collection.';
       } else if (q.includes('credit') || q.includes('score')) {
         reply =
           'Your current Credit Readiness Score is 78/100 (Grade B). To reach Grade A (85+), focus on accelerating receivables collections past 85% on-time and maintaining operating profit margins above 25%.';
       } else if (q.includes('invoice') || q.includes('bill')) {
         reply =
-          'You currently have 14 pending/unpaid invoices totaling $28,400 across 12 customers. 3 invoices are overdue past Net 30. Recommending sending automated reminder notices to top 3 overdue accounts.';
+          'You currently have 14 pending/unpaid invoices totaling Rs. 28,400 across 12 customers. 3 invoices are overdue past Net 30. Recommending sending automated reminder notices to top 3 overdue accounts.';
       } else if (q.includes('tax') || q.includes('liability')) {
         reply =
-          'Estimated YTD Net Profit is approximately $58,200. Based on standard 30% combined federal & state tax rate, estimated upcoming tax liability is ~$17,460. Recommend exploring Section 179 equipment deductions before Q4 ends.';
+          'Estimated YTD Net Profit is approximately Rs. 58,200. Based on standard 30% combined federal & state tax rate, estimated upcoming tax liability is ~Rs. 17,460. Recommend exploring Section 179 equipment deductions before Q4 ends.';
       } else {
         reply = `I have analyzed your query regarding "${query}". All underlying cash reserves and transaction ledgers are currently in healthy standing. What specific metric would you like to explore deeper?`;
       }

@@ -39,15 +39,15 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="flex flex-col gap-1.5 text-text">
         <div>
           <span className="text-text-dark">Projected Balance: </span>
-          <strong className="text-secondary-light font-mono">${d?.projected_balance?.toLocaleString()}</strong>
+          <strong className="text-secondary-light font-mono">Rs. {d?.projected_balance?.toLocaleString()}</strong>
         </div>
         <div>
           <span className="text-text-dark">Income: </span>
-          <span className="text-secondary-light font-mono">+${d?.income?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono">+Rs. {d?.income?.toLocaleString()}</span>
         </div>
         <div>
           <span className="text-text-dark">Expenses: </span>
-          <span className="text-rose-400 font-mono">-${d?.expenses?.toLocaleString()}</span>
+          <span className="text-rose-400 font-mono">-Rs. {d?.expenses?.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -183,7 +183,7 @@ export default function DashboardMetrics() {
                   </span>
                 </div>
                 <p className="text-sm text-text-dark leading-relaxed">
-                  {t('low_cash_desc_prefix', 'Projected cash dips below $5,000 threshold on')}{' '}
+                  {t('low_cash_desc_prefix', 'Projected cash dips below Rs. 5,000 threshold on')}{' '}
                   <strong className="text-secondary font-mono">{cashData.low_cash_day}</strong>
                   {t(
                     'low_cash_desc_suffix',
@@ -353,7 +353,7 @@ export default function DashboardMetrics() {
               <div className="h-9 w-28 bg-white/10 rounded-lg animate-pulse my-1" />
             ) : (
               <div className="text-2xl lg:text-3xl font-bold font-secondary text-white font-mono">
-                ${summary.starting_cash?.toLocaleString() || '0'}
+                Rs. {summary.starting_cash?.toLocaleString() || '0'}
               </div>
             )}
             <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
@@ -379,7 +379,7 @@ export default function DashboardMetrics() {
               <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
             ) : (
               <div className="text-2xl lg:text-3xl font-bold font-secondary font-mono text-secondary-light">
-                ${summary.ending_balance?.toLocaleString() || '0'}
+                Rs. {summary.ending_balance?.toLocaleString() || '0'}
               </div>
             )}
             <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
@@ -403,7 +403,7 @@ export default function DashboardMetrics() {
               <div className="h-9 w-28 bg-white/10 rounded-lg animate-pulse my-1" />
             ) : (
               <div className="text-2xl lg:text-3xl font-bold font-secondary text-secondary-light font-mono">
-                +${summary.avg_daily_income?.toLocaleString() || '0'}
+                +Rs. {summary.avg_daily_income?.toLocaleString() || '0'}
               </div>
             )}
             <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
@@ -427,7 +427,7 @@ export default function DashboardMetrics() {
               <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
             ) : (
               <div className="text-2xl lg:text-3xl font-bold font-secondary text-secondary-light font-mono">
-                ${summary.pending_invoices?.toLocaleString() || '0'}
+                Rs. {summary.pending_invoices?.toLocaleString() || '0'}
               </div>
             )}
             <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
@@ -501,7 +501,7 @@ export default function DashboardMetrics() {
                       />
                       <YAxis
                         tick={{ fill: '#A48993', fontSize: 10 }}
-                        tickFormatter={(val) => `$${(val / 1000).toFixed(0)}k`}
+                        tickFormatter={(val) => `Rs. ${(val / 1000).toFixed(0)}k`}
                         stroke="#4D2330"
                         width={50}
                       />
@@ -521,7 +521,7 @@ export default function DashboardMetrics() {
             </div>
 
             <div className="pt-4 border-t border-border/50 flex items-center justify-between text-xs text-text-dark">
-              <span>{t('buffer_threshold', 'Red dashed indicator = $5,000 liquidity buffer threshold')}</span>
+              <span>{t('buffer_threshold', 'Red dashed indicator = Rs. 5,000 liquidity buffer threshold')}</span>
               <Link to="/cash-flow" className="text-secondary-light hover:underline font-medium">
                 {t('detailed_simulation', 'Detailed 90-Day Simulation')} →
               </Link>

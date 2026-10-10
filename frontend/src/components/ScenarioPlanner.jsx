@@ -51,27 +51,27 @@ const FanChartTooltip = ({ active, payload, label }) => {
       <div className="space-y-1 text-text">
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">90th Pct (Bullish):</span>
-          <span className="text-secondary-light font-mono font-semibold">${d.p90?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono font-semibold">Rs. {d.p90?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">75th Pct:</span>
-          <span className="text-secondary-light font-mono">${d.p75?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono">Rs. {d.p75?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center py-0.5 border-y border-white/5 font-bold">
           <span className="text-secondary-light">Median (P50 Expected):</span>
-          <span className="text-secondary-light font-mono text-sm">${d.p50?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono text-sm">Rs. {d.p50?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">25th Pct:</span>
-          <span className="text-secondary font-mono">${d.p25?.toLocaleString()}</span>
+          <span className="text-secondary font-mono">Rs. {d.p25?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">10th Pct (Stress):</span>
-          <span className="text-rose-400 font-mono font-semibold">${d.p10?.toLocaleString()}</span>
+          <span className="text-rose-400 font-mono font-semibold">Rs. {d.p10?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center pt-1 border-t border-white/5 text-[11px]">
           <span className="text-text-dark">Baseline (No Shocks):</span>
-          <span className="text-zinc-300 font-mono">${d.baseline?.toLocaleString()}</span>
+          <span className="text-zinc-300 font-mono">Rs. {d.baseline?.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -419,7 +419,7 @@ export default function ScenarioPlanner() {
               <span>+15 {t('sp_staff', 'Staff')}</span>
             </div>
             <div className="text-[11px] text-text-dark pt-1">
-              {t('sp_est_payroll', 'Est. Payroll:')} <strong className="text-zinc-300 font-mono">+${(hiringCount * 4500).toLocaleString()}/mo</strong>
+              {t('sp_est_payroll', 'Est. Payroll:')} <strong className="text-zinc-300 font-mono">+Rs. {(hiringCount * 4500).toLocaleString()}/mo</strong>
             </div>
           </div>
 
@@ -542,19 +542,19 @@ export default function ScenarioPlanner() {
             <div className="px-3 py-1.5 rounded-xl bg-secondary/15 border border-secondary/30 text-xs font-mono">
               <span className="text-text-dark mr-1.5">{t('total_custom_inflows', 'Inflow:')}</span>
               <span className="text-secondary-light font-bold">
-                +${customInflow.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                +Rs. {customInflow.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs font-mono">
               <span className="text-text-dark mr-1.5">{t('total_custom_outflows', 'Outflow:')}</span>
               <span className="text-rose-400 font-bold">
-                -${customOutflow.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                -Rs. {customOutflow.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-border text-xs font-mono">
               <span className="text-text-dark mr-1.5">{t('net_custom_impact', 'Net Impact:')}</span>
               <span className={`font-bold ${customInflow - customOutflow >= 0 ? 'text-secondary-light' : 'text-rose-400'}`}>
-                {customInflow - customOutflow >= 0 ? '+' : '-'}$
+                {customInflow - customOutflow >= 0 ? '+' : '-'}Rs.&nbsp;
                 {Math.abs(customInflow - customOutflow).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -597,7 +597,7 @@ export default function ScenarioPlanner() {
               required
               step="100"
               min="1"
-              placeholder={t('item_amount', 'Amount ($)')}
+              placeholder={t('item_amount', 'Amount (Rs.)')}
               value={newItemAmount}
               onChange={(e) => setNewItemAmount(e.target.value)}
               className="w-full bg-dark/80 border border-border rounded-xl px-3.5 py-2 text-xs text-white font-mono placeholder-text-dark focus:outline-none focus:border-secondary transition-colors"
@@ -671,7 +671,7 @@ export default function ScenarioPlanner() {
                       item.type === 'inflow' ? 'text-secondary-light' : 'text-rose-400'
                     }`}
                   >
-                    {item.type === 'inflow' ? '+' : '-'}$
+                    {item.type === 'inflow' ? '+' : '-'}Rs.&nbsp;
                     {Number(item.amount).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -698,7 +698,7 @@ export default function ScenarioPlanner() {
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium mb-2">{t('sp_kpi_ending_cash', 'Expected Ending Cash (P50)')}</div>
           <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
-            ${impact.ending_cash_p50?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rs. {impact.ending_cash_p50?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
             <span
@@ -706,7 +706,7 @@ export default function ScenarioPlanner() {
                 impact.net_cash_impact >= 0 ? 'text-secondary-light' : 'text-rose-400'
               }`}
             >
-              {impact.net_cash_impact >= 0 ? `+$${impact.net_cash_impact?.toLocaleString()}` : `-$${Math.abs(impact.net_cash_impact || 0)?.toLocaleString()}`}
+              {impact.net_cash_impact >= 0 ? `+Rs. ${impact.net_cash_impact?.toLocaleString()}` : `-Rs. ${Math.abs(impact.net_cash_impact || 0)?.toLocaleString()}`}
             </span>
             <span>{t('sp_kpi_vs_baseline', 'vs Baseline')}</span>
           </div>
@@ -715,7 +715,7 @@ export default function ScenarioPlanner() {
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium mb-2">{t('sp_kpi_worst_case', 'Worst-Case Stress (P10)')}</div>
           <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
-            ${impact.ending_cash_p10?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            Rs. {impact.ending_cash_p10?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-secondary-light animate-pulse"></span>
@@ -737,7 +737,7 @@ export default function ScenarioPlanner() {
             {impact.shortfall_probability || 0}%
           </div>
           <div className="text-xs text-text-dark mt-2">
-            {t('sp_kpi_buffer_desc', 'Probability of dipping < $5,000 threshold')}
+            {t('sp_kpi_buffer_desc', 'Probability of dipping < Rs. 5,000 threshold')}
           </div>
         </div>
 
@@ -745,8 +745,8 @@ export default function ScenarioPlanner() {
           <div className="text-xs text-text-dark font-medium mb-2">{t('sp_kpi_spend_shift', 'Procurement Spend Shift')}</div>
           <div className="text-2xl font-bold font-secondary text-white font-mono mt-1">
             {impact.procurement_cost_delta >= 0
-              ? `+$${impact.procurement_cost_delta?.toLocaleString()}`
-              : `-$${Math.abs(impact.procurement_cost_delta || 0)?.toLocaleString()}`}
+              ? `+Rs. ${impact.procurement_cost_delta?.toLocaleString()}`
+              : `-Rs. ${Math.abs(impact.procurement_cost_delta || 0)?.toLocaleString()}`}
           </div>
           <div className="text-xs text-text-dark mt-2 truncate">
             {impact.credit_risk_impact}
@@ -823,12 +823,12 @@ export default function ScenarioPlanner() {
                   fontSize={11}
                   tickLine={false}
                   domain={['auto', 'auto']}
-                  tickFormatter={(val) => `$${(val / 1000).toFixed(0)}k`}
+                  tickFormatter={(val) => `Rs. ${(val / 1000).toFixed(0)}k`}
                 />
                 <Tooltip content={<FanChartTooltip />} />
 
                 {/* Statutory Minimum Safety Buffer */}
-                <ReferenceLine y={5000} stroke="#EF4444" strokeDasharray="3 3" label={{ value: t('sp_min_reserve', 'Min Reserve $5k'), fill: '#EF4444', fontSize: 10, position: 'insideBottomRight' }} />
+                <ReferenceLine y={5000} stroke="#EF4444" strokeDasharray="3 3" label={{ value: t('sp_min_reserve', 'Min Reserve Rs. 5k'), fill: '#EF4444', fontSize: 10, position: 'insideBottomRight' }} />
 
                 {/* Outer Fan: P90 */}
                 <Area type="monotone" dataKey="p90" stroke="none" fill="url(#fanBandOuter)" />

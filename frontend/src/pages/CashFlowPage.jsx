@@ -22,15 +22,15 @@ const CustomTooltip = ({ active, payload, label, t }) => {
       <div className="flex flex-col gap-1.5 text-text">
         <div>
           <span className="text-text-dark">{t('projected_end_bal', 'Projected Balance')}: </span>
-          <strong className="text-secondary-light font-mono">${d?.projected_balance?.toLocaleString()}</strong>
+          <strong className="text-secondary-light font-mono">Rs. {d?.projected_balance?.toLocaleString()}</strong>
         </div>
         <div>
           <span className="text-text-dark">{t('daily_avg_inflow', 'Income')}: </span>
-          <span className="text-secondary-light font-mono">+${d?.income?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono">+Rs. {d?.income?.toLocaleString()}</span>
         </div>
         <div>
           <span className="text-text-dark">{t('expense_control', 'Expenses')}: </span>
-          <span className="text-secondary-light font-mono">-${d?.expenses?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono">-Rs. {d?.expenses?.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@ export default function CashFlowPage() {
             {t('starting_cash', 'Starting Cash')}
           </div>
           <div className="text-2xl font-bold font-secondary text-white font-mono">
-            ${summary.starting_cash?.toLocaleString() ?? '—'}
+            Rs. {summary.starting_cash?.toLocaleString() ?? '—'}
           </div>
           <div className="text-xs text-text-dark mt-2">
             {t('cf_baseline_balance', 'Historical baseline balance')}
@@ -151,7 +151,7 @@ export default function CashFlowPage() {
                 : 'text-amber-400'
             }`}
           >
-            ${summary.ending_balance?.toLocaleString() ?? '—'}
+            Rs. {summary.ending_balance?.toLocaleString() ?? '—'}
           </div>
           <div className="text-xs text-text-dark mt-2">
             {t('cf_after_forecast', 'After forecast period')} ({days}d)
@@ -163,7 +163,7 @@ export default function CashFlowPage() {
             {t('daily_avg_inflow', 'Avg Daily Inflow')}
           </div>
           <div className="text-2xl font-bold font-secondary text-secondary-light font-mono">
-            +${summary.avg_daily_income?.toLocaleString() ?? '—'}
+            +Rs. {summary.avg_daily_income?.toLocaleString() ?? '—'}
           </div>
           <div className="text-xs text-text-dark mt-2">
             {t('cf_daily_rate', 'Last 90-day daily rate')}
@@ -175,7 +175,7 @@ export default function CashFlowPage() {
             {t('pending_invoices', 'Pending Invoices')}
           </div>
           <div className="text-2xl font-bold font-secondary text-secondary-light font-mono">
-            ${summary.pending_invoices?.toLocaleString() ?? '—'}
+            Rs. {summary.pending_invoices?.toLocaleString() ?? '—'}
           </div>
           <div className="text-xs text-text-dark mt-2">
             {t('cf_receivables', 'Accounts receivable')}
@@ -219,7 +219,7 @@ export default function CashFlowPage() {
                 />
                 <YAxis
                   tick={{ fill: '#A48993', fontSize: 10 }}
-                  tickFormatter={(val) => `$${(val / 1000).toFixed(0)}k`}
+                  tickFormatter={(val) => `Rs. ${(val / 1000).toFixed(0)}k`}
                   stroke="#4D2330"
                   width={50}
                 />

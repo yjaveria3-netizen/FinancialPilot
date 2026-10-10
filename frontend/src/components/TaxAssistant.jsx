@@ -96,22 +96,22 @@ Business Context: Garment Manufacturing & Apparel Operations
 
 1. FINANCIAL & TAX LIABILITY METRICS
 --------------------------------------------------------------------------------
-Gross Revenue (YTD):              $${Number(data.revenue_ytd || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-Total Deductible Expenses:        $${Number(data.deductible_total || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-Net Taxable Operating Income:     $${Number(data.net_taxable_income || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Gross Revenue (YTD):              Rs. ${Number(data.revenue_ytd || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Total Deductible Expenses:        Rs. ${Number(data.deductible_total || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Net Taxable Operating Income:     Rs. ${Number(data.net_taxable_income || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 --------------------------------------------------------------------------------
-Estimated Corporate Tax (26.0%):  $${Number(data.corporate_tax || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-Estimated Sales & Use Tax (4.0%): $${Number(data.sales_tax || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-Total Estimated Tax Liability:    $${Number(data.estimated_tax_due || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-Prior Tax Remittances / Credits:  $${Number(data.prior_tax_paid || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-Net Estimated Balance Due:        $${Number(data.net_balance_due || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Estimated Corporate Tax (26.0%):  Rs. ${Number(data.corporate_tax || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Estimated Sales & Use Tax (4.0%): Rs. ${Number(data.sales_tax || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Total Estimated Tax Liability:    Rs. ${Number(data.estimated_tax_due || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Prior Tax Remittances / Credits:  Rs. ${Number(data.prior_tax_paid || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+Net Estimated Balance Due:        Rs. ${Number(data.net_balance_due || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 Effective Tax Rate:               ${data.effective_tax_rate || 26.0}%
 
 
 2. DEDUCTIBLE OPERATIONAL SCHEDULE (IRC SEC. 162 & COGS)
 --------------------------------------------------------------------------------
 ${Object.entries(data.deductibles_breakdown || {})
-  .map(([cat, amt]) => `* ${cat.padEnd(25)}: $${Number(amt).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
+  .map(([cat, amt]) => `* ${cat.padEnd(25)}: Rs. ${Number(amt).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
   .join('\n')}
 
 
@@ -121,8 +121,8 @@ ${(data.filing_deadlines || [])
   .map(
     (dl, i) =>
       `[${i + 1}] ${dl.event} (${dl.form})
-    Category:       ${dl.category}
-    Due Date:       ${dl.due_date} (${dl.days_remaining} days remaining - ${dl.urgency})
+    Category:       Rs. {dl.category}
+    Due Date:       Rs. {dl.due_date} (Rs. {dl.days_remaining} days remaining - Rs. {dl.urgency})
     Description:    ${dl.description}`
   )
   .join('\n\n')}
@@ -309,7 +309,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 {t('tax_next_filing', 'Estimated Tax Due')}
               </div>
               <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
-                ${data?.estimated_tax_due?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs. {data?.estimated_tax_due?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-secondary-light"></span>
@@ -322,7 +322,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 {t('tax_deductibles', 'Total Deductibles')}
               </div>
               <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
-                ${data?.deductible_total?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs. {data?.deductible_total?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-xs text-secondary-light/80 mt-2 flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-secondary-light"></span>
@@ -335,10 +335,10 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 {t('tax_taxable_inc', 'Net Taxable Profit')}
               </div>
               <div className="text-3xl font-bold font-secondary text-white font-mono">
-                ${data?.net_taxable_income?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs. {data?.net_taxable_income?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-xs text-text-dark mt-2">
-                {t('tax_rev_less_ded', 'Revenue')} (${(data?.revenue_ytd / 1000000).toFixed(2)}M) {t('tax_less_ded', 'less Deductions')}
+                {t('tax_rev_less_ded', 'Revenue')} (Rs. {(data?.revenue_ytd / 1000000).toFixed(2)}M) {t('tax_less_ded', 'less Deductions')}
               </div>
             </div>
 
@@ -350,7 +350,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 {data?.effective_tax_rate || 26.0}%
               </div>
               <div className="text-xs text-text-dark mt-2">
-                {t('tax_net_due', 'Net Outstanding Due:')} <strong className="text-white font-mono">${data?.net_balance_due?.toLocaleString()}</strong>
+                {t('tax_net_due', 'Net Outstanding Due:')} <strong className="text-white font-mono">Rs. {data?.net_balance_due?.toLocaleString()}</strong>
               </div>
             </div>
           </div>
@@ -378,7 +378,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-border space-y-1.5">
                   <div className="text-xs text-text-dark font-medium">{t('tax_est_corp_tax', 'Estimated Corporate Income Tax')}</div>
                   <div className="text-2xl font-bold font-mono text-white">
-                    ${data?.corporate_tax?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    Rs. {data?.corporate_tax?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <div className="text-[11px] text-text-dark">{t('tax_fed_state', 'Federal (21%) + State Franchise (5%)')}</div>
                 </div>
@@ -386,7 +386,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-border space-y-1.5">
                   <div className="text-xs text-text-dark font-medium">{t('tax_sales_provision', 'Sales & Use Tax Provision')}</div>
                   <div className="text-2xl font-bold font-mono text-white">
-                    ${data?.sales_tax?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    Rs. {data?.sales_tax?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <div className="text-[11px] text-text-dark">{t('tax_sales_goods', '~4.0% provision on finished goods sales')}</div>
                 </div>
@@ -396,7 +396,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between text-xs font-semibold">
                   <span className="text-white uppercase tracking-wider">{t('tax_qualifying_deductibles', 'Qualifying Deductible Expenses')}</span>
-                  <span className="text-secondary-light font-mono">${data?.deductible_total?.toLocaleString()} {t('tax_total', 'Total')}</span>
+                  <span className="text-secondary-light font-mono">Rs. {data?.deductible_total?.toLocaleString()} {t('tax_total', 'Total')}</span>
                 </div>
 
                 <div className="space-y-3.5">
@@ -429,7 +429,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                             <span className="text-text-dark ml-2 text-[11px] hidden sm:inline">• {subtext}</span>
                           </div>
                           <div className="font-mono text-white font-semibold">
-                            ${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            Rs. {amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             <span className="text-text-dark font-normal text-[11px] ml-1.5">({pct.toFixed(1)}%)</span>
                           </div>
                         </div>
@@ -452,7 +452,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                   <span className="text-text-dark">{t('tax_prior_prepayments', 'Recorded Tax Prepayments / Withholdings:')}</span>
                 </div>
                 <span className="font-mono font-semibold text-white">
-                  ${data?.prior_tax_paid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  Rs. {data?.prior_tax_paid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
@@ -660,7 +660,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         </h4>
                       </div>
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary-light border border-secondary/30 font-semibold font-mono">
-                        {t('tax_net_bal_label', 'Net Balance:')} ${data?.net_balance_due?.toLocaleString()}
+                        {t('tax_net_bal_label', 'Net Balance:')} Rs. {data?.net_balance_due?.toLocaleString()}
                       </span>
                     </div>
 
@@ -672,19 +672,19 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
                         <div className="text-text-dark text-[11px]">{t('tax_gross_rev_col', 'Gross Revenue')}</div>
-                        <div className="font-mono font-semibold text-white mt-0.5">${data?.revenue_ytd?.toLocaleString()}</div>
+                        <div className="font-mono font-semibold text-white mt-0.5">Rs. {data?.revenue_ytd?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
                         <div className="text-text-dark text-[11px]">{t('tax_net_tax_base', 'Net Taxable Base')}</div>
-                        <div className="font-mono font-semibold text-white mt-0.5">${data?.net_taxable_income?.toLocaleString()}</div>
+                        <div className="font-mono font-semibold text-white mt-0.5">Rs. {data?.net_taxable_income?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
                         <div className="text-text-dark text-[11px]">{t('tax_est_tot_tax', 'Est. Total Tax')}</div>
-                        <div className="font-mono font-semibold text-secondary-light mt-0.5">${data?.estimated_tax_due?.toLocaleString()}</div>
+                        <div className="font-mono font-semibold text-secondary-light mt-0.5">Rs. {data?.estimated_tax_due?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
                         <div className="text-text-dark text-[11px]">{t('tax_prior_remit', 'Prior Remittances')}</div>
-                        <div className="font-mono font-semibold text-secondary-light mt-0.5">-${data?.prior_tax_paid?.toLocaleString()}</div>
+                        <div className="font-mono font-semibold text-secondary-light mt-0.5">-Rs. {data?.prior_tax_paid?.toLocaleString()}</div>
                       </div>
                     </div>
                   </div>
@@ -701,7 +701,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         </h4>
                       </div>
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary-light border border-secondary/30 font-semibold font-mono">
-                        ${data?.deductible_total?.toLocaleString()} {t('tax_qualified', 'Qualified')}
+                        Rs. {data?.deductible_total?.toLocaleString()} {t('tax_qualified', 'Qualified')}
                       </span>
                     </div>
 
@@ -718,7 +718,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         <div>
                           <div className="text-xs font-semibold text-white">{t('tax_cogs_title', 'Raw Materials & Supplies (COGS)')}</div>
                           <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
-                            ${deductibles['Supplier Payment']?.toLocaleString()}
+                            Rs. {deductibles['Supplier Payment']?.toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
                             {t('tax_cogs_memo_sub', 'Direct textile, trim, and fabric procurement. Under IRC Sec. 471, maintain closing inventory reconciliations.')}
@@ -733,7 +733,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         <div>
                           <div className="text-xs font-semibold text-white">{t('tax_direct_payroll', 'Direct & Operational Payroll')}</div>
                           <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
-                            ${deductibles['Salaries']?.toLocaleString()}
+                            Rs. {deductibles['Salaries']?.toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
                             {t('tax_payroll_memo_sub', 'Plant floor sewing operators, machine mechanics, and supervisors. Reconciled with quarterly Form 941 filings.')}
@@ -748,7 +748,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         <div>
                           <div className="text-xs font-semibold text-white">{t('tax_facility_overhead', 'Facility & Production Overhead')}</div>
                           <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
-                            ${((deductibles['Rent'] || 0) + (deductibles['Utilities'] || 0)).toLocaleString()}
+                            Rs. {((deductibles['Rent'] || 0) + (deductibles['Utilities'] || 0)).toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
                             {t('tax_lease_memo_sub', 'Factory warehouse lease and high-voltage cutting power.')}
@@ -763,7 +763,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         <div>
                           <div className="text-xs font-semibold text-white">{t('tax_wholesale_dist', 'Wholesale Distribution & SG&A')}</div>
                           <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
-                            ${deductibles['Marketing']?.toLocaleString()}
+                            Rs. {deductibles['Marketing']?.toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
                             {t('tax_wholesale_sub', 'Apparel trade show exhibits, showroom space, and B2B catalog marketing campaigns.')}

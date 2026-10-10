@@ -245,7 +245,7 @@ export default function AnomalyGuard() {
             <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
           ) : (
             <div className="text-3xl font-bold font-secondary text-white font-mono">
-              ${stats.totalExposure.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              Rs. {stats.totalExposure.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           )}
           <div className="text-xs text-text-dark mt-2">
@@ -440,7 +440,7 @@ export default function AnomalyGuard() {
                       {/* Flagged Amount */}
                       <td className="py-4 px-6 align-top">
                         <div className="font-mono font-semibold text-white">
-                          ${Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          Rs. {Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </div>
                         <div className="text-[10px] text-text-dark mt-0.5">
                           {item.category === 'Price Spike' ? 'Batch' : 'Face'}

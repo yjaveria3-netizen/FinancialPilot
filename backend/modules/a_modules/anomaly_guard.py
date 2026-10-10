@@ -89,7 +89,7 @@ def detect_anomalies() -> list[dict]:
                     severity = "High" if amt >= 5000 else "Medium" if amt >= 1500 else "Low"
 
                     reason = (
-                        f"Identical invoice amount of ${amt:,.2f} billed to {vendor} twice within {diff_days} days "
+                        f"Identical invoice amount of Rs. {amt:,.2f} billed to {vendor} twice within {diff_days} days "
                         f"({inv1_id} on {date1_str} and {inv2_id} on {date2_str}). "
                         f"Possible duplicate billing or batch entry error."
                     )
@@ -137,8 +137,8 @@ def detect_anomalies() -> list[dict]:
                     severity = "High" if z_val >= 4.0 else "Medium" if z_val >= 2.8 else "Low"
 
                     reason = (
-                        f"Outflow payment of ${amt:,.2f} for {category} ('{desc}') deviates {z_val:.2f} standard deviations "
-                        f"from the historical outflow mean of ${mean_outflow:,.2f} (z-score: {z_val:.2f} > 2.50 threshold). "
+                        f"Outflow payment of Rs. {amt:,.2f} for {category} ('{desc}') deviates {z_val:.2f} standard deviations "
+                        f"from the historical outflow mean of Rs. {mean_outflow:,.2f} (z-score: {z_val:.2f} > 2.50 threshold). "
                         f"Unusually large cash outflow."
                     )
 
@@ -197,8 +197,8 @@ def detect_anomalies() -> list[dict]:
                 severity = "High" if ratio >= 2.0 else "Medium" if ratio >= 1.5 else "Low"
 
                 reason = (
-                    f"Unit cost for {prod_name} ({sku}) jumped {pct_inc:.1f}% (${base_cost:,.2f} -> ${curr_cost:,.2f}) "
-                    f"from supplier {supp_name}. Historical baseline median is ${base_cost:,.2f}. "
+                    f"Unit cost for {prod_name} ({sku}) jumped {pct_inc:.1f}% (Rs. {base_cost:,.2f} -> Rs. {curr_cost:,.2f}) "
+                    f"from supplier {supp_name}. Historical baseline median is Rs. {base_cost:,.2f}. "
                     f"Potential supplier price gouging or billing discrepancy."
                 )
 
