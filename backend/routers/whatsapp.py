@@ -14,9 +14,25 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Any
 from datetime import datetime
 
-from backend.services.whatsapp_automation import send_bulk_reminders, clean_phone_number
+from backend.services.whatsapp_automation import (
+    send_bulk_reminders,
+    clean_phone_number,
+    get_connection_status,
+    save_connection_state,
+    disconnect_session,
+    generate_pairing_qr,
+)
 
 router = APIRouter(prefix="/api/whatsapp", tags=["WhatsApp Automation"])
+
+
+class ConnectPayload(BaseModel):
+    phone: Optional[str] = "+92 3224154788"
+    sender_name: Optional[str] = "Primary Mobile"
+
+
+class QrRequestPayload(BaseModel):
+    phone: Optional[str] = "+92 3224154788"
 
 
 class ReminderItem(BaseModel):
@@ -34,6 +50,46 @@ class ReminderItem(BaseModel):
 
 class BulkSendPayload(BaseModel):
     reminders: List[ReminderItem] = Field(default_factory=list)
+
+
+@router.get("/connection")
+def get_whatsapp_connection():
+    """Returns current paired device status and linked phone number."""
+    return get_connection_status()
+
+
+@router.post("/qr-code")
+async def request_pairing_qr(payload: Optional[QrRequestPayload] = None):
+    """Generates an authentic scannable QR Code data URL for linking."""
+    phone = payload.phone if payload else "+92 3224154788"
+    return await generate_pairing_qr(phone)
+
+
+@router.post("/confirm-pairing")
+def confirm_device_pairing(payload: ConnectPayload):
+    """Confirms and activates device pairing for automated dispatching."""
+    return save_connection_state(payload.phone or "+92 3224154788", payload.sender_name)
+
+
+@router.post("/disconnect")
+def disconnect_device():
+    """Unlinks current WhatsApp device."""
+    return disconnect_session()
+
+
+@router.post("/launch-login-window")
+def launch_login_window():
+    """Launches visible Chrome window so user can scan the official WhatsApp Web QR code."""
+    import subprocess
+    import sys
+    from pathlib import Path
+    script_path = str(Path(__file__).resolve().parents[1] / "link_whatsapp.py")
+    subprocess.Popen([sys.executable, script_path])
+    return {
+        "status": "launched",
+        "message": "WhatsApp login window opened on desktop. Scan the QR code with your phone to complete setup."
+    }
+
 
 
 # In-memory latest dispatch report cache

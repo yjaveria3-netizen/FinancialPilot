@@ -74,7 +74,7 @@ export default function CashFlowPage() {
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
             {t('cf_title_1', 'Cash Flow')}{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">{t('cf_title_2', 'Forecaster')}</span>
+            <span className="text-secondary-light font-bold">{t('cf_title_2', 'Forecaster')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
             {t(

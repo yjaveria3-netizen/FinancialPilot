@@ -71,7 +71,7 @@ export default function BusinessNeeds() {
           <div className="section-intro text-center mb-16">
             <h2 className="title hasHighlight text-3xl sm:text-4xl lg:text-5xl font-bold font-secondary text-white mb-4">
               {t('bn_heading_1', 'The 5 Financial Pillars Every')}{' '}
-              <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">
+              <strong className="text-secondary-light font-bold">
                 {t('bn_heading_2', 'Business Needs')}
               </strong>
             </h2>

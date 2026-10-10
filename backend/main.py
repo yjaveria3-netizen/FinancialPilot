@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 """
 FinPilot Backend API Server
 Framework: FastAPI
@@ -229,6 +232,9 @@ def get_credit_score():
         raise HTTPException(status_code=500, detail=f"Credit score error: {str(e)}")
 
 
+# ---- Member B routes ----
+from backend.b_routes import router as b_router
+app.include_router(b_router)
 # ── Member A: Anomaly and Fraud Guard ────────────────────────────────────────
 @app.get("/api/anomalies", tags=["Member A — Risk & Compliance"])
 def get_anomalies():

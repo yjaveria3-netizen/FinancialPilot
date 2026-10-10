@@ -69,7 +69,7 @@ export default function PricingSection() {
         <div className="section-intro text-center mb-12">
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
             {t('pricing_heading_1', 'Pricing Built For')}{' '}
-            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-semibold">
+            <strong className="text-secondary-light font-bold">
               {t('pricing_heading_2', 'Business Growth')}
             </strong>
           </h2>

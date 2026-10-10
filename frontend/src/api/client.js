@@ -81,3 +81,20 @@ export const markInvoicePaid = (invoiceId) =>
 export const bulkSendWhatsAppReminders = (reminders = []) =>
   apiClient.post('/api/whatsapp/bulk-send', { reminders }).then((r) => r.data);
 
+export const getWhatsAppConnection = () =>
+  apiClient.get('/api/whatsapp/connection').then((r) => r.data);
+
+export const requestWhatsAppQr = (phone = '+92 3224154788') =>
+  apiClient.post('/api/whatsapp/qr-code', { phone }).then((r) => r.data);
+
+export const confirmWhatsAppPairing = (phone = '+92 3224154788', senderName = 'Primary Mobile') =>
+  apiClient.post('/api/whatsapp/confirm-pairing', { phone, sender_name: senderName }).then((r) => r.data);
+
+export const disconnectWhatsApp = () =>
+  apiClient.post('/api/whatsapp/disconnect').then((r) => r.data);
+
+export const launchWhatsAppLoginWindow = () =>
+  apiClient.post('/api/whatsapp/launch-login-window').then((r) => r.data);
+
+
+

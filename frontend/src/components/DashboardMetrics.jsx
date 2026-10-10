@@ -149,7 +149,7 @@ export default function DashboardMetrics() {
           </div>
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
             {t('real_time_financial', 'Real-Time Financial')}{' '}
-            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">{t('intelligence_hub', 'Intelligence Hub')}</strong>
+            <strong className="text-secondary-light font-bold">{t('intelligence_hub', 'Intelligence Hub')}</strong>
           </h2>
           <p className="text-text-dark max-w-2xl mx-auto text-base">
             {t(
