@@ -40,13 +40,37 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
     }, 1200);
   };
 
-  const handleFileUpload = (e) => {
+ const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+    setFileName(file.name);
+    setScanning(true);
+    setScannedResult(null);
+    try {
+      const form = new FormData();
+      form.append('file', file);
+      const res = await fetch(`${API}/api/invoice-scan`, { method: 'POST', body: form });
+      const d = await res.json();
+      if (!res.ok || !d.ok) throw new Error(d.error || 'scan failed');
+      const f = d.fields || {};
+      setScannedResult({
+        invoiceId: 'SCANNED-' + Date.now().toString().slice(-4),
+        vendor: f.vendor || 'Unknown vendor',
+        date: f.date || new Date().toISOString().slice(0, 10),
+        dueDate: f.date || '',
+        amount: Number(f.amount ?? 0),
+        category: f.currency || 'PKR',
+        lineItems: [],
+        confidence: 'Gemini 2.5 Flash',
+      });
+      setScanning(false);
+    } catch (err) {
+      console.error(err);
       simulateScan(file.name);
     }
   };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 backdrop-blur-2xl bg-body/85 animate-fadeIn">
       {/* Backdrop click to close */}
