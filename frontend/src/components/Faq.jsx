@@ -1,24 +1,38 @@
 import { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Faq() {
+  const { t } = useLanguage();
   const [openIdx, setOpenIdx] = useState(0);
 
   const faqs = [
     {
-      q: 'How does the Cash Flow Forecaster project my balance?',
-      a: 'Financial Pilot analyzes your historical ledger transactions stored in local CSV files, calculates 90-day moving averages of income and operational expenses, and applies statistical volatility modeling to generate 7 to 90-day projections with automatic early warning flags.',
+      q: t('faq_q1', 'How does the Cash Flow Forecaster project my balance?'),
+      a: t(
+        'faq_a1',
+        'Financial Pilot analyzes your historical ledger transactions stored in local CSV files, calculates 90-day moving averages of income and operational expenses, and applies statistical volatility modeling to generate 7 to 90-day projections with automatic early warning flags.'
+      ),
     },
     {
-      q: 'What is the Credit Readiness Score based on?',
-      a: 'The 0–100 score benchmarks four core lending criteria: monthly revenue consistency (coefficient of variation), net profit margin, accounts receivable collection speed, and cost discipline ratios. Gemini AI then generates custom 90-day improvement action steps.',
+      q: t('faq_q2', 'What is the Credit Readiness Score based on?'),
+      a: t(
+        'faq_a2',
+        'The 0–100 score benchmarks four core lending criteria: monthly revenue consistency (coefficient of variation), net profit margin, accounts receivable collection speed, and cost discipline ratios. Gemini AI then generates custom 90-day improvement action steps.'
+      ),
     },
     {
-      q: 'Where is my financial data stored?',
-      a: 'During our Phase 1 MVP, all data resides locally on your machine in the /backend/data/ directory using standard Pandas CSV contracts. No proprietary banking credentials or sensitive ledger details leave your server.',
+      q: t('faq_q3', 'Where is my financial data stored?'),
+      a: t(
+        'faq_a3',
+        'During our Phase 1 MVP, all data resides locally on your machine in the /backend/data/ directory using standard Pandas CSV contracts. No proprietary banking credentials or sensitive ledger details leave your server.'
+      ),
     },
     {
-      q: 'How does Financial Pilot decouple its data architecture and modules?',
-      a: 'Financial Pilot enforces a strict Function Contract: all analytical modules expose pure Python functions returning pure JSON-serializable dictionaries or DataFrames. UI pages only call those pure functions via FastAPI endpoints.',
+      q: t('faq_q4', 'How does Financial Pilot decouple its data architecture and modules?'),
+      a: t(
+        'faq_a4',
+        'Financial Pilot enforces a strict Function Contract: all analytical modules expose pure Python functions returning pure JSON-serializable dictionaries or DataFrames. UI pages only call those pure functions via FastAPI endpoints.'
+      ),
     },
   ];
 
@@ -27,10 +41,16 @@ export default function Faq() {
       <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
         <div className="section-intro text-center mb-12">
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
-            Frequently Asked <strong className="text-primary font-normal">Questions</strong>
+            {t('faq_heading_1', 'Frequently Asked')}{' '}
+            <strong className="text-primary font-normal">
+              {t('faq_heading_2', 'Questions')}
+            </strong>
           </h2>
           <p className="text-slate-300 text-base">
-            Everything you need to know about Financial Pilot’s architecture and financial co-pilot engine.
+            {t(
+              'faq_subheading',
+              'Everything you need to know about Financial Pilot’s architecture and financial co-pilot engine.'
+            )}
           </p>
         </div>
 
@@ -38,7 +58,7 @@ export default function Faq() {
           {faqs.map((f, i) => (
             <div
               key={f.q}
-              className="rounded-3xl bg-light border border-border overflow-hidden transition-all"
+              className="rounded-3xl bg-light border border-border overflow-hidden hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)] transition-all duration-300"
             >
               <button
                 type="button"

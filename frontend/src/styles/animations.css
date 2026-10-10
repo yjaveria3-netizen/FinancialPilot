@@ -169,3 +169,216 @@
     var(--color-primary) 100%
   );
 }
+
+/* Modal Popups & Drawer Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* =========================================================================
+   ELECTRIC CURRENT & GLOWING GRADIENT SUITE
+   ========================================================================= */
+
+@keyframes electricSurge {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(180%);
+    opacity: 0;
+  }
+}
+
+@keyframes electricCirculate {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -251.2;
+  }
+}
+
+@keyframes electricPulseBreath {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes electricSparkFlicker {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 0.9;
+  }
+  30% {
+    transform: translateY(-50%) scale(1.3);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-50%) scale(0.85);
+    opacity: 0.75;
+  }
+  85% {
+    transform: translateY(-50%) scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes electricLineMove {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes borderCurrentFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.electric-bar-sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(55, 110, 111, 0.2) 20%,
+    rgba(255, 255, 255, 0.8) 48%,
+    rgba(242, 163, 181, 0.9) 55%,
+    rgba(218, 123, 147, 0.7) 70%,
+    transparent 100%
+  );
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: electricSurge 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.electric-gauge-current {
+  animation: electricCirculate 3.8s linear infinite;
+}
+
+.delay-current-0 {
+  animation-delay: 0s;
+}
+
+.delay-current-1 {
+  animation-delay: 0.55s;
+}
+
+.delay-current-2 {
+  animation-delay: 1.1s;
+}
+
+.delay-current-3 {
+  animation-delay: 1.65s;
+}
+
+.animate-electric-line {
+  animation: electricLineMove 3.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-electric-breath {
+  animation: electricPulseBreath 3.2s ease-in-out infinite;
+}
+
+/* Card Electric Current & Border Glow System */
+.card-electric {
+  position: relative;
+  background-color: var(--color-light);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.card-electric:hover {
+  border-color: rgba(218, 123, 147, 0.65) !important;
+  box-shadow: 0 0 25px rgba(218, 123, 147, 0.3), 0 0 15px rgba(55, 110, 111, 0.25) !important;
+}
+
+.card-electric::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(55, 110, 111, 0.4) 15%,
+    rgba(218, 123, 147, 0.9) 45%,
+    rgba(242, 163, 181, 1) 50%,
+    rgba(55, 110, 111, 0.8) 85%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card-electric:hover::after {
+  opacity: 1;
+  animation: electricLineMove 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.card-hover-glow {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover-glow:hover {
+  border-color: rgba(218, 123, 147, 0.65) !important;
+  box-shadow: 0 0 25px rgba(218, 123, 147, 0.3), 0 0 15px rgba(55, 110, 111, 0.25) !important;
+}
+
+

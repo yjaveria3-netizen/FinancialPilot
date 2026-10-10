@@ -6,8 +6,10 @@ import {
   IconLightning,
   IconCheck,
 } from './Icons';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function InvoiceScannerModal({ isOpen, onClose }) {
+  const { t } = useLanguage();
   const [scanning, setScanning] = useState(false);
   const [scannedResult, setScannedResult] = useState(null);
   const [fileName, setFileName] = useState('');
@@ -50,7 +52,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
       {/* Backdrop click to close */}
       <div className="absolute inset-0 -z-10" onClick={onClose} />
 
-      <div className="relative w-full max-w-2xl bg-light/95 border border-border rounded-4xl p-6 sm:p-8 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-2xl card-electric rounded-4xl p-6 sm:p-8 shadow-2xl overflow-hidden">
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-border/80 mb-6">
           <div className="flex items-center gap-3">
@@ -59,10 +61,10 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
             </div>
             <div>
               <h3 className="text-base font-bold font-secondary text-white">
-                Invoice & Receipt Scanner
+                {t('scan_title', 'Invoice & Receipt Scanner')}
               </h3>
               <p className="text-xs text-text-dark">
-                AI Vision & OCR automatic ledger extraction
+                {t('scan_subtitle', 'AI Vision & OCR automatic ledger extraction')}
               </p>
             </div>
           </div>
@@ -85,10 +87,10 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                 <IconUploadCloud className="size-10" />
               </span>
               <span className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
-                Drop invoice or receipt here, or browse
+                {t('scan_dropzone', 'Drop invoice or receipt here, or browse')}
               </span>
               <span className="text-xs text-text-dark mt-1">
-                Supports PDF, PNG, JPG receipts up to 25MB
+                {t('scan_supported', 'Supports PDF, PNG, JPG receipts up to 25MB')}
               </span>
               <input
                 type="file"
@@ -101,24 +103,24 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
             {/* Quick Sample Invoices */}
             <div>
               <span className="text-xs text-text-dark font-medium block mb-2">
-                Or test with sample mock invoice:
+                {t('scan_or_test', 'Or test with sample mock invoice:')}
               </span>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => simulateScan('acme_freight_october.pdf')}
-                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer"
+                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-[#DA7B93]/60"
                 >
                   <IconLightning className="size-3.5 text-secondary" />
-                  <span>Acme Freight Bill ($3,480)</span>
+                  <span>{t('scan_sample_1', 'Acme Freight Bill ($3,480)')}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => simulateScan('aws_cloud_servers.pdf')}
-                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer"
+                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-[#DA7B93]/60"
                 >
                   <IconLightning className="size-3.5 text-secondary" />
-                  <span>Cloud Infrastructure ($1,850)</span>
+                  <span>{t('scan_sample_2', 'Cloud Infrastructure ($1,850)')}</span>
                 </button>
               </div>
             </div>
@@ -134,10 +136,10 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
             </div>
             <div>
               <div className="text-sm font-bold text-white">
-                Parsing {fileName} with OCR Vision…
+                {t('scan_parsing', 'Parsing')} {fileName} {t('scan_with_ocr', 'with OCR Vision…')}
               </div>
               <div className="text-xs text-text-dark mt-1">
-                Extracting vendor, line items, and payment terms
+                {t('scan_extracting', 'Extracting vendor, line items, and payment terms')}
               </div>
             </div>
           </div>
@@ -146,20 +148,20 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
         {/* Scanned Result Card */}
         {scannedResult && (
           <div className="space-y-6">
-            <div className="p-5 rounded-2xl bg-dark/70 border border-border space-y-4">
+            <div className="p-5 rounded-2xl card-electric space-y-4">
               <div className="flex items-center justify-between border-b border-border/60 pb-3">
                 <div>
-                  <div className="text-xs text-text-dark">Detected Vendor</div>
+                  <div className="text-xs text-text-dark">{t('scan_detected_vendor', 'Detected Vendor')}</div>
                   <div className="text-base font-bold text-white">
                     {scannedResult.vendor}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                  <div className="inline-flex items-center gap-1 text-xs text-secondary-light font-semibold bg-secondary/15 px-2 py-0.5 rounded-full border border-secondary/30">
                     <IconCheck className="size-3" />
-                    <span>Confidence {scannedResult.confidence}</span>
+                    <span>{t('scan_confidence', 'Confidence')} {scannedResult.confidence}</span>
                   </div>
-                  <div className="text-xs text-text-dark mt-1">
+                  <div className="text-xs text-text-dark mt-1 font-mono">
                     ID: {scannedResult.invoiceId}
                   </div>
                 </div>
@@ -167,15 +169,15 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
 
               <div className="grid grid-cols-3 gap-4 text-xs">
                 <div>
-                  <span className="text-text-dark block">Issue Date</span>
-                  <span className="font-semibold text-white">{scannedResult.date}</span>
+                  <span className="text-text-dark block">{t('scan_issue_date', 'Issue Date')}</span>
+                  <span className="font-semibold text-white font-mono">{scannedResult.date}</span>
                 </div>
                 <div>
-                  <span className="text-text-dark block">Due Date</span>
-                  <span className="font-semibold text-white">{scannedResult.dueDate}</span>
+                  <span className="text-text-dark block">{t('scan_due_date', 'Due Date')}</span>
+                  <span className="font-semibold text-white font-mono">{scannedResult.dueDate}</span>
                 </div>
                 <div>
-                  <span className="text-text-dark block">Category</span>
+                  <span className="text-text-dark block">{t('scan_category', 'Category')}</span>
                   <span className="font-semibold text-white">{scannedResult.category}</span>
                 </div>
               </div>
@@ -183,7 +185,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
               {/* Line items table */}
               <div className="border-t border-border/60 pt-3">
                 <span className="text-xs text-text-dark font-medium block mb-2">
-                  Extracted Line Items
+                  {t('scan_extracted_items', 'Extracted Line Items')}
                 </span>
                 <div className="space-y-1.5 text-xs">
                   {scannedResult.lineItems.map((item, i) => (
@@ -193,7 +195,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                     </div>
                   ))}
                   <div className="flex justify-between font-bold text-sm text-white pt-2 border-t border-border/40">
-                    <span>Total Amount</span>
+                    <span>{t('scan_total_amount', 'Total Amount')}</span>
                     <span className="text-primary font-mono font-bold">
                       ${scannedResult.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
@@ -207,20 +209,20 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={() => setScannedResult(null)}
-                className="btn btn-outline btn-sm text-xs cursor-pointer"
+                className="btn btn-outline btn-sm text-xs cursor-pointer hover:border-[#DA7B93]/60"
               >
-                Scan Another
+                {t('scan_another', 'Scan Another')}
               </button>
               <button
                 type="button"
                 onClick={() => {
-                  alert('Invoice successfully recorded to /backend/data/invoices.csv!');
+                  alert(t('scan_recorded_alert', 'Invoice successfully recorded to /backend/data/invoices.csv!'));
                   onClose();
                 }}
-                className="btn btn-primary btn-sm text-xs flex items-center gap-1.5 cursor-pointer"
+                className="btn btn-primary btn-sm text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-primary/20 hover:border-[#DA7B93]/60"
               >
                 <IconCheck className="size-3.5" />
-                <span>Confirm & Sync to Ledger</span>
+                <span>{t('scan_confirm_sync', 'Confirm & Sync to Ledger')}</span>
               </button>
             </div>
           </div>

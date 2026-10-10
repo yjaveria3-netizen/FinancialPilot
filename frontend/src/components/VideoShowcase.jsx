@@ -9,33 +9,64 @@ export default function VideoShowcase() {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
 
-  // Silky smooth GSAP 3D Scroll Tilt Animation - perfectly stable, zero glitch or collapse
+  // Silky smooth GSAP 3D Scroll Tilt Animation - pronounced perspective matching hero showcase
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     const ctx = gsap.context(() => {
-      // Starting 3D tilted state
-      gsap.set(el, {
-        transformPerspective: 1200,
-        rotationX: 12,
-        scale: 0.92,
-        transformOrigin: '50% 50%',
-        willChange: 'transform',
+      const mm = gsap.matchMedia();
+
+      // Desktop & Tablet: Pronounced 35-degree 3D tilt, laid down under buttons
+      mm.add('(min-width: 768px)', () => {
+        gsap.set(el, {
+          transformPerspective: 1000,
+          rotationX: 35,
+          scale: 0.9,
+          y: -35,
+          transformOrigin: '50% 60%',
+          willChange: 'transform',
+        });
+
+        gsap.to(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            end: 'top 20%',
+            scrub: 1.2,
+            markers: false,
+          },
+          rotationX: 5,
+          scale: 1,
+          y: 0,
+          ease: 'power2.out',
+        });
       });
 
-      // Smoothly tilt flat on scroll
-      gsap.to(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 90%',
-          end: 'top 25%',
-          scrub: 1, // 1s scrub smoothing prevents abrupt jumps and jitter
-          markers: false,
-        },
-        rotationX: 0,
-        scale: 1,
-        ease: 'power2.out',
+      // Mobile: Balanced 26-degree tilt for smaller viewports
+      mm.add('(max-width: 767px)', () => {
+        gsap.set(el, {
+          transformPerspective: 800,
+          rotationX: 26,
+          scale: 0.94,
+          y: -15,
+          transformOrigin: '50% 60%',
+          willChange: 'transform',
+        });
+
+        gsap.to(el, {
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 90%',
+            end: 'top 25%',
+            scrub: 1,
+            markers: false,
+          },
+          rotationX: 4,
+          scale: 1,
+          y: 0,
+          ease: 'power2.out',
+        });
       });
     }, containerRef);
 
@@ -57,11 +88,15 @@ export default function VideoShowcase() {
     <div
       ref={containerRef}
       data-gsap-video-showcase
-      className="relative w-full max-w-[1120px] aspect-video mx-auto rounded-3xl lg:rounded-4xl overflow-hidden border border-border/80 shadow-2xl bg-dark/60 group transition-colors duration-300 hover:border-primary/50"
+      className="relative w-full max-w-[1040px] xl:max-w-[1100px] aspect-video mx-auto rounded-3xl lg:rounded-4xl overflow-hidden border border-white/15 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.8),0_0_60px_-15px_rgba(147,122,255,0.25)] bg-dark/70 group transition-colors duration-300 hover:border-primary/50"
       style={{
         transformStyle: 'preserve-3d',
+        transform: 'perspective(1000px) rotateX(35deg) scale(0.9) translateY(-35px)',
+        transformOrigin: '50% 60%',
       }}
     >
+      {/* Top subtle specular edge highlight */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-10" />
       <video
         ref={videoRef}
         id="videoPlayer"
@@ -118,8 +153,8 @@ export default function VideoShowcase() {
                 y2="5.62488"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="var(--color-primary-light, #4D36D0)" />
-                <stop offset="1" stopColor="var(--color-primary, #937AFF)" />
+                <stop stopColor="var(--color-primary-light, #F2A3B5)" />
+                <stop offset="1" stopColor="var(--color-primary, #DA7B93)" />
               </linearGradient>
             </defs>
           </svg>

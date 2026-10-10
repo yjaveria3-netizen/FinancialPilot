@@ -4,6 +4,11 @@ import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import CashFlowPage from './pages/CashFlowPage';
 import CreditScorePage from './pages/CreditScorePage';
+import AnomalyGuard from './components/AnomalyGuard';
+import TaxAssistant from './components/TaxAssistant';
+import ScenarioPlanner from './components/ScenarioPlanner';
+import AccountantPortal from './components/AccountantPortal';
+import WhatsAppCollector from './components/WhatsAppCollector';
 import ComingSoon from './pages/ComingSoon';
 import { ProcurePage, InventoryPage, PricingPage, NegotiationPage, CfoChatPage } from './pages/BPages';
 import {
@@ -18,10 +23,12 @@ import {
   IconCfoChat,
   IconScanInvoice,
 } from './components/Icons';
+import { LanguageProvider } from './context/LanguageContext';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Main Public Landing Page */}
@@ -35,40 +42,13 @@ export default function App() {
           <Route path="credit-score" element={<CreditScorePage />} />
 
           {/* 4. Anomaly & Fraud Guard */}
-          <Route
-            path="anomaly-guard"
-            element={
-              <ComingSoon
-                title="Anomaly & Fraud Guard"
-                icon={<IconAnomalyGuard className="size-10 text-primary" />}
-                assignee="Compliance & Risk"
-              />
-            }
-          />
+          <Route path="anomaly-guard" element={<AnomalyGuard />} />
 
           {/* 5. Tax & Compliance Assistant */}
-          <Route
-            path="tax-assistant"
-            element={
-              <ComingSoon
-                title="Tax & Compliance Assistant"
-                icon={<IconTaxAssistant className="size-10 text-primary" />}
-                assignee="Tax Intelligence"
-              />
-            }
-          />
+          <Route path="tax-assistant" element={<TaxAssistant />} />
 
           {/* 6. Scenario Planner */}
-          <Route
-            path="scenario-planner"
-            element={
-              <ComingSoon
-                title="Scenario Planner"
-                icon={<IconScenarioPlanner className="size-10 text-primary" />}
-                assignee="Monte Carlo Modeling"
-              />
-            }
-          />
+          <Route path="scenario-planner" element={<ScenarioPlanner />} />
 
           {/* 7. ProcureAI */}
           <Route path="procure-ai" element={<ProcurePage />} />
@@ -83,16 +63,11 @@ export default function App() {
           <Route path="negotiation-copilot" element={<NegotiationPage />} />
 
           {/* 11. Accountant & Lender Portal */}
-          <Route
-            path="accountant-portal"
-            element={
-              <ComingSoon
-                title="Accountant & Lender Portal"
-                icon={<IconAccountantPortal className="size-10 text-primary" />}
-                assignee="Reporting & Audit"
-              />
-            }
-          />
+          <Route path="accountant-portal" element={<AccountantPortal />} />
+
+          {/* 12. WhatsApp Automated Collection Agent */}
+          <Route path="whatsapp-collector" element={<WhatsAppCollector />} />
+          <Route path="whatsapp-agent" element={<WhatsAppCollector />} />
 
           {/* 12. AI CFO Chat */}
           <Route path="cfo-chat" element={<CfoChatPage />} />
@@ -123,5 +98,6 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+  </LanguageProvider>
   );
 }

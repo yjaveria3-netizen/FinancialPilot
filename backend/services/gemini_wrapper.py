@@ -9,14 +9,19 @@ import urllib.request
 import urllib.error
 
 
-def ask_gemini(prompt: str, fallback: str = "AI insight unavailable.") -> str:
+def ask_gemini(
+    prompt: str,
+    fallback: str = "AI insight unavailable.",
+    system_instruction: str = "",
+) -> str:
     """
     Send a prompt to Gemini REST API and return the text response.
     Falls back gracefully if the API key is missing or the call fails.
 
     Args:
-        prompt:   The full text prompt.
-        fallback: Text to return on any error or missing key.
+        prompt:             The full text prompt.
+        fallback:           Text to return on any error or missing key.
+        system_instruction: Optional system instruction context.
 
     Returns:
         str: Gemini's text response or fallback string.
@@ -29,11 +34,13 @@ def ask_gemini(prompt: str, fallback: str = "AI insight unavailable.") -> str:
     # Support multiple models, default to gemini-1.5-flash
     model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+    
+    full_prompt = f"Instructions: {system_instruction}\n\nTask: {prompt}" if system_instruction else prompt
     payload = {
         "contents": [
             {
                 "parts": [
-                    {"text": prompt}
+                    {"text": full_prompt}
                 ]
             }
         ],

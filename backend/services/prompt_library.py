@@ -65,16 +65,94 @@ Respond in plain language without technical jargon.
 
 
 def tax_assistant_prompt(tax_summary: dict) -> str:
-    """Prompt for Tax Assistant advisory."""
+    """Prompt for Tax Assistant accountant executive summary."""
+    breakdown_lines = "\n".join(
+        [f"  * {cat}: ${amt:,.2f}" for cat, amt in tax_summary.get("deductibles_breakdown", {}).items()]
+    )
+    deadlines_lines = "\n".join(
+        [f"  * {dl.get('event')}: Due {dl.get('due_date')} ({dl.get('days_remaining')} days remaining)"
+         for dl in tax_summary.get("filing_deadlines", [])[:4]]
+    )
     return f"""
-You are a US small business tax advisor. Based on the following financial data:
+You are a senior Corporate Tax Director and CPA specializing in manufacturing, industrial supply chain, and garment-factory operations.
+Review the following financial tax status report for the enterprise:
 
-- Total Revenue YTD: ${tax_summary.get('revenue_ytd', 0):,.2f}
-- Total Expenses YTD: ${tax_summary.get('expenses_ytd', 0):,.2f}
-- Estimated Net Profit: ${tax_summary.get('net_profit', 0):,.2f}
-- Estimated Tax Rate (Self-Employment + Income): 30%
-- Estimated Tax Liability: ${tax_summary.get('estimated_tax', 0):,.2f}
+FINANCIAL POSITION:
+- Gross Revenue YTD: ${tax_summary.get('revenue_ytd', 0):,.2f}
+- Total Eligible Deductions: ${tax_summary.get('deductible_total', 0):,.2f}
+- Net Taxable Operating Income: ${tax_summary.get('net_taxable_income', 0):,.2f}
+- Estimated Total Tax Liability Due: ${tax_summary.get('estimated_tax_due', 0):,.2f}
+- Prior Tax Withholdings / Remittances Paid: ${tax_summary.get('prior_tax_paid', 0):,.2f}
+- Effective Corporate Tax Rate Provision: {tax_summary.get('effective_tax_rate', 26.0):.1f}%
 
-Provide 2-3 short, practical tax optimization tips the business owner can use before year end.
-Do not give specific legal advice — frame as general guidance.
+DEDUCTIBLE EXPENSE BREAKDOWN:
+{breakdown_lines}
+
+UPCOMING COMPLIANCE DEADLINES:
+{deadlines_lines}
+
+Write a formal, comprehensive, 3-section Executive Tax Summary tailored specifically for the company's external CPA and internal accounting department:
+
+1. EXECUTIVE SUMMARY & TAX LIABILITY POSTURE:
+   Provide an executive-level synopsis of the business's current taxable operating posture, margin resilience, and net estimated tax liability due.
+
+2. DEDUCTIBLE CLASSIFICATION & AUDIT READINESS:
+   Analyze the deductible schedule (raw material COGS, direct manufacturing payroll, plant facility rent, utilities, and marketing). Note GAAP capitalization vs Section 162 ordinary expense considerations, inventory/fabric depreciation write-offs, and compliance recommendations.
+
+3. UPCOMING FILING & REGULATORY COMPLIANCE ROADMAP:
+   Outline exact priority steps to meet the upcoming quarterly and annual filing deadlines, verify payroll tax (Form 941) reconciliations, and ensure estimated tax safe harbor provisions are satisfied.
+
+Tone: Authoritative, audit-ready, analytical, and structured with clear section headers. Do not use generic disclaimers.
+"""
+
+
+def scenario_planner_prompt(params: dict, impact_summary: dict) -> str:
+    """Prompt for Scenario Planner Monte Carlo simulation executive analysis."""
+    return f"""
+You are a senior financial risk analyst and CFO advisor. An executive is analyzing a Monte Carlo financial simulation run for their enterprise.
+
+SCENARIO PARAMETERS APPLIED:
+- Sales Revenue Shift: {params.get('sales_change_pct', 0.0):+.1f}%
+- Additional Headcount / Hiring: +{params.get('hiring_count', 0)} employees (Est. ${params.get('hiring_monthly_cost', 0):,.2f}/month)
+- Procurement & Raw Material Cost Shift: {params.get('procurement_cost_pct', 0.0):+.1f}%
+- Forecast Horizon: {params.get('days', 30)} days ({params.get('simulations', 500)} stochastic trials)
+
+SIMULATION OUTCOMES:
+- Baseline Projected Ending Cash: ${impact_summary.get('baseline_ending_cash', 0):,.2f}
+- Median Expected Ending Cash (P50): ${impact_summary.get('ending_cash_p50', 0):,.2f}
+- Worst-Case Stress Ending Cash (P10): ${impact_summary.get('ending_cash_p10', 0):,.2f}
+- Bullish Optimistic Ending Cash (P90): ${impact_summary.get('ending_cash_p90', 0):,.2f}
+- Net Cash Impact vs Baseline: ${impact_summary.get('net_cash_impact', 0):+,.2f}
+- Cash Shortfall / Insolvency Risk Probability: {impact_summary.get('shortfall_probability', 0):.1f}%
+- Projected Procurement Cost Shift: ${impact_summary.get('procurement_cost_delta', 0):+,.2f}
+- Credit Risk & Debt Capacity Exposure: {impact_summary.get('credit_risk_impact', 'Moderate')}
+
+Write a concise, professional 3-part Executive Simulation Review for the executive leadership team:
+1. RUNWAY & LIQUIDITY TRAJECTORY: Summarize the expected vs baseline cash position and whether the business maintains safe operating runway under stress (P10).
+2. SENSITIVITY & COST DRIVERS: Evaluate how the combination of sales shifts, hiring payroll, and procurement inflation drives the variance.
+3. STRATEGIC RECOMMENDATIONS: Provide 2-3 specific financial mitigation decisions (e.g., credit line drawdown triggers, phased hiring milestones, supplier term adjustments).
+
+Tone: Analytical, objective, and executive-ready. Format with clear section titles.
+"""
+
+
+def whatsapp_reminder_prompt(client_name: str, invoice_id: str, amount: float, days_overdue: int, due_date: str) -> str:
+    """Prompt for WhatsApp Automated Collection Agent dynamic reminder generation."""
+    return f"""
+You are a top-tier accounts receivable and collection specialist for an SMB finance department.
+Draft a concise, polite, yet clear and professional WhatsApp payment reminder message to send to a client.
+
+CLIENT & INVOICE DETAILS:
+- Client Name: {client_name}
+- Invoice Reference: {invoice_id}
+- Outstanding Balance: ${amount:,.2f}
+- Original Due Date: {due_date}
+- Days Past Due: {days_overdue} days
+
+REQUIREMENTS:
+1. Message MUST be 2 to 3 sentences maximum. Keep it conversational and appropriate for WhatsApp messaging.
+2. Maintain a courteous, respectful, yet firm tone that preserves client goodwill while driving prompt reconciliation.
+3. Explicitly reference invoice {invoice_id} and the exact amount ${amount:,.2f}.
+4. Provide a clear call-to-action asking when payment can be expected or offering to provide bank details / invoice copy.
+5. Do NOT include markdown bolding, asterisks, email subject lines, or signatures like 'Best regards, [Name]'.
 """

@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { IconCfoChat, IconClose } from './Icons';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CfoChatDrawer() {
+  const { t, translateGeminiContent } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -17,6 +19,28 @@ export default function CfoChatDrawer() {
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
+
+  // Listen for Cash Crunch Crisis Event to auto-open drawer with survival protocol
+  useEffect(() => {
+    const handleCrisis = (e) => {
+      setIsOpen(true);
+      const advice =
+        e.detail?.advice ||
+        'CRISIS MODE DETECTED: An unexpected $59,000 cash drain and duplicate invoice flags were injected into the ledger. Projected runway is compromised. Recommendation: Halt non-critical disbursements, expedite receivables, and inspect invoice anomalies.';
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          isEmergency: true,
+          text: `🚨 URGENT CFO EMERGENCY ADVISORY:\n\n${advice}`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+    };
+
+    window.addEventListener('finpilot:crisis', handleCrisis);
+    return () => window.removeEventListener('finpilot:crisis', handleCrisis);
+  }, []);
 
   // Close on Escape key
   useEffect(() => {
@@ -88,22 +112,22 @@ export default function CfoChatDrawer() {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="relative group size-14 sm:size-16 rounded-full bg-primary hover:bg-primary-light text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer border border-white/20"
+          className="relative group size-14 sm:size-16 rounded-full bg-gradient-to-tr from-[#285B5C] via-[#376E6F] to-[#3FBFA8] hover:brightness-115 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer border border-[#3FBFA8]/60"
           style={{
-            boxShadow: '0 0 30px rgba(147, 122, 255, 0.45)',
+            boxShadow: '0 0 32px rgba(63, 191, 168, 0.65), 0 6px 20px rgba(40, 91, 92, 0.55)',
           }}
           aria-label={isOpen ? 'Close AI CFO Chat' : 'Open AI CFO Chat'}
         >
-          {/* Subtle Ambient Pulse Ring */}
-          <span className="absolute -inset-1 rounded-full bg-primary/40 animate-ping opacity-60 pointer-events-none" />
+          {/* Subtle Ambient Pulse Ring in Emerald Green */}
+          <span className="absolute -inset-1 rounded-full bg-[#3FBFA8]/40 animate-ping opacity-60 pointer-events-none" />
 
           {isOpen ? (
             /* Close Icon */
-            <IconClose className="size-6 relative z-10" />
+            <IconClose className="size-6 relative z-10 text-white" />
           ) : (
             /* AI CFO Chat Icon */
             <div className="relative z-10 flex flex-col items-center justify-center">
-              <IconCfoChat className="size-6 text-white" />
+              <IconCfoChat className="size-6 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]" />
             </div>
           )}
         </button>
@@ -123,15 +147,15 @@ export default function CfoChatDrawer() {
             {/* Drawer Header */}
             <div className="p-5 border-b border-border/80 flex items-center justify-between bg-dark/50">
               <div className="flex items-center gap-3">
-                <div className="size-10 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center">
-                  <IconCfoChat className="size-5 text-primary" />
+                <div className="size-10 rounded-2xl bg-[#376E6F]/20 border border-[#3FBFA8]/40 flex items-center justify-center">
+                  <IconCfoChat className="size-5 text-[#3FBFA8]" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold font-secondary text-white flex items-center gap-2">
-                    AI CFO Assistant
-                    <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                    {t('cfo_title', 'AI CFO Assistant')}
+                    <span className="size-2 rounded-full bg-[#3FBFA8] animate-pulse" />
                   </h3>
-                  <p className="text-[11px] text-text-dark">Real-time financial intelligence</p>
+                  <p className="text-[11px] text-text-dark">{t('cfo_sub', 'Real-time financial intelligence')}</p>
                 </div>
               </div>
 
@@ -156,13 +180,15 @@ export default function CfoChatDrawer() {
                   }`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed ${
-                      m.role === 'user'
+                    className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed whitespace-pre-line ${
+                      m.isEmergency
+                        ? 'bg-rose-950/70 border border-rose-500/60 text-rose-100 rounded-bl-none shadow-xl font-medium'
+                        : m.role === 'user'
                         ? 'bg-primary text-white rounded-br-none shadow-lg'
                         : 'bg-dark/70 border border-border text-text rounded-bl-none shadow-md'
                     }`}
                   >
-                    {m.text}
+                    {translateGeminiContent(m.text)}
                   </div>
                   <span className="text-[10px] text-text-dark mt-1 px-1">
                     {m.time}
@@ -172,9 +198,9 @@ export default function CfoChatDrawer() {
 
               {isTyping && (
                 <div className="flex items-center gap-1.5 p-3 rounded-2xl bg-dark/70 border border-border w-fit text-text-dark text-xs">
-                  <span className="size-1.5 rounded-full bg-primary animate-bounce" />
-                  <span className="size-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.2s]" />
-                  <span className="size-1.5 rounded-full bg-primary animate-bounce [animation-delay:0.4s]" />
+                  <span className="size-1.5 rounded-full bg-[#3FBFA8] animate-bounce" />
+                  <span className="size-1.5 rounded-full bg-[#3FBFA8] animate-bounce [animation-delay:0.2s]" />
+                  <span className="size-1.5 rounded-full bg-[#3FBFA8] animate-bounce [animation-delay:0.4s]" />
                 </div>
               )}
 
@@ -183,7 +209,7 @@ export default function CfoChatDrawer() {
 
             {/* Suggested Quick Prompts */}
             <div className="px-4 py-2 border-t border-border/40 bg-dark/30">
-              <div className="text-[11px] text-text-dark mb-2 font-medium">Quick suggestions:</div>
+              <div className="text-[11px] text-text-dark mb-2 font-medium">{t('cfo_suggestions', 'Quick suggestions:')}</div>
               <div className="flex flex-wrap gap-1.5">
                 {quickPrompts.map((p) => (
                   <button
@@ -211,7 +237,7 @@ export default function CfoChatDrawer() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask your AI CFO a question..."
+                  placeholder={t('cfo_placeholder', 'Ask your AI CFO a question...')}
                   className="flex-1 bg-light border border-border focus:border-primary rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-text-dark focus:outline-none transition-colors"
                 />
                 <button
@@ -219,7 +245,7 @@ export default function CfoChatDrawer() {
                   disabled={!input.trim()}
                   className="btn btn-primary btn-sm px-3.5 py-2.5 text-xs shrink-0 disabled:opacity-40 cursor-pointer"
                 >
-                  Send
+                  {t('cfo_send', 'Send')}
                 </button>
               </form>
             </div>
