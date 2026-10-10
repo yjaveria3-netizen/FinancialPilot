@@ -184,13 +184,13 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-secondary/30 text-xs text-secondary-light mb-3 font-semibold">
             <IconTaxAssistant className="size-4" />
             {t('tax_badge', 'Compliance & Statutory Accounting Engine')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
             {t('tax_title_1', 'Tax & Compliance')}{' '}
-            <span className="text-primary font-normal">{t('tax_title_2', 'Assistant')}</span>
+            <span className="text-secondary-light font-normal">{t('tax_title_2', 'Assistant')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
             {t(
@@ -308,11 +308,11 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
                 {t('tax_next_filing', 'Estimated Tax Due')}
               </div>
-              <div className="text-3xl font-bold font-secondary text-primary font-mono">
+              <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
                 ${data?.estimated_tax_due?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-primary"></span>
+                <span className="size-1.5 rounded-full bg-secondary-light"></span>
                 {t('tax_rate_breakdown', 'Federal 21% + State 5% + Sales Tax')}
               </div>
             </div>
@@ -368,7 +368,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                     {t('tax_cost_accounting_guide', 'Garment manufacturing cost accounting according to statutory guidelines')}
                   </p>
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-semibold text-primary self-start">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/15 border border-secondary/35 text-xs font-semibold text-secondary-light self-start">
                   {t('tax_combined_rate', 'Combined 26.0% Rate')}
                 </div>
               </div>
@@ -448,7 +448,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               {/* Prior Taxes Remitted Callout */}
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="text-primary font-bold">ℹ</span>
+                  <span className="text-secondary-light font-bold">ℹ</span>
                   <span className="text-text-dark">{t('tax_prior_prepayments', 'Recorded Tax Prepayments / Withholdings:')}</span>
                 </div>
                 <span className="font-mono font-semibold text-white">
@@ -469,7 +469,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                   </p>
                 </div>
 
-                <div className="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs font-mono">
+                <div className="size-8 rounded-full bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-xs font-mono">
                   {filteredDeadlines.length}
                 </div>
               </div>
@@ -524,7 +524,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                             {item.event}
                           </div>
                           <div className="text-[11px] text-text-dark mt-0.5 flex items-center gap-1.5">
-                            <span className="font-mono text-primary font-semibold">{item.form}</span>
+                            <span className="font-mono text-secondary-light font-semibold">{item.form}</span>
                             <span>•</span>
                             <span>{item.category}</span>
                           </div>
@@ -537,7 +537,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                               ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                               : isApproaching
                               ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                              : 'bg-primary/15 text-primary border border-primary/30'
+                              : 'bg-secondary/15 text-secondary-light border border-secondary/30'
                           }`}
                         >
                           {item.days_remaining}d left
@@ -563,14 +563,14 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
           {/* Section 3: Redesigned Executive Accountant Summary Section */}
           <div className="rounded-4xl card-electric overflow-hidden relative shadow-2xl">
             {/* Top Header & Action Bar */}
-            <div className="p-6 lg:p-8 border-b border-border bg-gradient-to-r from-primary/10 via-secondary/10 to-transparent flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="p-6 lg:p-8 border-b border-border bg-gradient-to-r from-secondary/10 via-secondary/5 to-transparent flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
-                <div className="size-12 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-lg shadow-primary/20">
+                <div className="size-12 rounded-2xl bg-secondary/20 border border-secondary/40 flex items-center justify-center text-secondary-light shadow-lg shadow-secondary/20">
                   <IconAiSparkle className="size-6" />
                 </div>
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-[11px] font-semibold mb-1">
-                    <span className="size-1.5 rounded-full bg-primary animate-pulse"></span>
+                  <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-secondary/15 border border-secondary/30 text-secondary-light text-[11px] font-semibold mb-1">
+                    <span className="size-1.5 rounded-full bg-secondary-light animate-pulse"></span>
                     {t('tax_ai_memo_badge', 'Gemini AI Advisory • Audit-Ready CPA Workpaper')}
                   </div>
                   <h3 className="text-2xl font-bold font-secondary text-white tracking-tight">
@@ -639,7 +639,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
 
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border/80">
                 <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">{t('tax_memo_audit', 'Audit Authority')}</div>
-                <div className="text-xs font-semibold text-primary">IRC Sec. 162 &amp; COGS</div>
+                <div className="text-xs font-semibold text-secondary-light">IRC Sec. 162 &amp; COGS</div>
                 <div className="text-[11px] text-zinc-400">{t('tax_safe_harbor', 'Safe-Harbor Compliant')}</div>
               </div>
             </div>
@@ -649,17 +649,17 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               {parsedSummary?.sec1 ? (
                 <>
                   {/* Section 1 Card */}
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-primary/40 transition-colors">
+                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-secondary/40 transition-colors">
                     <div className="flex items-center justify-between pb-3 border-b border-border/60">
                       <div className="flex items-center gap-3">
-                        <div className="size-8 rounded-xl bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
+                        <div className="size-8 rounded-xl bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-xs">
                           1
                         </div>
                         <h4 className="text-base font-bold font-secondary text-white">
                           {t('tax_sec1_title', 'Executive Summary & Tax Liability Posture')}
                         </h4>
                       </div>
-                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold font-mono">
+                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary-light border border-secondary/30 font-semibold font-mono">
                         {t('tax_net_bal_label', 'Net Balance:')} ${data?.net_balance_due?.toLocaleString()}
                       </span>
                     </div>
@@ -680,7 +680,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
                         <div className="text-text-dark text-[11px]">{t('tax_est_tot_tax', 'Est. Total Tax')}</div>
-                        <div className="font-mono font-semibold text-primary mt-0.5">${data?.estimated_tax_due?.toLocaleString()}</div>
+                        <div className="font-mono font-semibold text-secondary-light mt-0.5">${data?.estimated_tax_due?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
                         <div className="text-text-dark text-[11px]">{t('tax_prior_remit', 'Prior Remittances')}</div>
@@ -727,7 +727,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                       </div>
 
                       <div className="p-4 rounded-2xl bg-white/[0.015] border border-border/60 flex items-start gap-3">
-                        <div className="size-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center shrink-0 text-sm font-bold">
+                        <div className="size-8 rounded-lg bg-secondary/15 text-secondary-light flex items-center justify-center shrink-0 text-sm font-bold">
                           👥
                         </div>
                         <div>
@@ -757,7 +757,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                       </div>
 
                       <div className="p-4 rounded-2xl bg-white/[0.015] border border-border/60 flex items-start gap-3">
-                        <div className="size-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center shrink-0 text-sm font-bold">
+                        <div className="size-8 rounded-lg bg-secondary/15 text-secondary-light flex items-center justify-center shrink-0 text-sm font-bold">
                           📢
                         </div>
                         <div>

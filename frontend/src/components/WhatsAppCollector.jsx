@@ -12,10 +12,44 @@ import {
 } from './Icons';
 import { useLanguage } from '../context/LanguageContext';
 
+export function formatWhatsAppDigits(phone) {
+  if (!phone) return '923224154788';
+  let digits = String(phone).replace(/[^\d]/g, '');
+  if (digits.length === 11 && digits.startsWith('03')) {
+    return `92${digits.slice(1)}`;
+  }
+  if (digits.length === 10 && digits.startsWith('3')) {
+    return `92${digits}`;
+  }
+  if (digits.length === 10 && !digits.startsWith('1')) {
+    return `1${digits}`;
+  }
+  if (digits.length === 7) {
+    return `1${digits}`;
+  }
+  return digits || '923224154788';
+}
+
+const VIP_TEST_TARGET = {
+  invoice_id: 'INV-0001',
+  client_name: 'VIP Client (Target: +92 3224154788)',
+  client_phone: '+92 3224154788',
+  clean_phone: '923224154788',
+  amount: 5364.05,
+  due_date: '2024-10-06',
+  days_overdue: 19,
+  status: 'Overdue',
+  ai_message:
+    'Hi, this is FinPilot Accounts Receivable regarding invoice INV-0001 for $5,364.05, which was due on 2024-10-06 (19 days past due). We kindly request an immediate update on the remittance schedule. Thank you!',
+  whatsapp_link:
+    'https://web.whatsapp.com/send?phone=923224154788&text=Hi%2C%20this%20is%20FinPilot%20Accounts%20Receivable%20regarding%20invoice%20INV-0001%20for%20%245%2C364.05%2C%20which%20was%20due%20on%202024-10-06%20(19%20days%20past%20due).%20We%20kindly%20request%20an%20immediate%20update%20on%20the%20remittance%20schedule.%20Thank%20you!',
+  customer_id: 'CUST-001',
+};
+
 export default function WhatsAppCollector() {
   const { lang, t, translateGeminiContent } = useLanguage();
-  const [reminders, setReminders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [reminders, setReminders] = useState([VIP_TEST_TARGET]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDispatchingAll, setIsDispatchingAll] = useState(false);
@@ -35,25 +69,6 @@ export default function WhatsAppCollector() {
   const [processingId, setProcessingId] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
 
-  const VIP_TEST_TARGET = useMemo(
-    () => ({
-      invoice_id: 'INV-0001',
-      client_name: 'VIP Client (Target: +92 3224154788)',
-      client_phone: '+92 3224154788',
-      clean_phone: '923224154788',
-      amount: 5364.05,
-      due_date: '2024-10-06',
-      days_overdue: 19,
-      status: 'Overdue',
-      ai_message:
-        'Hi, this is FinPilot Accounts Receivable regarding invoice INV-0001 for $5,364.05, which was due on 2024-10-06 (19 days past due). We kindly request an immediate update on the remittance schedule. Thank you!',
-      whatsapp_link:
-        'https://wa.me/923224154788?text=Hi%2C%20this%20is%20FinPilot%20Accounts%20Receivable%20regarding%20invoice%20INV-0001%20for%20%245%2C364.05%2C%20which%20was%20due%20on%202024-10-06%20(19%20days%20past%20due).%20We%20kindly%20request%20an%20immediate%20update%20on%20the%20remittance%20schedule.%20Thank%20you!',
-      customer_id: 'CUST-001',
-    }),
-    []
-  );
-
   // Load reminders: checks sessionStorage first so live edits persist seamlessly
   const fetchReminders = useCallback(
     async (forceApi = false) => {
@@ -66,7 +81,21 @@ export default function WhatsAppCollector() {
           try {
             const parsed = JSON.parse(cached);
             if (Array.isArray(parsed) && parsed.length > 0) {
-              setReminders(parsed);
+              // Guarantee that user's number +92 3224154788 is ALWAYS present at index 0 even in cached sessions
+              const userIdx = parsed.findIndex(
+                (r) =>
+                  (r.client_phone && r.client_phone.includes('3224154788')) ||
+                  (r.clean_phone && r.clean_phone.includes('3224154788'))
+              );
+              let list = [...parsed];
+              if (userIdx > -1) {
+                const [userTarget] = list.splice(userIdx, 1);
+                list.unshift(userTarget);
+              } else {
+                list.unshift(VIP_TEST_TARGET);
+              }
+              setReminders(list);
+              sessionStorage.setItem('finpilot:custom_reminders', JSON.stringify(list));
               setLoading(false);
               return;
             }
@@ -108,7 +137,7 @@ export default function WhatsAppCollector() {
             status: 'Overdue',
             ai_message:
               'Hi Metro Textile Mills, this is FinPilot Accounts Receivable regarding invoice INV-8842 for $6,800.00. We would appreciate it if you could verify the payment status with your accounts team this week.',
-            whatsapp_link: 'https://wa.me/923008472910?text=Hi',
+            whatsapp_link: 'https://web.whatsapp.com/send?phone=923008472910&text=Hi',
             customer_id: 'CUST-002',
           },
           {
@@ -122,7 +151,7 @@ export default function WhatsAppCollector() {
             status: 'Overdue',
             ai_message:
               'Hi Al-Fatah Retail Logistics, just a friendly check-in regarding invoice INV-7650 for $3,150.00. Please let us know once payment has been released so we can reconcile your account.',
-            whatsapp_link: 'https://wa.me/923219988771?text=Hi',
+            whatsapp_link: 'https://web.whatsapp.com/send?phone=923219988771&text=Hi',
             customer_id: 'CUST-003',
           },
         ];
@@ -195,11 +224,7 @@ export default function WhatsAppCollector() {
     e.preventDefault();
     if (!editingTarget) return;
 
-    const rawDigits = (editingTarget.client_phone || '').replace(/[^\d]/g, '');
-    let clean = rawDigits;
-    if (clean.length === 11 && clean.startsWith('03')) clean = `92${clean.slice(1)}`;
-    if (!clean) clean = '923224154788';
-
+    const clean = formatWhatsAppDigits(editingTarget.client_phone);
     const normalized = {
       ...editingTarget,
       clean_phone: clean,
@@ -245,39 +270,6 @@ export default function WhatsAppCollector() {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  // Launch WhatsApp Web Link
-  const handleLaunchWhatsApp = () => {
-    if (!activeModalItem) return;
-    let digits = (recipientPhone || activeModalItem.client_phone || '').replace(/[^\d]/g, '');
-    if (digits.length === 11 && digits.startsWith('03')) {
-      digits = `92${digits.slice(1)}`;
-    } else if (digits.length === 10 && !digits.startsWith('1')) {
-      digits = `1${digits}`;
-    } else if (digits.length === 7) {
-      digits = `1${digits}`;
-    } else if (!digits) {
-      digits = activeModalItem.clean_phone || '923224154788';
-    }
-
-    // Persist any phone updates back to state
-    if (recipientPhone && recipientPhone !== activeModalItem.client_phone) {
-      const updatedList = reminders.map((r) =>
-        r.invoice_id === activeModalItem.invoice_id
-          ? { ...r, client_phone: recipientPhone, clean_phone: digits }
-          : r
-      );
-      setReminders(updatedList);
-      sessionStorage.setItem('finpilot:custom_reminders', JSON.stringify(updatedList));
-    }
-
-    const encodedText = encodeURIComponent(customMessage);
-    const intentUrl = `https://wa.me/${digits}?text=${encodedText}`;
-    window.open(intentUrl, '_blank', 'noopener,noreferrer');
-
-    setToastMessage(`WhatsApp Click-to-Chat intent dispatched for ${activeModalItem.invoice_id}!`);
-    setTimeout(() => setToastMessage(null), 4000);
-  };
-
   // Mark invoice as paid
   const handleMarkPaid = async (invoiceId, itemAmount = 0) => {
     setProcessingId(invoiceId);
@@ -312,17 +304,30 @@ export default function WhatsAppCollector() {
     }
   };
 
-  // Master Action: Batch Send All Reminders (Calls FastAPI Playwright Background Automation)
+  // Master Action: Batch Send All Reminders (Calls FastAPI Playwright Background Automation & Opens Web)
   const handleSendAllReminders = async () => {
     if (!filteredReminders.length || isDispatchingAll) return;
     setIsDispatchingAll(true);
 
+    // Launch WhatsApp Web synchronously right on user click to prevent browser popup blockers
+    const topTarget = filteredReminders[0];
+    if (topTarget) {
+      const topDigits = formatWhatsAppDigits(topTarget.client_phone);
+      const topText = encodeURIComponent(translateGeminiContent(topTarget.ai_message || ''));
+      try {
+        navigator.clipboard.writeText(translateGeminiContent(topTarget.ai_message || ''));
+        window.open(`https://web.whatsapp.com/send?phone=${topDigits}&text=${topText}`, '_blank');
+      } catch (err) {
+        console.warn('Direct popup open warning:', err);
+      }
+    }
+
     const dispatchingMsg =
       lang === 'ur'
-        ? '⚡ بیک گراؤنڈ اے آئی آٹومیشن کے ذریعے ترسیل جاری ہے...'
+        ? '⚡ واٹس ایپ ویب کھول دیا گیا! پس منظر میں اے آئی آٹومیشن کے ذریعے ترسیل جاری ہے...'
         : lang === 'zh'
-        ? '⚡ 后台 AI 自动化正在批量派发中...'
-        : '⚡ Background AI Automation Dispatching...';
+        ? '⚡ 已调起 WhatsApp Web！后台 AI 自动化正在批量派发中...'
+        : '⚡ WhatsApp Web launched! Background AI Automation Dispatching...';
     setToastMessage(dispatchingMsg);
 
     try {
@@ -351,10 +356,10 @@ export default function WhatsAppCollector() {
       const count = filteredReminders.length;
       const toast =
         lang === 'ur'
-          ? `🚀 تمام ${count} یاد دہانیاں پس منظر میں بھیج دی گئیں۔`
+          ? `🚀 تمام ${count} یاد دہانیاں پس منظر میں بھیج دی گئیں! واٹس ایپ پیغام کلپ بورڈ میں بھی محفوظ کر لیا گیا۔`
           : lang === 'zh'
-          ? `🚀 批量派发完成！已向 ${count} 位客户发送催收提醒。`
-          : `🚀 Batch dispatch executed! All ${count} active reminders marked as Dispatched via WhatsApp queue.`;
+          ? `🚀 批量派发完成！已向 ${count} 位客户发送提醒（文本已复制至剪贴板）。`
+          : `🚀 Batch dispatch executed! WhatsApp Web launched for your test target (${count} targets updated).`;
       setToastMessage(toast);
     } catch (err) {
       console.warn('Background WhatsApp dispatch error, setting demo state:', err);
@@ -447,26 +452,24 @@ export default function WhatsAppCollector() {
         </div>
       </div>
 
-      {/* Summary Metric Cards with Electric Current Hover */}
+      {/* Summary Metric Cards with Permanent Electric Current & Border Glow */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Total Overdue Capital */}
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary" />
           <div className="text-text-dark text-xs uppercase tracking-wider font-semibold mb-2">
             {t('total_overdue', 'Total Overdue Capital')}
           </div>
-          <div className="text-2xl sm:text-3xl font-bold font-mono text-primary-light">
+          <div className="text-2xl sm:text-3xl font-bold font-mono text-secondary-light">
             ${totalOverdueCapital.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-[11px] text-text-dark mt-2 flex items-center gap-1.5">
-            <span className="text-primary font-semibold">•</span>
+            <span className="text-secondary-light font-semibold">•</span>
             <span>{t('outstanding_receivables', 'Outstanding past-due receivables')}</span>
           </div>
         </div>
 
         {/* Active Pending Clients */}
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary-light" />
           <div className="text-text-dark text-xs uppercase tracking-wider font-semibold mb-2">
             {t('active_clients', 'Active Pending Clients')}
           </div>
@@ -474,14 +477,13 @@ export default function WhatsAppCollector() {
             {activePendingClients}
           </div>
           <div className="text-[11px] text-text-dark mt-2 flex items-center gap-1.5">
-            <span className="text-primary font-semibold">{reminders.length}</span>
+            <span className="text-secondary-light font-semibold">{reminders.length}</span>
             <span>{t('pending_invoices_queue', 'total pending invoices in queue')}</span>
           </div>
         </div>
 
         {/* Average Days Overdue */}
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-primary" />
           <div className="text-text-dark text-xs uppercase tracking-wider font-semibold mb-2">
             {t('avg_overdue', 'Avg. Days Overdue')}
           </div>
@@ -496,7 +498,6 @@ export default function WhatsAppCollector() {
 
         {/* Reconciled This Session */}
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary to-secondary-light" />
           <div className="text-text-dark text-xs uppercase tracking-wider font-semibold mb-2">
             {t('reconciled_session', 'Reconciled This Session')}
           </div>
@@ -512,7 +513,7 @@ export default function WhatsAppCollector() {
         </div>
       </div>
 
-      {/* Main Table Card with Electric Current Hover */}
+      {/* Main Table Card with Permanent Electric Current & Border Glow */}
       <div className="rounded-3xl card-electric overflow-hidden">
         {/* Table Toolbar with 🚀 Send All Reminders Master Action & + Add Target */}
         <div className="p-6 border-b border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -534,7 +535,7 @@ export default function WhatsAppCollector() {
               type="button"
               onClick={handleSendAllReminders}
               disabled={isDispatchingAll || filteredReminders.length === 0}
-              className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-primary via-[#8A4C62] to-secondary hover:brightness-110 text-white border border-primary/40 shadow-lg shadow-primary/20 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap active:scale-95"
+              className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-secondary via-[#317071] to-secondary-light hover:brightness-110 text-white border border-secondary/40 shadow-lg shadow-secondary/20 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap active:scale-95"
               title="Batch dispatch AI follow-ups to all active collection targets via WhatsApp queue"
             >
               {isDispatchingAll ? (
@@ -567,7 +568,7 @@ export default function WhatsAppCollector() {
                 placeholder={t('search_placeholder', 'Search client or invoice...')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-dark/60 border border-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-text-dark focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-dark/60 border border-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-text-dark focus:outline-none focus:border-secondary transition-colors"
               />
               {searchTerm && (
                 <button
@@ -585,7 +586,7 @@ export default function WhatsAppCollector() {
         {/* Loading State */}
         {loading && (
           <div className="py-20 text-center space-y-3">
-            <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
+            <div className="size-8 rounded-full border-2 border-secondary-light border-t-transparent animate-spin mx-auto" />
             <p className="text-xs text-text-dark">Scanning overdue ledgers & generating Gemini reminders...</p>
           </div>
         )}
@@ -593,7 +594,7 @@ export default function WhatsAppCollector() {
         {/* Error State */}
         {!loading && error && (
           <div className="p-8 text-center space-y-3">
-            <div className="text-primary font-semibold text-sm">Notice</div>
+            <div className="text-secondary-light font-semibold text-sm">Notice</div>
             <p className="text-xs text-text-dark">{error}</p>
             <button
               type="button"
@@ -624,7 +625,7 @@ export default function WhatsAppCollector() {
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="text-xs text-primary hover:underline"
+                className="text-xs text-secondary-light hover:underline"
               >
                 {t('clear_filter', 'Clear search filter')}
               </button>
@@ -650,6 +651,9 @@ export default function WhatsAppCollector() {
                 {filteredReminders.map((item) => {
                   const isProcessing = processingId === item.invoice_id;
                   const isTargetPhone = item.client_phone && item.client_phone.includes('3224154788');
+                  const targetDigits = formatWhatsAppDigits(item.client_phone);
+                  const encodedMsg = encodeURIComponent(translateGeminiContent(item.ai_message || ''));
+                  const directWhatsAppWebUrl = `https://web.whatsapp.com/send?phone=${targetDigits}&text=${encodedMsg}`;
 
                   return (
                     <tr
@@ -660,7 +664,7 @@ export default function WhatsAppCollector() {
                     >
                       {/* Client Name */}
                       <td className="py-4 px-6 align-middle">
-                        <div className="font-semibold text-white group-hover:text-primary transition-colors flex items-center gap-2">
+                        <div className="font-semibold text-white group-hover:text-secondary-light transition-colors flex items-center gap-2">
                           <span>{item.client_name}</span>
                           {isTargetPhone && (
                             <span className="px-1.5 py-0.5 rounded text-[10px] bg-secondary/30 text-secondary-light border border-secondary/50 font-mono">
@@ -694,7 +698,7 @@ export default function WhatsAppCollector() {
                       {/* Due Date & Days Overdue */}
                       <td className="py-4 px-6 align-middle">
                         <div className="text-text-light font-medium">{item.due_date}</div>
-                        <div className="text-[11px] text-primary font-medium mt-0.5">
+                        <div className="text-[11px] text-rose-400 font-medium mt-0.5">
                           {item.days_overdue} {t('days_overdue', 'days overdue')}
                         </div>
                       </td>
@@ -705,12 +709,12 @@ export default function WhatsAppCollector() {
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
                             item.status === 'Dispatched'
                               ? 'bg-secondary/20 text-secondary-light border border-secondary/40'
-                              : 'bg-primary/15 text-primary-light border border-primary/30'
+                              : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
                           }`}
                         >
                           <span
                             className={`size-1.5 rounded-full ${
-                              item.status === 'Dispatched' ? 'bg-secondary-light' : 'bg-primary animate-pulse'
+                              item.status === 'Dispatched' ? 'bg-secondary-light' : 'bg-rose-400 animate-pulse'
                             }`}
                           />
                           {item.status === 'Dispatched'
@@ -722,22 +726,34 @@ export default function WhatsAppCollector() {
                       {/* Actions */}
                       <td className="py-4 px-6 align-middle text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {/* Send WhatsApp Reminder */}
+                          {/* 1-Click Direct WhatsApp Web Send Anchor Link */}
+                          <a
+                            href={directWhatsAppWebUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => {
+                              navigator.clipboard.writeText(translateGeminiContent(item.ai_message || ''));
+                              setToastMessage(`✓ WhatsApp Web launched for ${item.client_name}! (Message copied to clipboard Ctrl+V)`);
+                              setTimeout(() => setToastMessage(null), 4500);
+                            }}
+                            className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-secondary hover:bg-secondary-light text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-secondary/20 active:scale-95 whitespace-nowrap"
+                            title="Directly launch WhatsApp Web chat with tailored message"
+                          >
+                            <IconWhatsApp className="size-3.5 text-white" />
+                            <span>{t('btn_send_whatsapp', 'Send WhatsApp')}</span>
+                          </a>
+
+                          {/* Preview & Customize AI Copy */}
                           <button
                             type="button"
                             onClick={() => handleOpenModal(item)}
-                            className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-secondary/20 text-secondary-light border border-secondary/40 hover:bg-secondary/30 hover:border-secondary transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shadow-secondary/20"
-                            title="Preview Gemini AI reminder & launch WhatsApp web"
+                            className="p-1.5 rounded-xl text-xs font-semibold bg-white/5 text-text-light border border-border hover:text-white hover:border-secondary hover:bg-secondary/15 transition-all flex items-center gap-1 cursor-pointer"
+                            title="Preview and customize AI message copy before sending"
                           >
-                            <IconWhatsApp className="size-3.5 text-secondary-light" />
-                            <span>
-                              {item.status === 'Dispatched'
-                                ? t('btn_resend_whatsapp', 'Resend WhatsApp')
-                                : t('btn_send_whatsapp', 'Send WhatsApp Reminder')}
-                            </span>
+                            <IconAiSparkle className="size-3.5 text-secondary-light" />
                           </button>
 
-                          {/* Edit Target */}
+                          {/* Edit Target Data */}
                           <button
                             type="button"
                             onClick={() => handleOpenEditModal(item)}
@@ -816,7 +832,7 @@ export default function WhatsAppCollector() {
               </div>
               <div>
                 <span className="text-[10px] text-text-dark uppercase tracking-wider block">Delinquency</span>
-                <span className="font-bold text-primary font-mono">
+                <span className="font-bold text-rose-400 font-mono">
                   {activeModalItem.days_overdue} {t('days_overdue', 'days overdue')}
                 </span>
               </div>
@@ -848,7 +864,7 @@ export default function WhatsAppCollector() {
             {/* Gemini AI Message Area */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-primary font-secondary flex items-center gap-1.5">
+                <label className="text-xs font-semibold text-secondary-light font-secondary flex items-center gap-1.5">
                   <IconAiSparkle className="size-3.5" />
                   {t('ai_message_draft', 'Gemini-Generated Reminder Copy')}
                 </label>
@@ -885,15 +901,36 @@ export default function WhatsAppCollector() {
                   {t('btn_mark_paid', 'Mark as Paid')}
                 </button>
 
-                {/* Direct WhatsApp Launch */}
-                <button
-                  type="button"
-                  onClick={handleLaunchWhatsApp}
-                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-semibold bg-secondary hover:bg-secondary-light text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-secondary/30 cursor-pointer font-medium"
+                {/* Direct Universal Link (wa.me) */}
+                <a
+                  href={`https://wa.me/${formatWhatsAppDigits(recipientPhone || activeModalItem.client_phone)}?text=${encodeURIComponent(customMessage)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    navigator.clipboard.writeText(customMessage);
+                  }}
+                  className="px-3.5 py-2.5 rounded-xl text-xs font-medium bg-white/5 border border-border text-text-light hover:text-white hover:border-secondary transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                  title="Universal link for mobile or desktop"
                 >
                   <IconSend className="size-3.5" />
-                  <span>{t('open_whatsapp', 'Open WhatsApp Web Link')}</span>
-                </button>
+                  <span>wa.me</span>
+                </a>
+
+                {/* Direct WhatsApp Web Anchor Link - Unblockable */}
+                <a
+                  href={`https://web.whatsapp.com/send?phone=${formatWhatsAppDigits(recipientPhone || activeModalItem.client_phone)}&text=${encodeURIComponent(customMessage)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    navigator.clipboard.writeText(customMessage);
+                    setToastMessage(`✓ WhatsApp Web launched! Message copied to clipboard for instant pasting (Ctrl+V).`);
+                    setTimeout(() => setToastMessage(null), 4500);
+                  }}
+                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-semibold bg-secondary hover:bg-secondary-light text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-secondary/30 cursor-pointer font-medium"
+                >
+                  <IconWhatsApp className="size-4" />
+                  <span>{t('open_whatsapp', 'Open WhatsApp Web')}</span>
+                </a>
               </div>
             </div>
           </div>

@@ -112,14 +112,19 @@ export default function CfoChatDrawer() {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="relative group size-14 sm:size-16 rounded-full bg-gradient-to-tr from-[#285B5C] via-[#376E6F] to-[#3FBFA8] hover:brightness-115 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer border border-[#3FBFA8]/60"
+          className="relative group size-14 sm:size-16 rounded-full bg-gradient-to-tr from-[#1B5E50] via-[#2E9C88] to-[#4EE2C9] hover:brightness-115 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer border-2 border-[#80F4E0]/90"
           style={{
-            boxShadow: '0 0 32px rgba(63, 191, 168, 0.65), 0 6px 20px rgba(40, 91, 92, 0.55)',
+            boxShadow: '0 0 35px rgba(78, 226, 201, 0.75), 0 6px 20px rgba(27, 94, 80, 0.6)',
           }}
           aria-label={isOpen ? 'Close AI CFO Chat' : 'Open AI CFO Chat'}
         >
           {/* Subtle Ambient Pulse Ring in Emerald Green */}
-          <span className="absolute -inset-1 rounded-full bg-[#3FBFA8]/40 animate-ping opacity-60 pointer-events-none" />
+          <span className="absolute -inset-1 rounded-full bg-[#4EE2C9]/50 animate-ping opacity-60 pointer-events-none" />
+
+          {/* AI Badge Chip */}
+          <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-[#190a28] border border-[#4EE2C9] text-[9px] font-extrabold text-[#4EE2C9] shadow-md pointer-events-none">
+            AI
+          </span>
 
           {isOpen ? (
             /* Close Icon */
@@ -184,7 +189,7 @@ export default function CfoChatDrawer() {
                       m.isEmergency
                         ? 'bg-rose-950/70 border border-rose-500/60 text-rose-100 rounded-bl-none shadow-xl font-medium'
                         : m.role === 'user'
-                        ? 'bg-primary text-white rounded-br-none shadow-lg'
+                        ? 'bg-secondary text-white rounded-br-none shadow-lg shadow-secondary/25'
                         : 'bg-dark/70 border border-border text-text rounded-bl-none shadow-md'
                     }`}
                   >
@@ -216,7 +221,7 @@ export default function CfoChatDrawer() {
                     key={p}
                     type="button"
                     onClick={() => handleSend(p)}
-                    className="text-[11px] bg-white/5 hover:bg-primary/20 text-text-dark hover:text-primary border border-border/60 hover:border-primary/40 rounded-full px-2.5 py-1 transition-all text-left cursor-pointer"
+                    className="text-[11px] bg-white/5 hover:bg-secondary/20 text-text-dark hover:text-secondary-light border border-border/60 hover:border-secondary/40 rounded-full px-2.5 py-1 transition-all text-left cursor-pointer"
                   >
                     {p}
                   </button>
@@ -238,7 +243,7 @@ export default function CfoChatDrawer() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={t('cfo_placeholder', 'Ask your AI CFO a question...')}
-                  className="flex-1 bg-light border border-border focus:border-primary rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-text-dark focus:outline-none transition-colors"
+                  className="flex-1 bg-light border border-border focus:border-secondary rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-text-dark focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"

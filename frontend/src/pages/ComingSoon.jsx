@@ -8,8 +8,8 @@ export default function ComingSoon({
 }) {
   return (
     <div className="container mx-auto px-4 lg:px-8 pt-40 pb-20 flex flex-col items-center justify-center text-center space-y-6">
-      <div className="size-20 rounded-3xl bg-light border border-border flex items-center justify-center text-primary shadow-xl">
-        {icon || <IconScenarioPlanner className="size-10 text-primary" />}
+      <div className="size-20 rounded-3xl bg-light border border-border flex items-center justify-center text-secondary-light shadow-xl">
+        {icon || <IconScenarioPlanner className="size-10 text-secondary-light" />}
       </div>
       <div>
         <h2 className="text-3xl font-bold font-secondary text-white">{title}</h2>
@@ -19,7 +19,7 @@ export default function ComingSoon({
       </div>
 
       <div className="bg-light border border-border rounded-3xl p-6 max-w-md text-left w-full space-y-3">
-        <div className="text-xs font-semibold text-primary uppercase tracking-wider">
+        <div className="text-xs font-semibold text-secondary-light uppercase tracking-wider">
           Engine Specification
         </div>
         <code className="text-xs text-text-dark block leading-relaxed font-mono bg-dark/50 p-4 rounded-2xl border border-border/50">

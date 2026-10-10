@@ -48,7 +48,7 @@ export default function ValueProps() {
         <div className="section-intro text-center mb-12">
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
             {t('val_heading_1', 'Replace Complex Spreadsheets With a')}{' '}
-            <strong className="text-primary font-normal">
+            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-semibold">
               {t('val_heading_2', 'Smart Financial Co-Pilot')}
             </strong>
           </h2>
@@ -64,7 +64,7 @@ export default function ValueProps() {
           {items.map((item) => (
             <div
               key={item.title}
-              className="p-8 rounded-3xl bg-white/5 border border-border hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)] transition-all duration-300"
+              className="p-8 rounded-3xl bg-white/5 border border-border hover:border-secondary/60 hover:shadow-[0_0_25px_rgba(63,191,168,0.35)] transition-all duration-300"
             >
               <img src={item.logo} alt={item.title} className="mb-6 size-12" />
               <h3 className="text-lg font-bold font-secondary text-white mb-4">{item.title}</h3>
@@ -72,7 +72,7 @@ export default function ValueProps() {
                 {item.list.map((li) => (
                   <li key={li} className="flex items-center gap-2">
                     <svg
-                      className="size-4 text-primary shrink-0"
+                      className="size-4 text-secondary-light shrink-0"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"

@@ -69,7 +69,7 @@ export default function PricingSection() {
         <div className="section-intro text-center mb-12">
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
             {t('pricing_heading_1', 'Pricing Built For')}{' '}
-            <strong className="text-primary font-normal">
+            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-semibold">
               {t('pricing_heading_2', 'Business Growth')}
             </strong>
           </h2>
@@ -86,7 +86,7 @@ export default function PricingSection() {
               type="button"
               onClick={() => setIsYearly(false)}
               className={`px-6 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                !isYearly ? 'bg-primary text-white shadow-lg' : 'text-text hover:text-white'
+                !isYearly ? 'bg-secondary text-white shadow-lg shadow-secondary/25' : 'text-text hover:text-white'
               }`}
             >
               {t('pricing_monthly', 'Monthly')}
@@ -95,7 +95,7 @@ export default function PricingSection() {
               type="button"
               onClick={() => setIsYearly(true)}
               className={`px-6 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                isYearly ? 'bg-primary text-white shadow-lg' : 'text-text hover:text-white'
+                isYearly ? 'bg-secondary text-white shadow-lg shadow-secondary/25' : 'text-text hover:text-white'
               }`}
             >
               {t('pricing_yearly', 'Yearly')}{' '}
@@ -113,14 +113,14 @@ export default function PricingSection() {
             return (
               <div
                 key={p.title}
-                className={`rounded-4xl p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 relative hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)] ${
+                className={`rounded-4xl p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 relative hover:border-secondary/60 hover:shadow-[0_0_25px_rgba(63,191,168,0.35)] ${
                   p.featured
-                    ? 'bg-light border-2 border-primary shadow-2xl shadow-primary/10 lg:-translate-y-2'
+                    ? 'bg-light border-2 border-secondary shadow-2xl shadow-secondary/15 lg:-translate-y-2'
                     : 'bg-light/60 border border-border'
                 }`}
               >
                 {p.badge && (
-                  <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-semibold">
+                  <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-secondary/20 text-secondary-light border border-secondary/30 text-xs font-semibold">
                     {p.badge}
                   </div>
                 )}
@@ -148,7 +148,7 @@ export default function PricingSection() {
                       {p.features.map((feat) => (
                         <li key={feat} className="flex items-start gap-3">
                           <svg
-                            className="size-4 text-primary shrink-0 mt-0.5"
+                            className="size-4 text-secondary-light shrink-0 mt-0.5"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"

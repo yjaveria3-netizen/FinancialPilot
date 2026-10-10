@@ -21,15 +21,17 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 sm:mb-8">
             {/* Top Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-light border border-border text-xs text-primary mb-4 font-semibold tracking-wide">
-              <span className="size-2 rounded-full bg-primary animate-pulse"></span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-light border border-secondary/40 text-xs text-secondary-light mb-4 font-semibold tracking-wide">
+              <span className="size-2 rounded-full bg-secondary-light animate-pulse"></span>
               {t('hero_badge', 'The AI Financial Co-Pilot for Growing Businesses')}
             </div>
 
             {/* Main Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-secondary text-white leading-tight mb-4">
               {t('hero_title_1', 'Stop Flying Blind on Your')} <br className="hidden sm:inline" />
-              <span className="text-primary">{t('hero_title_2', 'Financial Runway')}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-extrabold drop-shadow-[0_0_20px_rgba(63,191,168,0.35)]">
+                {t('hero_title_2', 'Financial Runway')}
+              </span>
             </h1>
 
             {/* Subtitle - High contrast, clearly readable text */}
