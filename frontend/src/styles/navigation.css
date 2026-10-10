@@ -44,5 +44,5 @@
 }
 
 .nav-dropdown-link {
-  @apply text-text-dark hover:text-primary   block py-1 font-semibold transition;
+  @apply text-text-dark hover:text-secondary-light block py-1 font-semibold transition;
 }

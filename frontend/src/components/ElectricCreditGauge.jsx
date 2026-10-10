@@ -13,14 +13,8 @@ export default function ElectricCreditGauge({
   const circumference = 2 * Math.PI * radius; // ~251.327
   const strokeDashoffset = circumference - (circumference * safeScore) / 100;
 
-  // In the rotated coordinate system, angle theta = (score / 100) * 2 * PI
-  const angleRad = (safeScore / 100) * 2 * Math.PI;
-  const sparkX = Number((50 + radius * Math.cos(angleRad)).toFixed(2));
-  const sparkY = Number((50 + radius * Math.sin(angleRad)).toFixed(2));
-
   const gradId = `${idPrefix}-score-grad`;
   const trackId = `${idPrefix}-track-grad`;
-  const beamId = `${idPrefix}-beam-grad`;
   const filterId = `${idPrefix}-glow-filter`;
 
   return (
@@ -44,14 +38,6 @@ export default function ElectricCreditGauge({
           <linearGradient id={trackId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#1D0B12" />
             <stop offset="100%" stopColor="#2E151B" />
-          </linearGradient>
-
-          {/* Electric Beam Gradient with emerald/pink flash */}
-          <linearGradient id={beamId} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#3FBFA8" stopOpacity="0" />
-            <stop offset="45%" stopColor="#FFFFFF" stopOpacity="0.95" />
-            <stop offset="55%" stopColor="#FFFFFF" stopOpacity="1" />
-            <stop offset="100%" stopColor="#3FBFA8" stopOpacity="0" />
           </linearGradient>
 
           {/* Glow filter with #3FBFA8 and #DA7B93 shadow */}
@@ -88,7 +74,7 @@ export default function ElectricCreditGauge({
           />
         )}
 
-        {/* Main Gradient Progress Arc */}
+        {/* Main Clean Gradient Progress Arc */}
         <circle
           cx="50"
           cy="50"
@@ -102,65 +88,6 @@ export default function ElectricCreditGauge({
           filter={`url(#${filterId})`}
           className="transition-all duration-1000 ease-out"
         />
-
-        {/* Active Plasma Current Stream Beam */}
-        {safeScore > 5 && (
-          <circle
-            cx="50"
-            cy="50"
-            r={radius}
-            stroke={`url(#${beamId})`}
-            strokeWidth="4"
-            fill="none"
-            strokeDasharray="18 45"
-            strokeLinecap="round"
-            className="animate-electric-stream opacity-90 mix-blend-screen pointer-events-none"
-          />
-        )}
-
-        {/* Secondary Micro-Current Stream Beam */}
-        {safeScore > 10 && (
-          <circle
-            cx="50"
-            cy="50"
-            r={radius}
-            stroke="#FFFFFF"
-            strokeWidth="2.5"
-            fill="none"
-            strokeDasharray="6 75"
-            strokeLinecap="round"
-            className="animate-electric-fast opacity-95 mix-blend-screen pointer-events-none"
-          />
-        )}
-
-        {/* Animated Electrode Spark at the Arc Leading Tip */}
-        {safeScore > 2 && safeScore < 100 && (
-          <g>
-            {/* Outer expanding energy pulse */}
-            <circle
-              cx={sparkX}
-              cy={sparkY}
-              r="6.5"
-              fill="none"
-              stroke="#DA7B93"
-              strokeWidth="1"
-              opacity="0.8"
-              className="animate-ping"
-            />
-            {/* Electric spark core */}
-            <circle
-              cx={sparkX}
-              cy={sparkY}
-              r="3.2"
-              fill="#FFFFFF"
-              style={{
-                filter:
-                  'drop-shadow(0 0 3px #FFFFFF) drop-shadow(0 0 7px #DA7B93) drop-shadow(0 0 12px #822B4A)',
-                animation: 'electricSparkFlicker 1.6s ease-in-out infinite'
-              }}
-            />
-          </g>
-        )}
       </svg>
 
       {/* Center Score & Glowing Grade */}

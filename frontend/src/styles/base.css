@@ -126,6 +126,17 @@ strong {
   @apply font-semibold text-white;
 }
 
+/* Global Heading Highlight: Emerald Mint Green */
+h1 strong,
+h2 strong,
+h3 strong,
+h4 strong,
+.title strong,
+.section-intro strong {
+  color: var(--color-secondary-light, #3FBFA8) !important;
+  font-weight: 700 !important;
+}
+
 code {
   @apply after:border-none;
 }
