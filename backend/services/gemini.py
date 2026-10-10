@@ -10,7 +10,7 @@ def ask(prompt):
         return json.load(open(f))["a"]
     try:
         client = genai.Client(api_key=os.environ["GEMINI_KEY"])
-        r = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
+        r = client.models.generate_content(model="gemini-3.8-flash", contents=prompt)
         json.dump({"a": r.text}, open(f, "w"))
         return r.text
     except Exception:

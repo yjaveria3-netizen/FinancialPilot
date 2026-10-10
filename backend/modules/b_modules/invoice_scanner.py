@@ -49,7 +49,7 @@ def extract_invoice(image_bytes: bytes) -> dict:
         from google import genai
         img = Image.open(io.BytesIO(image_bytes))
         client = genai.Client(api_key=os.environ["GEMINI_KEY"])
-        r = client.models.generate_content(model="gemini-2.5-flash", contents=[img, PROMPT])
+        r = client.models.generate_content(model="gemini-3.8-flash", contents=[img, PROMPT])
         return {"ok": True, "fields": parse_json_reply(r.text),
                 "note": "Please check the fields before saving."}
     except Exception as e:
