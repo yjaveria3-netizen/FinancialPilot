@@ -30,12 +30,12 @@ export default function CreditScorePage() {
     <div className="container mx-auto px-4 lg:px-8 pt-32 pb-16 space-y-8">
       {/* Page Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-secondary/40 text-xs text-secondary-light mb-3 font-semibold">
           {t('score_engine', 'Bankability & Underwriting Engine')}
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
           {t('credit_readiness', 'Credit Readiness')}{' '}
-          <span className="text-primary font-normal">{t('score_engine_tool', 'Score')}</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">{t('score_engine_tool', 'Score')}</span>
         </h1>
         <p className="text-sm text-text-dark mt-1">
           {t(
@@ -53,7 +53,7 @@ export default function CreditScorePage() {
 
       {loading ? (
         <div className="py-20 flex items-center justify-center">
-          <div className="size-10 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+          <div className="size-10 rounded-full border-2 border-secondary border-t-transparent animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -64,7 +64,7 @@ export default function CreditScorePage() {
 
             <div className="relative z-10 flex flex-col items-center">
               <div className="text-xs uppercase tracking-wider text-text-dark font-semibold mb-6 flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-primary shadow-[0_0_6px_#DA7B93] animate-pulse" />
+                <span className="size-1.5 rounded-full bg-secondary-light shadow-[0_0_6px_#4EE2C9] animate-pulse" />
                 {t('composite_score', 'Composite Readiness Score')}
               </div>
 
@@ -94,7 +94,7 @@ export default function CreditScorePage() {
             <div className="relative z-10 space-y-6">
               <div>
                 <h3 className="text-lg font-bold font-secondary text-white mb-1 flex items-center gap-2">
-                  <span className="size-2 rounded-full bg-primary shadow-[0_0_8px_#DA7B93] animate-pulse" />
+                  <span className="size-2 rounded-full bg-secondary-light shadow-[0_0_8px_#4EE2C9] animate-pulse" />
                   {t('score_factors_title', 'Score Factor Breakdown')}
                 </h3>
                 <p className="text-xs text-text-dark">
@@ -128,8 +128,8 @@ export default function CreditScorePage() {
       {!loading && data && (
         <div className="rounded-4xl card-electric p-8 transition-all duration-300">
           <div className="flex items-center gap-3 mb-6">
-            <div className="size-8 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-              <IconAiSparkle className="size-4 text-primary" />
+            <div className="size-8 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary-light font-bold text-sm">
+              <IconAiSparkle className="size-4 text-secondary-light" />
             </div>
             <div>
               <h4 className="text-base font-bold font-secondary text-white">
@@ -145,7 +145,7 @@ export default function CreditScorePage() {
             {tips.length > 0 ? (
               tips.slice(0, 3).map((tip, i) => (
                 <div key={i} className="bg-dark/40 rounded-3xl p-6 border border-border/40 flex flex-col gap-3">
-                  <div className="size-7 rounded-full bg-primary/20 text-primary text-xs font-bold font-mono flex items-center justify-center">
+                  <div className="size-7 rounded-full bg-secondary/20 text-secondary-light text-xs font-bold font-mono flex items-center justify-center">
                     0{i + 1}
                   </div>
                   <p className="text-sm text-text-dark leading-relaxed">{translateGeminiContent(tip)}</p>

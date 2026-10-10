@@ -229,7 +229,7 @@ export default function Header() {
       {/* ── Compact, Rectangular Floating Glassmorphic Navbar with Sleek Rounded Corners ── */}
       <header className="header z-40 w-full fixed top-0 left-0 right-0 py-2.5 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <nav className="flex items-center justify-between bg-[#2E151B]/80 backdrop-blur-xl border border-[#4D2330]/80 rounded-xl px-5 py-2.5 shadow-xl transition-all hover:border-primary/50">
+          <nav className="flex items-center justify-between bg-[#2E151B]/80 backdrop-blur-xl border border-[#4D2330]/80 rounded-xl px-5 py-2.5 shadow-xl transition-all hover:border-secondary/50">
             {/* Left: Financial Pilot Brand Logo (Strictly English preserved) */}
             <Link to="/" onClick={() => setMenuOpen(false)} className="shrink-0 flex items-center">
               <Logo />
@@ -250,7 +250,7 @@ export default function Header() {
                     onClick={() => setLang(item.code)}
                     className={`px-2 py-0.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
                       lang === item.code
-                        ? 'bg-primary text-white shadow-sm shadow-primary/40'
+                        ? 'bg-secondary text-white shadow-sm shadow-secondary/40'
                         : 'text-text-dark hover:text-white'
                     }`}
                     title={`Switch language to ${item.label}`}
@@ -303,10 +303,10 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setScannerOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-primary/50 text-xs font-medium transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-text hover:text-white border border-border/70 hover:border-secondary/50 text-xs font-medium transition-all cursor-pointer"
                 title="Open Invoice & Receipt Scanner"
               >
-                <IconScanInvoice className="size-4 text-primary" />
+                <IconScanInvoice className="size-4 text-secondary-light" />
                 <span className="hidden sm:inline">{t('scan_invoice', 'Scan')}</span>
               </button>
 
@@ -325,7 +325,7 @@ export default function Header() {
                 className={`size-10 rounded-xl flex items-center justify-center border transition-all duration-300 cursor-pointer ${
                   menuOpen
                     ? 'bg-secondary/25 text-white border-secondary shadow-lg shadow-secondary/25'
-                    : 'bg-light/80 border-border text-white hover:border-primary/60 hover:bg-white/10'
+                    : 'bg-light/80 border-border text-white hover:border-secondary/60 hover:bg-white/10'
                 }`}
                 aria-label={menuOpen ? 'Close feature menu' : 'Open feature menu'}
               >
@@ -389,7 +389,7 @@ export default function Header() {
             <div className="flex items-center justify-between pb-6 border-b border-border/80 mb-8">
               <div className="flex items-center gap-3">
                 <Logo />
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 font-semibold hidden sm:inline">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-secondary/20 text-secondary-light border border-secondary/30 font-semibold hidden sm:inline">
                   {t('complete_financial_suite', 'Complete Financial Suite')}
                 </span>
               </div>
@@ -410,7 +410,7 @@ export default function Header() {
               {featureCategories.map((group) => (
                 <div key={group.group} className="space-y-4">
                   <div className="flex items-center justify-between border-b border-border/50 pb-2">
-                    <h4 className="text-xs uppercase font-bold tracking-wider text-primary">
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-secondary-light">
                       {group.group}
                     </h4>
                     <span className="text-[10px] text-text-dark bg-white/5 px-2 py-0.5 rounded font-mono">
@@ -428,12 +428,12 @@ export default function Header() {
                           onClick={() => setMenuOpen(false)}
                           className="group flex items-start gap-3 p-3 rounded-2xl hover:bg-white/5 border border-transparent hover:border-border transition-all"
                         >
-                          <div className="size-5 shrink-0 mt-0.5 text-primary group-hover:scale-110 transition-transform">
+                          <div className="size-5 shrink-0 mt-0.5 text-secondary-light group-hover:scale-110 transition-transform">
                             <Icon className="size-5" />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
+                              <span className="text-sm font-semibold text-white group-hover:text-secondary-light transition-colors">
                                 {item.name}
                               </span>
                               {item.live ? (
@@ -489,10 +489,10 @@ export default function Header() {
                   type="button"
                   onClick={handleExportDossier}
                   disabled={isExportingDossier}
-                  className="hover:text-primary text-primary/90 transition-colors cursor-pointer flex items-center gap-1 font-medium disabled:opacity-50"
+                  className="hover:text-secondary-light text-secondary-light/90 transition-colors cursor-pointer flex items-center gap-1 font-medium disabled:opacity-50"
                   title="Export Bank & Lender Compliance Dossier (.JSON)"
                 >
-                  <span className="text-primary font-bold">📜</span>
+                  <span className="text-secondary-light font-bold">📜</span>
                   <span>{isExportingDossier ? 'Compiling Dossier...' : t('lender_dossier', 'Lender Dossier')}</span>
                 </button>
                 <span>•</span>

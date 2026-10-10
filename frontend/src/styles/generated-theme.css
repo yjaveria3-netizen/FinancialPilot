@@ -5,11 +5,13 @@
  */
 
 @theme {
-  /* === Colors: #DA7B93 Rose/Mauve Accent, #376E6F Teal Green Secondary, & #2E151B Foundation === */
+  /* === Colors: Preserved Background Foundation (#DA7B93 & #2E151B) === */
   --color-primary: #DA7B93;
   --color-primary-light: #F2A3B5;
-  --color-secondary: #376E6F;
-  --color-secondary-light: #4E8B8C;
+  --color-secondary: #285B5C;
+  --color-secondary-light: #3FBFA8;
+  --color-accent-green: #3FBFA8;
+  --color-accent-green-light: #4EE2C9;
   --color-body: #1D0B12;
   --color-border: #4D2330;
   --color-light: #2E151B;

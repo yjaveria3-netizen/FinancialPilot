@@ -55,19 +55,19 @@ const FanChartTooltip = ({ active, payload, label }) => {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">75th Pct:</span>
-          <span className="text-primary-light font-mono">${d.p75?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono">${d.p75?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center py-0.5 border-y border-white/5 font-bold">
-          <span className="text-primary">Median (P50 Expected):</span>
-          <span className="text-primary font-mono text-sm">${d.p50?.toLocaleString()}</span>
+          <span className="text-secondary-light">Median (P50 Expected):</span>
+          <span className="text-secondary-light font-mono text-sm">${d.p50?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">25th Pct:</span>
-          <span className="text-primary-light font-mono">${d.p25?.toLocaleString()}</span>
+          <span className="text-secondary font-mono">${d.p25?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="text-zinc-400">10th Pct (Stress):</span>
-          <span className="text-primary font-mono font-semibold">${d.p10?.toLocaleString()}</span>
+          <span className="text-rose-400 font-mono font-semibold">${d.p10?.toLocaleString()}</span>
         </div>
         <div className="flex justify-between items-center pt-1 border-t border-white/5 text-[11px]">
           <span className="text-text-dark">Baseline (No Shocks):</span>
@@ -262,13 +262,13 @@ export default function ScenarioPlanner() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-secondary/30 text-xs text-secondary-light mb-3 font-semibold">
             <IconScenarioPlanner className="size-4" />
             {t('sp_badge', 'Monte Carlo Predictive Engine • 500 Stochastic Paths')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
             {t('sp_title_1', 'Scenario')}{' '}
-            <span className="text-primary font-normal">{t('sp_title_2', 'Planner')}</span>
+            <span className="text-secondary-light font-normal">{t('sp_title_2', 'Planner')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
             {t(
@@ -328,8 +328,8 @@ export default function ScenarioPlanner() {
           {/* Horizon Pills & Live Status */}
           <div className="flex items-center gap-3 self-start sm:self-auto">
             {loading && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-[11px] text-primary font-semibold animate-pulse">
-                <span className="size-1.5 rounded-full bg-primary animate-ping" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/15 border border-secondary/35 text-[11px] text-secondary-light font-semibold animate-pulse">
+                <span className="size-1.5 rounded-full bg-secondary-light animate-ping" />
                 {t('sp_recalculating', 'Live Recalculating 500 Paths...')}
               </span>
             )}
@@ -341,7 +341,7 @@ export default function ScenarioPlanner() {
                   onClick={() => setHorizonDays(d)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     horizonDays === d
-                      ? 'btn-primary text-white shadow-md shadow-primary/20'
+                      ? 'btn-primary text-white shadow-md shadow-secondary/20'
                       : 'bg-white/5 border border-border text-text-dark hover:text-white'
                   }`}
                 >
@@ -355,7 +355,7 @@ export default function ScenarioPlanner() {
         {/* 4 Interactive Live-Linked Sliders */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* 1. Sales Change Slider */}
-          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-[#DA7B93]/40 transition-colors">
+          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-secondary/40 transition-colors">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-white">{t('sp_sales_revenue_shift', 'Sales Revenue Shift')}</span>
               <span
@@ -373,7 +373,7 @@ export default function ScenarioPlanner() {
               step="5"
               value={salesChange}
               onChange={(e) => setSalesChange(Number(e.target.value))}
-              className="w-full accent-primary cursor-pointer"
+              className="w-full accent-secondary cursor-pointer"
             />
             <div className="flex justify-between text-[10px] text-text-dark">
               <span>-50% {t('sp_recession', 'Recession')}</span>
@@ -387,7 +387,7 @@ export default function ScenarioPlanner() {
                   type="button"
                   onClick={() => setSalesChange(val)}
                   className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold cursor-pointer ${
-                    salesChange === val ? 'bg-primary/20 text-primary border border-primary/40' : 'bg-white/5 text-zinc-400'
+                    salesChange === val ? 'bg-secondary/25 text-secondary-light border border-secondary/40' : 'bg-white/5 text-zinc-400'
                   }`}
                 >
                   {val > 0 ? `+${val}%` : `${val}%`}
@@ -397,7 +397,7 @@ export default function ScenarioPlanner() {
           </div>
 
           {/* 2. Headcount Expansion Slider */}
-          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-[#DA7B93]/40 transition-colors">
+          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-secondary/40 transition-colors">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-white">{t('sp_headcount', 'Headcount / Hiring')}</span>
               <span className="font-mono font-bold text-sm text-indigo-300">
@@ -411,7 +411,7 @@ export default function ScenarioPlanner() {
               step="1"
               value={hiringCount}
               onChange={(e) => setHiringCount(Number(e.target.value))}
-              className="w-full accent-primary cursor-pointer"
+              className="w-full accent-secondary cursor-pointer"
             />
             <div className="flex justify-between text-[10px] text-text-dark">
               <span>0 {t('sp_hires', 'Hires')}</span>
@@ -424,7 +424,7 @@ export default function ScenarioPlanner() {
           </div>
 
           {/* 3. Procurement Cost Slider */}
-          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-[#DA7B93]/40 transition-colors">
+          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-secondary/40 transition-colors">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-white">{t('sp_procurement_costs', 'Procurement Costs')}</span>
               <span
@@ -442,7 +442,7 @@ export default function ScenarioPlanner() {
               step="5"
               value={procurementCost}
               onChange={(e) => setProcurementCost(Number(e.target.value))}
-              className="w-full accent-primary cursor-pointer"
+              className="w-full accent-secondary cursor-pointer"
             />
             <div className="flex justify-between text-[10px] text-text-dark">
               <span>-30% {t('sp_discount', 'Discount')}</span>
@@ -456,7 +456,7 @@ export default function ScenarioPlanner() {
                   type="button"
                   onClick={() => setProcurementCost(val)}
                   className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold cursor-pointer ${
-                    procurementCost === val ? 'bg-primary/20 text-primary border border-primary/40' : 'bg-white/5 text-zinc-400'
+                    procurementCost === val ? 'bg-secondary/25 text-secondary-light border border-secondary/40' : 'bg-white/5 text-zinc-400'
                   }`}
                 >
                   {val > 0 ? `+${val}%` : `${val}%`}
@@ -466,7 +466,7 @@ export default function ScenarioPlanner() {
           </div>
 
           {/* 4. Receivables Collection Shift Slider */}
-          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-[#DA7B93]/40 transition-colors">
+          <div className="p-5 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-secondary/40 transition-colors">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-white">{t('sp_collections_shift', 'Collections Shift')}</span>
               <span
@@ -492,7 +492,7 @@ export default function ScenarioPlanner() {
               step="5"
               value={receivablesDelay}
               onChange={(e) => setReceivablesDelay(Number(e.target.value))}
-              className="w-full accent-primary cursor-pointer"
+              className="w-full accent-secondary cursor-pointer"
             />
             <div className="flex justify-between text-[10px] text-text-dark">
               <span>-15d {t('sp_fast', 'Fast')}</span>
@@ -507,7 +507,7 @@ export default function ScenarioPlanner() {
                   onClick={() => setReceivablesDelay(val)}
                   className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold cursor-pointer ${
                     receivablesDelay === val
-                      ? 'bg-primary/20 text-primary border border-primary/40'
+                      ? 'bg-secondary/25 text-secondary-light border border-secondary/40'
                       : 'bg-white/5 text-zinc-400'
                   }`}
                 >
@@ -553,7 +553,7 @@ export default function ScenarioPlanner() {
             </div>
             <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-border text-xs font-mono">
               <span className="text-text-dark mr-1.5">{t('net_custom_impact', 'Net Impact:')}</span>
-              <span className={`font-bold ${customInflow - customOutflow >= 0 ? 'text-secondary-light' : 'text-primary'}`}>
+              <span className={`font-bold ${customInflow - customOutflow >= 0 ? 'text-secondary-light' : 'text-rose-400'}`}>
                 {customInflow - customOutflow >= 0 ? '+' : '-'}$
                 {Math.abs(customInflow - customOutflow).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
@@ -697,13 +697,13 @@ export default function ScenarioPlanner() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium mb-2">{t('sp_kpi_ending_cash', 'Expected Ending Cash (P50)')}</div>
-          <div className="text-3xl font-bold font-secondary text-primary font-mono">
+          <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
             ${impact.ending_cash_p50?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
             <span
               className={`font-mono font-semibold ${
-                impact.net_cash_impact >= 0 ? 'text-secondary-light' : 'text-primary'
+                impact.net_cash_impact >= 0 ? 'text-secondary-light' : 'text-rose-400'
               }`}
             >
               {impact.net_cash_impact >= 0 ? `+$${impact.net_cash_impact?.toLocaleString()}` : `-$${Math.abs(impact.net_cash_impact || 0)?.toLocaleString()}`}
@@ -714,11 +714,11 @@ export default function ScenarioPlanner() {
 
         <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
           <div className="text-xs text-text-dark font-medium mb-2">{t('sp_kpi_worst_case', 'Worst-Case Stress (P10)')}</div>
-          <div className="text-3xl font-bold font-secondary text-primary-light font-mono">
+          <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
             ${impact.ending_cash_p10?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className="text-xs text-primary/80 mt-2 flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-primary animate-pulse"></span>
+          <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
+            <span className="size-1.5 rounded-full bg-secondary-light animate-pulse"></span>
             {t('sp_kpi_bearish_floor', '10th Percentile Bearish Floor')}
           </div>
         </div>
@@ -728,9 +728,9 @@ export default function ScenarioPlanner() {
           <div
             className={`text-3xl font-bold font-secondary font-mono ${
               (impact.shortfall_probability || 0) > 20
-                ? 'text-primary'
+                ? 'text-rose-400'
                 : (impact.shortfall_probability || 0) > 5
-                ? 'text-primary-light'
+                ? 'text-amber-400'
                 : 'text-secondary-light'
             }`}
           >
@@ -769,11 +769,11 @@ export default function ScenarioPlanner() {
           {/* Chart Legend Tags */}
           <div className="flex flex-wrap items-center gap-3 text-xs">
             <div className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-full bg-primary"></span>
+              <span className="size-2.5 rounded-full bg-secondary-light"></span>
               <span className="text-text-dark">{t('sp_legend_median', 'P50 (Median)')}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-full bg-primary/30"></span>
+              <span className="size-2.5 rounded-full bg-secondary/40"></span>
               <span className="text-text-dark">{t('sp_legend_band', 'P25–P75 Band')}</span>
             </div>
             <div className="flex items-center gap-1.5">
@@ -791,7 +791,7 @@ export default function ScenarioPlanner() {
         <div className="h-[380px] w-full pt-4">
           {loading ? (
             <div className="h-full flex flex-col items-center justify-center gap-3">
-              <div className="size-10 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+              <div className="size-10 rounded-full border-2 border-secondary border-t-transparent animate-spin"></div>
               <p className="text-xs text-text-dark">{t('sp_sim_paths_label', 'Simulating 500 stochastic paths...')}</p>
             </div>
           ) : (
@@ -800,13 +800,13 @@ export default function ScenarioPlanner() {
                 <defs>
                   {/* P90 Outer Fan Gradient */}
                   <linearGradient id="fanBandOuter" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#DA7B93" stopOpacity={0.22} />
-                    <stop offset="100%" stopColor="#DA7B93" stopOpacity={0.03} />
+                    <stop offset="0%" stopColor="#3FBFA8" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="#3FBFA8" stopOpacity={0.03} />
                   </linearGradient>
                   {/* P75 Inner Fan Gradient */}
                   <linearGradient id="fanBandInner" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#F2A3B5" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#F2A3B5" stopOpacity={0.08} />
+                    <stop offset="0%" stopColor="#4EE2C9" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="#4EE2C9" stopOpacity={0.08} />
                   </linearGradient>
                 </defs>
 
@@ -828,7 +828,7 @@ export default function ScenarioPlanner() {
                 <Tooltip content={<FanChartTooltip />} />
 
                 {/* Statutory Minimum Safety Buffer */}
-                <ReferenceLine y={5000} stroke="#DA7B93" strokeDasharray="3 3" label={{ value: t('sp_min_reserve', 'Min Reserve $5k'), fill: '#DA7B93', fontSize: 10, position: 'insideBottomRight' }} />
+                <ReferenceLine y={5000} stroke="#EF4444" strokeDasharray="3 3" label={{ value: t('sp_min_reserve', 'Min Reserve $5k'), fill: '#EF4444', fontSize: 10, position: 'insideBottomRight' }} />
 
                 {/* Outer Fan: P90 */}
                 <Area type="monotone" dataKey="p90" stroke="none" fill="url(#fanBandOuter)" />
@@ -836,13 +836,13 @@ export default function ScenarioPlanner() {
                 <Area type="monotone" dataKey="p75" stroke="none" fill="url(#fanBandInner)" />
 
                 {/* P10 Floor Area */}
-                <Line type="monotone" dataKey="p10" stroke="#DA7B93" strokeWidth={1.5} strokeDasharray="3 3" dot={false} />
+                <Line type="monotone" dataKey="p10" stroke="#F43F5E" strokeWidth={1.5} strokeDasharray="3 3" dot={false} />
 
                 {/* Baseline Reference Trajectory */}
                 <Line type="monotone" dataKey="baseline" stroke="#817E84" strokeWidth={2} strokeDasharray="5 5" dot={false} />
 
                 {/* Expected P50 Median Line */}
-                <Line type="monotone" dataKey="p50" stroke="#DA7B93" strokeWidth={3} dot={false} />
+                <Line type="monotone" dataKey="p50" stroke="#3FBFA8" strokeWidth={3} dot={false} />
               </ComposedChart>
             </ResponsiveContainer>
           )}
@@ -851,13 +851,13 @@ export default function ScenarioPlanner() {
 
       {/* Gemini AI Scenario Analysis Panel */}
       <div className="rounded-4xl card-electric overflow-hidden shadow-2xl">
-        <div className="p-6 lg:p-8 border-b border-border bg-gradient-to-r from-primary/10 via-transparent to-transparent flex items-center justify-between">
+        <div className="p-6 lg:p-8 border-b border-border bg-gradient-to-r from-secondary/10 via-transparent to-transparent flex items-center justify-between">
           <div className="flex items-center gap-3.5">
-            <div className="size-11 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary">
+            <div className="size-11 rounded-2xl bg-secondary/20 border border-secondary/40 flex items-center justify-center text-secondary-light">
               <IconAiSparkle className="size-5" />
             </div>
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-[11px] font-semibold mb-1">
+              <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-secondary/15 border border-secondary/30 text-secondary-light text-[11px] font-semibold mb-1">
                 {t('sp_gemini_advisory', 'Gemini AI Predictive Advisory')}
               </div>
               <h3 className="text-xl font-bold font-secondary text-white">
@@ -872,9 +872,9 @@ export default function ScenarioPlanner() {
           {parsedAnalysis?.s1 ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Card 1: Runway & Liquidity */}
-              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-[#DA7B93]/40 transition-colors">
+              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-secondary/40 transition-colors">
                 <div className="flex items-center gap-2.5 pb-2 border-b border-border/60">
-                  <span className="size-7 rounded-lg bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">1</span>
+                  <span className="size-7 rounded-lg bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-xs">1</span>
                   <h4 className="text-sm font-bold font-secondary text-white">{t('sp_insight_runway', 'Runway & Liquidity Trajectory')}</h4>
                 </div>
                 <p className="text-xs text-zinc-300 leading-relaxed">
@@ -883,9 +883,9 @@ export default function ScenarioPlanner() {
               </div>
 
               {/* Card 2: Sensitivity & Cost Drivers */}
-              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-[#DA7B93]/40 transition-colors">
+              <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-3 hover:border-secondary/40 transition-colors">
                 <div className="flex items-center gap-2.5 pb-2 border-b border-border/60">
-                  <span className="size-7 rounded-lg bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">2</span>
+                  <span className="size-7 rounded-lg bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-xs">2</span>
                   <h4 className="text-sm font-bold font-secondary text-white">{t('sp_insight_sensitivity', 'Sensitivity & Cost Drivers')}</h4>
                 </div>
                 <p className="text-xs text-zinc-300 leading-relaxed">

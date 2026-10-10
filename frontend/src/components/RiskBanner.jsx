@@ -217,7 +217,7 @@ ${bodyText}
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-border/80">
               <div className="flex items-center gap-3">
-                <div className="size-11 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary">
+                <div className="size-11 rounded-2xl bg-secondary/20 border border-secondary/35 flex items-center justify-center text-secondary-light">
                   <IconAiSparkle className="size-5" />
                 </div>
                 <div>
@@ -225,7 +225,7 @@ ${bodyText}
                     <h3 className="text-base font-bold font-secondary text-white">
                       {t('modal_agent_draft', 'Autonomous Agent Collection Draft')}
                     </h3>
-                    <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded-full font-semibold">
+                    <span className="text-[10px] bg-secondary/20 text-secondary-light border border-secondary/35 px-2 py-0.5 rounded-full font-semibold">
                       {t('modal_gemini_synth', 'Gemini Synthesized')}
                     </span>
                   </div>
@@ -271,7 +271,7 @@ ${bodyText}
                     type="email"
                     value={toEmail}
                     onChange={(e) => setToEmail(e.target.value)}
-                    className="w-full bg-white/5 border border-border rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-white/5 border border-border rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-secondary transition-colors"
                   />
                 </div>
                 <div>
@@ -280,7 +280,7 @@ ${bodyText}
                   </label>
                   <div className="bg-white/5 border border-border rounded-xl px-3.5 py-2 text-white font-mono flex justify-between items-center">
                     <span>{alertData.target_invoice?.invoice_id || 'INV-0203'}</span>
-                    <span className="text-primary font-bold">
+                    <span className="text-secondary-light font-bold">
                       ${alertData.target_invoice?.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
