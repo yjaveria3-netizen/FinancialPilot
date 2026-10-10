@@ -3,6 +3,12 @@ FinPilot Gemini AI Wrapper
 Shared service for all modules. Uses direct HTTPS REST API to prevent
 gRPC DLL blockages on Windows Application Control environments.
 """
+# --- load backend/.env before reading the key ---
+from pathlib import Path as _P
+from dotenv import load_dotenv as _ld
+_ld(_P(__file__).resolve().parents[1] / '.env')
+# ---
+
 import os
 import json
 import urllib.request
@@ -31,8 +37,8 @@ def ask_gemini(
         print("[GeminiWrapper] GEMINI_API_KEY is not set. Using contextual fallback.")
         return fallback
 
-    # Support multiple models, default to gemini-1.5-flash
-    model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+    # Support multiple models, default to gemini-3.8-flash
+    model_name = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
     
     full_prompt = f"Instructions: {system_instruction}\n\nTask: {prompt}" if system_instruction else prompt
