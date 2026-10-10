@@ -1,12 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
 } from 'recharts';
 import { getCashForecast } from '../api/client';
 import { IconAiSparkle } from '../components/Icons';
+import { useLanguage } from '../context/LanguageContext';
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, t }) => {
   if (!active || !payload?.length) return null;
   const d = payload[0]?.payload;
   return (
@@ -14,16 +21,16 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="text-white font-semibold mb-2">{label}</div>
       <div className="flex flex-col gap-1.5 text-text">
         <div>
-          <span className="text-text-dark">Projected Balance: </span>
+          <span className="text-text-dark">{t('projected_end_bal', 'Projected Balance')}: </span>
           <strong className="text-primary font-mono">${d?.projected_balance?.toLocaleString()}</strong>
         </div>
         <div>
-          <span className="text-text-dark">Income: </span>
-          <span className="text-emerald-400 font-mono">+${d?.income?.toLocaleString()}</span>
+          <span className="text-text-dark">{t('daily_avg_inflow', 'Income')}: </span>
+          <span className="text-secondary-light font-mono">+${d?.income?.toLocaleString()}</span>
         </div>
         <div>
-          <span className="text-text-dark">Expenses: </span>
-          <span className="text-secondary font-mono">-${d?.expenses?.toLocaleString()}</span>
+          <span className="text-text-dark">{t('expense_control', 'Expenses')}: </span>
+          <span className="text-primary-light font-mono">-${d?.expenses?.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -31,6 +38,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function CashFlowPage() {
+  const { t, translateGeminiContent } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -62,13 +70,17 @@ export default function CashFlowPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
-            Predictive Liquidity Engine
+            {t('cf_badge', 'Predictive Liquidity Engine')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
-            Cash Flow <span className="text-primary font-normal">Forecaster</span>
+            {t('cf_title_1', 'Cash Flow')}{' '}
+            <span className="text-primary font-normal">{t('cf_title_2', 'Forecaster')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
-            Algorithmic cash runway projection powered by Pandas & Gemini AI
+            {t(
+              'cf_subtitle',
+              'Algorithmic cash runway projection powered by Pandas & Gemini AI'
+            )}
           </p>
         </div>
 
@@ -79,10 +91,8 @@ export default function CashFlowPage() {
               key={d}
               type="button"
               onClick={() => setDays(d)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                days === d
-                  ? 'btn-primary text-white'
-                  : 'text-text-dark hover:text-white'
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer font-mono ${
+                days === d ? 'btn-primary text-white' : 'text-text-dark hover:text-white'
               }`}
             >
               {d}D
@@ -98,9 +108,12 @@ export default function CashFlowPage() {
             !
           </div>
           <div>
-            <h4 className="text-white font-bold text-base mb-1">Cash Reserve Alert</h4>
+            <h4 className="text-white font-bold text-base mb-1">
+              {t('cf_alert_title', 'Cash Reserve Alert')}
+            </h4>
             <p className="text-sm text-text-dark">
-              Projected cash dips below $5,000 threshold on <strong className="text-secondary">{data.low_cash_day}</strong>.
+              {t('low_cash_desc_prefix', 'Projected cash dips below $5,000 threshold on')}{' '}
+              <strong className="text-secondary font-mono">{data.low_cash_day}</strong>.
             </p>
           </div>
         </div>
@@ -115,50 +128,70 @@ export default function CashFlowPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-3xl bg-light border border-border p-6">
-          <div className="text-xs text-text-dark uppercase font-semibold mb-2">Starting Cash</div>
-          <div className="text-2xl font-bold font-secondary text-white">
+        <div className="rounded-3xl card-electric p-6">
+          <div className="text-xs text-text-dark uppercase font-semibold mb-2">
+            {t('starting_cash', 'Starting Cash')}
+          </div>
+          <div className="text-2xl font-bold font-secondary text-white font-mono">
             ${summary.starting_cash?.toLocaleString() ?? '—'}
           </div>
-          <div className="text-xs text-text-dark mt-2">Historical baseline balance</div>
+          <div className="text-xs text-text-dark mt-2">
+            {t('cf_baseline_balance', 'Historical baseline balance')}
+          </div>
         </div>
 
-        <div className="rounded-3xl bg-light border border-border p-6">
-          <div className="text-xs text-text-dark uppercase font-semibold mb-2">Projected Ending</div>
-          <div className={`text-2xl font-bold font-secondary ${
-            (summary.ending_balance || 0) >= (summary.starting_cash || 0) ? 'text-primary' : 'text-secondary'
-          }`}>
+        <div className="rounded-3xl card-electric p-6">
+          <div className="text-xs text-text-dark uppercase font-semibold mb-2">
+            {t('projected', 'Projected Ending')}
+          </div>
+          <div
+            className={`text-2xl font-bold font-secondary font-mono ${
+              (summary.ending_balance || 0) >= (summary.starting_cash || 0)
+                ? 'text-primary'
+                : 'text-secondary-light'
+            }`}
+          >
             ${summary.ending_balance?.toLocaleString() ?? '—'}
           </div>
-          <div className="text-xs text-text-dark mt-2">After {days} days forecast</div>
+          <div className="text-xs text-text-dark mt-2">
+            {t('cf_after_forecast', 'After forecast period')} ({days}d)
+          </div>
         </div>
 
-        <div className="rounded-3xl bg-light border border-border p-6">
-          <div className="text-xs text-text-dark uppercase font-semibold mb-2">Avg Daily Inflow</div>
-          <div className="text-2xl font-bold font-secondary text-emerald-400">
+        <div className="rounded-3xl card-electric p-6">
+          <div className="text-xs text-text-dark uppercase font-semibold mb-2">
+            {t('daily_avg_inflow', 'Avg Daily Inflow')}
+          </div>
+          <div className="text-2xl font-bold font-secondary text-secondary-light font-mono">
             +${summary.avg_daily_income?.toLocaleString() ?? '—'}
           </div>
-          <div className="text-xs text-text-dark mt-2">Last 90-day daily rate</div>
+          <div className="text-xs text-text-dark mt-2">
+            {t('cf_daily_rate', 'Last 90-day daily rate')}
+          </div>
         </div>
 
-        <div className="rounded-3xl bg-light border border-border p-6">
-          <div className="text-xs text-text-dark uppercase font-semibold mb-2">Pending Invoices</div>
-          <div className="text-2xl font-bold font-secondary text-amber-400">
+        <div className="rounded-3xl card-electric p-6">
+          <div className="text-xs text-text-dark uppercase font-semibold mb-2">
+            {t('pending_invoices', 'Pending Invoices')}
+          </div>
+          <div className="text-2xl font-bold font-secondary text-primary font-mono">
             ${summary.pending_invoices?.toLocaleString() ?? '—'}
           </div>
-          <div className="text-xs text-text-dark mt-2">Accounts receivable</div>
+          <div className="text-xs text-text-dark mt-2">
+            {t('cf_receivables', 'Accounts receivable')}
+          </div>
         </div>
       </div>
 
       {/* Main Chart Card */}
-      <div className="rounded-4xl bg-light border border-border p-8 relative">
+      <div className="rounded-4xl card-electric p-8 relative">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-bold font-secondary text-white">
-              Cash Projection Curve ({days} Days)
+              {t('cf_curve_title', 'Cash Projection Curve')} ({days} {t('days', 'Days')})
             </h3>
             <p className="text-xs text-text-dark mt-1">
-              Simulated with standard volatility modeling
+              {t('cf_curve_subtitle', 'Simulated with standard volatility modeling')}
             </p>
           </div>
         </div>
@@ -173,29 +206,29 @@ export default function CashFlowPage() {
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="cfGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#937AFF" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="#937AFF" stopOpacity={0.0} />
+                    <stop offset="5%" stopColor="#DA7B93" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#DA7B93" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#202128" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#4D2330" opacity={0.6} />
                 <XAxis
                   dataKey="date"
-                  tick={{ fill: '#817E84', fontSize: 10 }}
+                  tick={{ fill: '#A48993', fontSize: 10 }}
                   tickFormatter={(val) => val?.slice(5)}
-                  stroke="#202128"
+                  stroke="#4D2330"
                 />
                 <YAxis
-                  tick={{ fill: '#817E84', fontSize: 10 }}
+                  tick={{ fill: '#A48993', fontSize: 10 }}
                   tickFormatter={(val) => `$${(val / 1000).toFixed(0)}k`}
-                  stroke="#202128"
+                  stroke="#4D2330"
                   width={50}
                 />
-                <Tooltip content={<CustomTooltip />} />
-                <ReferenceLine y={5000} stroke="#FF5353" strokeDasharray="3 3" />
+                <Tooltip content={<CustomTooltip t={t} />} />
+                <ReferenceLine y={5000} stroke="#DA7B93" strokeDasharray="3 3" />
                 <Area
                   type="monotone"
                   dataKey="projected_balance"
-                  stroke="#937AFF"
+                  stroke="#DA7B93"
                   strokeWidth={2.5}
                   fill="url(#cfGrad)"
                 />
@@ -206,20 +239,22 @@ export default function CashFlowPage() {
       </div>
 
       {/* Gemini AI Executive Analysis */}
-      <div className="rounded-4xl bg-light border border-border p-8">
+      <div className="rounded-4xl card-electric p-8">
         <div className="flex items-center gap-3 mb-4">
           <div className="size-8 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
             <IconAiSparkle className="size-4 text-primary" />
           </div>
           <div>
             <h4 className="text-base font-bold font-secondary text-white">
-              Executive Cash Flow Analysis
+              {t('cf_exec_title', 'Executive Cash Flow Analysis')}
             </h4>
-            <p className="text-xs text-text-dark">Synthesized by Google Gemini AI</p>
+            <p className="text-xs text-text-dark">
+              {t('cf_gemini_by', 'Synthesized by Google Gemini AI')}
+            </p>
           </div>
         </div>
         <div className="bg-dark/40 rounded-2xl p-6 border border-border/40 text-sm text-text-dark leading-relaxed">
-          {data?.ai_explanation || 'AI analysis connecting...'}
+          {translateGeminiContent(data?.ai_explanation) || t('ai_connecting', 'AI analysis connecting...')}
         </div>
       </div>
     </div>

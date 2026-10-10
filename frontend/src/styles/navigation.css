@@ -1,5 +1,5 @@
 .header {
-  @apply bg-transparent py-6  left-0 w-full z-50 transition-transform duration-700;
+  @apply bg-transparent py-2 left-0 w-full z-50 transition-transform duration-700;
   transform: translateY(0px);
 }
 

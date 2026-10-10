@@ -72,3 +72,12 @@ export const getLenderDossier = () =>
 export const triggerCrisisMode = () =>
   apiClient.post('/api/trigger-crisis-mode').then((r) => r.data);
 
+export const getWhatsAppReminders = () =>
+  apiClient.get('/api/whatsapp-reminders').then((r) => r.data);
+
+export const markInvoicePaid = (invoiceId) =>
+  apiClient.post(`/api/invoices/${encodeURIComponent(invoiceId)}/mark-paid`).then((r) => r.data);
+
+export const bulkSendWhatsAppReminders = (reminders = []) =>
+  apiClient.post('/api/whatsapp/bulk-send', { reminders }).then((r) => r.data);
+

@@ -134,3 +134,25 @@ Write a concise, professional 3-part Executive Simulation Review for the executi
 
 Tone: Analytical, objective, and executive-ready. Format with clear section titles.
 """
+
+
+def whatsapp_reminder_prompt(client_name: str, invoice_id: str, amount: float, days_overdue: int, due_date: str) -> str:
+    """Prompt for WhatsApp Automated Collection Agent dynamic reminder generation."""
+    return f"""
+You are a top-tier accounts receivable and collection specialist for an SMB finance department.
+Draft a concise, polite, yet clear and professional WhatsApp payment reminder message to send to a client.
+
+CLIENT & INVOICE DETAILS:
+- Client Name: {client_name}
+- Invoice Reference: {invoice_id}
+- Outstanding Balance: ${amount:,.2f}
+- Original Due Date: {due_date}
+- Days Past Due: {days_overdue} days
+
+REQUIREMENTS:
+1. Message MUST be 2 to 3 sentences maximum. Keep it conversational and appropriate for WhatsApp messaging.
+2. Maintain a courteous, respectful, yet firm tone that preserves client goodwill while driving prompt reconciliation.
+3. Explicitly reference invoice {invoice_id} and the exact amount ${amount:,.2f}.
+4. Provide a clear call-to-action asking when payment can be expected or offering to provide bank details / invoice copy.
+5. Do NOT include markdown bolding, asterisks, email subject lines, or signatures like 'Best regards, [Name]'.
+"""

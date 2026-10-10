@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getAnomalies } from '../api/client';
 import { IconAnomalyGuard, IconAiSparkle } from './Icons';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AnomalyGuard() {
+  const { t, translateGeminiContent } = useLanguage();
   const [anomalies, setAnomalies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,11 +41,11 @@ export default function AnomalyGuard() {
 
   // Quick filter buttons matching template design
   const filterOptions = [
-    { key: 'ALL', label: 'All Anomalies' },
-    { key: 'HIGH_ONLY', label: 'High Severity Only' },
-    { key: 'DUPLICATE', label: 'Duplicate Invoices' },
-    { key: 'PAYMENT', label: 'Unusual Payments' },
-    { key: 'PRICE_SPIKE', label: 'Price Spikes' },
+    { key: 'ALL', label: t('ag_filter_all', 'All Anomalies') },
+    { key: 'HIGH_ONLY', label: t('ag_filter_high', 'High Severity Only') },
+    { key: 'DUPLICATE', label: t('ag_filter_dup', 'Duplicate Invoices') },
+    { key: 'PAYMENT', label: t('ag_filter_pay', 'Unusual Payments') },
+    { key: 'PRICE_SPIKE', label: t('ag_filter_price', 'Price Spikes') },
   ];
 
   // Filtered and searched records
@@ -103,22 +105,22 @@ export default function AnomalyGuard() {
         return (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">
             <span className="size-1.5 rounded-full bg-rose-400 animate-pulse"></span>
-            High Severity
+            {t('ag_badge_high', 'High Severity')}
           </span>
         );
       case 'Medium':
         return (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">
             <span className="size-1.5 rounded-full bg-amber-400"></span>
-            Medium Severity
+            {t('ag_badge_medium', 'Medium Severity')}
           </span>
         );
       case 'Low':
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/30">
-            <span className="size-1.5 rounded-full bg-sky-400"></span>
-            Low Severity
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-secondary/15 text-secondary-light border border-secondary/30">
+            <span className="size-1.5 rounded-full bg-secondary-light"></span>
+            {t('ag_badge_low', 'Low Severity')}
           </span>
         );
     }
@@ -127,13 +129,23 @@ export default function AnomalyGuard() {
   // Category Badge Styling
   const renderCategoryBadge = (category) => {
     let colorClasses = 'text-primary bg-primary/10 border-primary/20';
-    if (category === 'Duplicate') colorClasses = 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20';
-    if (category === 'Unusual Payment') colorClasses = 'text-secondary bg-secondary/10 border-secondary/20';
-    if (category === 'Price Spike') colorClasses = 'text-purple-300 bg-purple-500/10 border-purple-500/20';
+    let catLabel = category;
+    if (category === 'Duplicate') {
+      colorClasses = 'text-primary-light bg-primary/10 border-primary/20';
+      catLabel = t('ag_filter_dup', 'Duplicate Invoices');
+    }
+    if (category === 'Unusual Payment') {
+      colorClasses = 'text-secondary-light bg-secondary/15 border-secondary/30';
+      catLabel = t('ag_filter_pay', 'Unusual Payments');
+    }
+    if (category === 'Price Spike') {
+      colorClasses = 'text-primary bg-primary/10 border-primary/20';
+      catLabel = t('ag_filter_price', 'Price Spikes');
+    }
 
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-medium border ${colorClasses}`}>
-        {category}
+        {catLabel}
       </span>
     );
   };
@@ -145,13 +157,17 @@ export default function AnomalyGuard() {
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
             <IconAnomalyGuard className="size-4" />
-            Audit & Forensic Risk Engine
+            {t('ag_badge', 'Audit & Forensic Risk Engine')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
-            Anomaly & Fraud <span className="text-primary font-normal">Guard</span>
+            {t('ag_title_1', 'Anomaly & Fraud')}{' '}
+            <span className="text-primary font-normal">{t('ag_title_2', 'Guard')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
-            Real-time ledger audit detecting duplicate invoices, statistical payment outliers (z &gt; 2.5), and supplier price spikes
+            {t(
+              'ag_subtitle',
+              'Real-time ledger audit detecting duplicate invoices, statistical payment outliers (z > 2.5), and supplier price spikes'
+            )}
           </p>
         </div>
 
@@ -168,7 +184,7 @@ export default function AnomalyGuard() {
             <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
             <path d="M16 21h5v-5" />
           </svg>
-          Re-scan Ledger
+          {t('ag_rescan', 'Re-scan Ledger')}
         </button>
       </div>
 
@@ -187,38 +203,44 @@ export default function AnomalyGuard() {
 
       {/* KPI Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Total Flagged</div>
+        <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+            {t('ag_total_flagged', 'Total Flagged')}
+          </div>
           {loading ? (
             <div className="h-9 w-16 bg-white/10 rounded-lg animate-pulse my-1" />
           ) : (
-            <div className="text-3xl font-bold font-secondary text-white">
+            <div className="text-3xl font-bold font-secondary text-white font-mono">
               {stats.totalCount}
             </div>
           )}
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-primary"></span>
-            Across 3 audit algorithms
+            {t('ag_across_algos', 'Across 3 audit algorithms')}
           </div>
         </div>
 
-        <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">High Severity Risks</div>
+        <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+            {t('ag_high_severity', 'High Severity Risks')}
+          </div>
           {loading ? (
             <div className="h-9 w-16 bg-white/10 rounded-lg animate-pulse my-1" />
           ) : (
-            <div className="text-3xl font-bold font-secondary text-rose-400 font-mono">
+            <div className="text-3xl font-bold font-secondary text-primary font-mono">
               {stats.highCount}
             </div>
           )}
-          <div className="text-xs text-rose-400/80 mt-2 flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-rose-400 animate-pulse"></span>
-            Requires immediate CPA review
+          <div className="text-xs text-primary/80 mt-2 flex items-center gap-1.5">
+            <span className="size-1.5 rounded-full bg-primary animate-pulse"></span>
+            {t('ag_cpa_review', 'Requires immediate CPA review')}
           </div>
         </div>
 
-        <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Potential Exposure</div>
+        <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+            {t('ag_potential_exposure', 'Potential Exposure')}
+          </div>
           {loading ? (
             <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
           ) : (
@@ -227,24 +249,26 @@ export default function AnomalyGuard() {
             </div>
           )}
           <div className="text-xs text-text-dark mt-2">
-            Cumulative value under review
+            {t('ag_cumulative_value', 'Cumulative value under review')}
           </div>
         </div>
 
-        <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Detection Engine</div>
-          <div className="text-xl font-bold font-secondary text-primary mt-1">
-            Active • 100%
+        <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+          <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+            {t('ag_engine_active', 'Detection Engine')}
+          </div>
+          <div className="text-xl font-bold font-secondary text-secondary-light mt-1 font-mono">
+            {t('ag_active_100', 'Active • 100%')}
           </div>
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1">
-            <IconAiSparkle className="size-3.5 text-primary shrink-0" />
+            <IconAiSparkle className="size-3.5 text-secondary-light shrink-0" />
             Statistical Z-Score &amp; Median Variance
           </div>
         </div>
       </div>
 
       {/* Control Bar: Quick Filter Buttons & Search */}
-      <div className="rounded-3xl bg-light border border-border p-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+      <div className="rounded-3xl card-electric p-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
         {/* Filter Pills */}
         <div className="flex flex-wrap gap-2">
           {filterOptions.map((f) => (
@@ -254,13 +278,13 @@ export default function AnomalyGuard() {
               onClick={() => setActiveFilter(f.key)}
               className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeFilter === f.key
-                  ? 'btn-primary text-white shadow-lg shadow-primary/20'
+                  ? 'btn-primary text-white shadow-lg'
                   : 'bg-white/5 border border-border text-text-dark hover:text-white hover:bg-white/10'
               }`}
             >
               {f.label}
               {f.key === 'HIGH_ONLY' && (
-                <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500/30 text-rose-300">
+                <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500/30 text-rose-300 font-mono">
                   {stats.highCount}
                 </span>
               )}
@@ -274,7 +298,7 @@ export default function AnomalyGuard() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search reference, vendor, reason..."
+            placeholder={t('ag_search', 'Search reference, vendor, reason...')}
             className="w-full bg-white/5 border border-border rounded-xl px-4 py-2 pl-9 text-xs text-white placeholder-text-dark focus:outline-none focus:border-primary transition-colors"
           />
           <svg className="size-4 text-text-dark absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -294,16 +318,18 @@ export default function AnomalyGuard() {
       </div>
 
       {/* Anomaly Data Table */}
-      <div className="rounded-4xl bg-light border border-border overflow-hidden">
+      <div className="rounded-4xl card-electric overflow-hidden">
         <div className="p-6 border-b border-border flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold font-secondary text-white">Flagged Ledger Anomalies</h3>
+            <h3 className="text-lg font-bold font-secondary text-white">
+              {t('ag_title_1', 'Anomaly & Fraud')} {t('ag_title_2', 'Guard')}
+            </h3>
             <p className="text-xs text-text-dark mt-0.5">
-              Showing {filteredAnomalies.length} of {anomalies.length} identified risk signals
+              {filteredAnomalies.length} / {anomalies.length} {t('badge_flags', 'risk signals')}
             </p>
           </div>
-          <div className="text-xs text-text-dark">
-            Click any row to view full forensic breakdown
+          <div className="text-xs text-text-dark hidden sm:block">
+            Forensic risk audit
           </div>
         </div>
 
@@ -312,13 +338,13 @@ export default function AnomalyGuard() {
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-border text-text-dark uppercase tracking-wider text-[11px] bg-white/[0.02]">
-                  <th className="py-4 px-6 font-semibold">Anomaly ID</th>
-                  <th className="py-4 px-6 font-semibold">Category</th>
-                  <th className="py-4 px-6 font-semibold">Severity</th>
-                  <th className="py-4 px-6 font-semibold">Item Reference</th>
-                  <th className="py-4 px-6 font-semibold">Flagged Amount</th>
-                  <th className="py-4 px-6 font-semibold min-w-[280px]">Why Flagged (Reason)</th>
-                  <th className="py-4 px-6 font-semibold text-right">Actions</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_id', 'Ref / ID')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_category', 'Category')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_severity', 'Severity')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_entity', 'Entity / Vendor')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_amount', 'Flagged Amount')}</th>
+                  <th className="py-4 px-6 font-semibold min-w-[280px]">{t('ag_col_reason', 'Why Flagged (Reason)')}</th>
+                  <th className="py-4 px-6 font-semibold text-right">{t('ag_col_action', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -358,23 +384,22 @@ export default function AnomalyGuard() {
             <div className="size-12 rounded-full bg-white/5 text-text-dark mx-auto flex items-center justify-center text-xl">
               ✓
             </div>
-            <div className="text-base font-semibold text-white">No anomalies matching current filters</div>
-            <p className="text-xs text-text-dark max-w-sm mx-auto">
-              No transactions or invoices match the selected criteria. Try switching back to &quot;All Anomalies&quot;.
-            </p>
+            <div className="text-base font-semibold text-white">
+              {t('ag_no_records', 'No matching anomaly records found')}
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-border text-text-dark uppercase tracking-wider text-[11px] bg-white/[0.02]">
-                  <th className="py-4 px-6 font-semibold">Anomaly ID</th>
-                  <th className="py-4 px-6 font-semibold">Category</th>
-                  <th className="py-4 px-6 font-semibold">Severity</th>
-                  <th className="py-4 px-6 font-semibold">Item Reference</th>
-                  <th className="py-4 px-6 font-semibold">Flagged Amount</th>
-                  <th className="py-4 px-6 font-semibold min-w-[280px]">Why Flagged (Reason)</th>
-                  <th className="py-4 px-6 font-semibold text-right">Actions</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_id', 'Ref / ID')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_category', 'Category')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_severity', 'Severity')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_entity', 'Entity / Vendor')}</th>
+                  <th className="py-4 px-6 font-semibold">{t('ag_col_amount', 'Flagged Amount')}</th>
+                  <th className="py-4 px-6 font-semibold min-w-[280px]">{t('ag_col_reason', 'Why Flagged (Reason)')}</th>
+                  <th className="py-4 px-6 font-semibold text-right">{t('ag_col_action', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -393,7 +418,7 @@ export default function AnomalyGuard() {
                       {/* ID & Date */}
                       <td className="py-4 px-6 align-top">
                         <div className="font-mono font-medium text-white">{item.id}</div>
-                        <div className="text-[11px] text-text-dark mt-0.5">{item.date || 'N/A'}</div>
+                        <div className="text-[11px] text-text-dark mt-0.5 font-mono">{item.date || 'N/A'}</div>
                       </td>
 
                       {/* Category */}
@@ -418,14 +443,14 @@ export default function AnomalyGuard() {
                           ${Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </div>
                         <div className="text-[10px] text-text-dark mt-0.5">
-                          {item.category === 'Price Spike' ? 'Total batch value' : 'Face value'}
+                          {item.category === 'Price Spike' ? 'Batch' : 'Face'}
                         </div>
                       </td>
 
                       {/* Dedicated Why Flagged Column */}
                       <td className="py-4 px-6 align-top">
                         <p className="text-zinc-300 leading-relaxed line-clamp-2" title={item.reason}>
-                          {item.reason}
+                          {translateGeminiContent(item.reason)}
                         </p>
                         <button
                           type="button"
@@ -433,9 +458,9 @@ export default function AnomalyGuard() {
                             e.stopPropagation();
                             toggleExpand(item.id);
                           }}
-                          className="text-[11px] text-primary hover:underline mt-1 font-medium inline-flex items-center gap-1"
+                          className="text-[11px] text-primary hover:underline mt-1 font-medium inline-flex items-center gap-1 cursor-pointer"
                         >
-                          {isExpanded ? 'Hide forensic breakdown ▲' : 'View full breakdown ▼'}
+                          {isExpanded ? t('ag_hide', 'Hide ▲') : t('ag_details', 'Details ▼')}
                         </button>
                       </td>
 
@@ -446,11 +471,11 @@ export default function AnomalyGuard() {
                           onClick={(e) => toggleReview(item.id, e)}
                           className={`px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer ${
                             isReviewed
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              ? 'bg-secondary/20 text-secondary-light border border-secondary/35'
                               : 'bg-white/5 text-text-dark border border-border hover:text-white hover:border-primary'
                           }`}
                         >
-                          {isReviewed ? '✓ Verified' : 'Mark Reviewed'}
+                          {isReviewed ? t('ag_btn_reviewed', '✓ Reviewed') : t('ag_btn_review', 'Mark Reviewed')}
                         </button>
                       </td>
                     </tr>
@@ -461,7 +486,7 @@ export default function AnomalyGuard() {
           </div>
         )}
 
-        {/* Expandable Forensic Detail Panel (if row clicked) */}
+        {/* Expandable Forensic Detail Panel */}
         {expandedRowId && (
           <div className="border-t border-border bg-white/[0.02] p-6 lg:p-8">
             {(() => {
@@ -499,32 +524,36 @@ export default function AnomalyGuard() {
                         Detailed Algorithmic Audit Reason
                       </div>
                       <p className="text-sm text-zinc-200 leading-relaxed">
-                        {activeItem.reason}
+                        {translateGeminiContent(activeItem.reason)}
                       </p>
                       <div className="p-3 rounded-xl bg-white/[0.03] border border-border text-xs text-text-dark leading-relaxed">
-                        <strong className="text-white">Audit Rule Trigger: </strong>
-                        {activeItem.category === 'Duplicate' && 'Identical dollar amounts and entity name matching within rolling 14-day chronological window.'}
-                        {activeItem.category === 'Unusual Payment' && 'Statistical outlier exceeding 2.50 standard deviations above historical rolling average.'}
-                        {activeItem.category === 'Price Spike' && 'Unit cost elevation exceeds baseline catalog median by greater than 35%.'}
+                        <strong className="text-white">{t('ag_rule_trigger', 'Audit Rule Trigger:')} </strong>
+                        {translateGeminiContent(
+                          activeItem.category === 'Duplicate'
+                            ? 'Identical dollar amounts and entity name matching within rolling 14-day chronological window.'
+                            : activeItem.category === 'Unusual Payment'
+                            ? 'Statistical outlier exceeding 2.50 standard deviations above historical rolling average.'
+                            : 'Unit cost elevation exceeds baseline catalog median by greater than 35%.'
+                        )}
                       </div>
                     </div>
 
                     <div className="rounded-2xl bg-light border border-border p-5 space-y-4">
                       <div className="text-xs font-semibold text-text-dark uppercase tracking-wider">
-                        Recommended Remediation
+                        {t('ag_recommended_remediation', 'Recommended Remediation')}
                       </div>
                       <ul className="text-xs text-text space-y-2.5">
                         <li className="flex items-start gap-2">
                           <span className="text-primary mt-0.5">•</span>
-                          <span>Contact <strong>{activeItem.entity}</strong> accounts receivable to verify billing schedule.</span>
+                          <span>{translateGeminiContent(`Contact ${activeItem.entity} accounts receivable to verify billing schedule.`)}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-primary mt-0.5">•</span>
-                          <span>Cross-reference bank ledger remittance slip with approved purchase orders.</span>
+                          <span>{translateGeminiContent('Cross-reference bank ledger remittance slip with approved purchase orders.')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-primary mt-0.5">•</span>
-                          <span>Require dual-signature sign-off before releasing pending disbursements.</span>
+                          <span>{translateGeminiContent('Require dual-signature sign-off before releasing pending disbursements.')}</span>
                         </li>
                       </ul>
 
@@ -534,7 +563,7 @@ export default function AnomalyGuard() {
                           onClick={(e) => toggleReview(activeItem.id, e)}
                           className="w-full py-2 rounded-xl text-xs font-semibold btn-primary text-white cursor-pointer"
                         >
-                          {reviewedIds.has(activeItem.id) ? 'Re-open Investigation' : 'Verify & Clear Exception'}
+                          {reviewedIds.has(activeItem.id) ? t('ag_reopen', 'Re-open Investigation') : t('ag_verify_clear', 'Verify & Clear Exception')}
                         </button>
                       </div>
                     </div>

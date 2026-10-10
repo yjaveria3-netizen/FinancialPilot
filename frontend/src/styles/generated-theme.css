@@ -5,21 +5,23 @@
  */
 
 @theme {
-  /* === Colors === */
-  --color-primary: #937AFF;
-  --color-primary-light: #4D36D0;
-  --color-secondary: #FF5353;
-  --color-body: #03010E;
-  --color-border: #202128;
-  --color-light: #0B0C17;
-  --color-dark: #040404;
-  --color-text: #DAD4DE;
-  --color-text-dark: #817E84;
-  --color-text-light: #E5E5E5;
+  /* === Colors: #DA7B93 Rose/Mauve Accent, #376E6F Teal Green Secondary, & #2E151B Foundation === */
+  --color-primary: #DA7B93;
+  --color-primary-light: #F2A3B5;
+  --color-secondary: #376E6F;
+  --color-secondary-light: #4E8B8C;
+  --color-body: #1D0B12;
+  --color-border: #4D2330;
+  --color-light: #2E151B;
+  --color-dark: #15070D;
+  --color-text: #E8DCE1;
+  --color-text-dark: #A48993;
+  --color-text-light: #FAF2F5;
 
   /* === Font Families === */
   --font-primary: Inter Tight, sans-serif;
   --font-secondary: Urbanist, sans-serif;
+  --font-urdu: "Noto Sans Arabic", "Noto Nastaliq Urdu", "Urdu Typesetting", Tahoma, sans-serif;
 
   /* === Font Sizes === */
   --text-base: 16px;

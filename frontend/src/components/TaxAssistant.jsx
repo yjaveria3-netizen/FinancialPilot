@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { getTaxSummary } from '../api/client';
 import { IconTaxAssistant, IconAiSparkle } from './Icons';
+import { useLanguage } from '../context/LanguageContext';
 
 // Helper to parse inline markdown bold syntax **bold text** into styled React elements
 const renderFormattedText = (text) => {
@@ -27,6 +28,7 @@ const renderFormattedText = (text) => {
 };
 
 export default function TaxAssistant() {
+  const { t, translateGeminiContent } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -184,13 +186,17 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
             <IconTaxAssistant className="size-4" />
-            Compliance &amp; Statutory Accounting Engine
+            {t('tax_badge', 'Compliance & Statutory Accounting Engine')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
-            Tax &amp; Compliance <span className="text-primary font-normal">Assistant</span>
+            {t('tax_title_1', 'Tax & Compliance')}{' '}
+            <span className="text-primary font-normal">{t('tax_title_2', 'Assistant')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
-            Manufacturing tax liability computation, deductible expense aggregation, and regulatory countdown tracker
+            {t(
+              'tax_subtitle',
+              'Manufacturing tax liability computation, deductible expense aggregation, and regulatory countdown tracker'
+            )}
           </p>
         </div>
 
@@ -207,7 +213,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" x2="12" y1="15" y2="3" />
             </svg>
-            Download Summary Report
+            {t('tax_download_report', 'Download Summary Report')}
           </button>
 
           <button
@@ -229,9 +235,9 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
 
       {/* Download Alert Banner */}
       {downloadSuccess && (
-        <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-3 animate-fadeIn">
+        <div className="p-4 rounded-2xl bg-secondary/15 border border-secondary/30 text-secondary-light text-xs flex items-center gap-3 animate-fadeIn">
           <span className="text-base font-bold">✓</span>
-          <span>Tax &amp; Compliance Executive Summary Report downloaded successfully to your computer.</span>
+          <span>{t('tax_download_success', 'Tax & Compliance Executive Summary Report downloaded successfully to your computer.')}</span>
         </div>
       )}
 
@@ -242,7 +248,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
             !
           </div>
           <div>
-            <h4 className="text-white font-bold text-sm mb-1">Tax Engine Error</h4>
+            <h4 className="text-white font-bold text-sm mb-1">{t('tax_engine_error', 'Tax Engine Error')}</h4>
             <p className="text-xs text-text-dark">{error}</p>
           </div>
         </div>
@@ -298,45 +304,53 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
         <>
           {/* Top KPI Metrics Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Estimated Tax Due</div>
+            <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+                {t('tax_next_filing', 'Estimated Tax Due')}
+              </div>
               <div className="text-3xl font-bold font-secondary text-primary font-mono">
                 ${data?.estimated_tax_due?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-primary"></span>
-                Federal 21% + State 5% + Sales Tax
+                {t('tax_rate_breakdown', 'Federal 21% + State 5% + Sales Tax')}
               </div>
             </div>
 
-            <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Total Deductibles</div>
-              <div className="text-3xl font-bold font-secondary text-emerald-400 font-mono">
+            <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+                {t('tax_deductibles', 'Total Deductibles')}
+              </div>
+              <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
                 ${data?.deductible_total?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
-              <div className="text-xs text-emerald-400/80 mt-2 flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-emerald-400"></span>
-                Eligible IRC Sec. 162 &amp; COGS Write-offs
+              <div className="text-xs text-secondary-light/80 mt-2 flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-secondary-light"></span>
+                {t('tax_irc_eligible', 'Eligible IRC Sec. 162 & COGS Write-offs')}
               </div>
             </div>
 
-            <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Net Taxable Profit</div>
+            <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+                {t('tax_taxable_inc', 'Net Taxable Profit')}
+              </div>
               <div className="text-3xl font-bold font-secondary text-white font-mono">
                 ${data?.net_taxable_income?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <div className="text-xs text-text-dark mt-2">
-                Revenue (${(data?.revenue_ytd / 1000000).toFixed(2)}M) less Deductions
+                {t('tax_rev_less_ded', 'Revenue')} (${(data?.revenue_ytd / 1000000).toFixed(2)}M) {t('tax_less_ded', 'less Deductions')}
               </div>
             </div>
 
-            <div className="rounded-3xl bg-light border border-border p-6 relative overflow-hidden">
-              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">Effective Provision Rate</div>
+            <div className="rounded-3xl card-electric p-6 relative overflow-hidden">
+              <div className="text-xs text-text-dark font-medium uppercase tracking-wider mb-2">
+                {t('tax_gross_rev', 'Effective Provision Rate')}
+              </div>
               <div className="text-3xl font-bold font-secondary text-white font-mono">
                 {data?.effective_tax_rate || 26.0}%
               </div>
               <div className="text-xs text-text-dark mt-2">
-                Net Outstanding Due: <strong className="text-white font-mono">${data?.net_balance_due?.toLocaleString()}</strong>
+                {t('tax_net_due', 'Net Outstanding Due:')} <strong className="text-white font-mono">${data?.net_balance_due?.toLocaleString()}</strong>
               </div>
             </div>
           </div>
@@ -344,67 +358,67 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
           {/* Section 1 & 2: Tax Estimate Card & Deadline Calendar View */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* 1. Tax Estimate Card (7 cols) */}
-            <div className="lg:col-span-7 rounded-4xl bg-light border border-border p-8 space-y-6">
+            <div className="lg:col-span-7 rounded-4xl card-electric p-8 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-border">
                 <div>
                   <h3 className="text-xl font-bold font-secondary text-white">
-                    Tax Liability &amp; Deductible Breakdown
+                    {t('tax_liability_breakdown', 'Tax Liability & Deductible Breakdown')}
                   </h3>
                   <p className="text-xs text-text-dark mt-0.5">
-                    Garment manufacturing cost accounting according to statutory guidelines
+                    {t('tax_cost_accounting_guide', 'Garment manufacturing cost accounting according to statutory guidelines')}
                   </p>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-xs font-semibold text-primary self-start">
-                  Combined 26.0% Rate
+                  {t('tax_combined_rate', 'Combined 26.0% Rate')}
                 </div>
               </div>
 
               {/* High-level Tax Summary Banner */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-border space-y-1.5">
-                  <div className="text-xs text-text-dark font-medium">Estimated Corporate Income Tax</div>
+                  <div className="text-xs text-text-dark font-medium">{t('tax_est_corp_tax', 'Estimated Corporate Income Tax')}</div>
                   <div className="text-2xl font-bold font-mono text-white">
                     ${data?.corporate_tax?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[11px] text-text-dark">Federal (21%) + State Franchise (5%)</div>
+                  <div className="text-[11px] text-text-dark">{t('tax_fed_state', 'Federal (21%) + State Franchise (5%)')}</div>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-border space-y-1.5">
-                  <div className="text-xs text-text-dark font-medium">Sales &amp; Use Tax Provision</div>
+                  <div className="text-xs text-text-dark font-medium">{t('tax_sales_provision', 'Sales & Use Tax Provision')}</div>
                   <div className="text-2xl font-bold font-mono text-white">
                     ${data?.sales_tax?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[11px] text-text-dark">~4.0% provision on finished goods sales</div>
+                  <div className="text-[11px] text-text-dark">{t('tax_sales_goods', '~4.0% provision on finished goods sales')}</div>
                 </div>
               </div>
 
               {/* Deductible Breakdown Bars */}
               <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className="text-white uppercase tracking-wider">Qualifying Deductible Expenses</span>
-                  <span className="text-emerald-400 font-mono">${data?.deductible_total?.toLocaleString()} Total</span>
+                  <span className="text-white uppercase tracking-wider">{t('tax_qualifying_deductibles', 'Qualifying Deductible Expenses')}</span>
+                  <span className="text-secondary-light font-mono">${data?.deductible_total?.toLocaleString()} {t('tax_total', 'Total')}</span>
                 </div>
 
                 <div className="space-y-3.5">
                   {Object.entries(deductibles).map(([category, amount]) => {
                     const pct = totalDeductibleVal > 0 ? (amount / totalDeductibleVal) * 100 : 0;
                     let label = category;
-                    let subtext = 'Standard Deduction';
+                    let subtext = t('tax_std_ded', 'Standard Deduction');
                     if (category === 'Supplier Payment') {
-                      label = 'Raw Materials & Textiles (COGS)';
-                      subtext = 'Direct fabric, trim & thread spend';
+                      label = t('tax_cogs_label', 'Raw Materials & Textiles (COGS)');
+                      subtext = t('tax_cogs_sub', 'Direct fabric, trim & thread spend');
                     } else if (category === 'Salaries') {
-                      label = 'Manufacturing Payroll';
-                      subtext = 'Sewing operators, cutters, patternmakers';
+                      label = t('tax_payroll_label', 'Manufacturing Payroll');
+                      subtext = t('tax_payroll_sub', 'Sewing operators, cutters, patternmakers');
                     } else if (category === 'Rent') {
-                      label = 'Plant Facility Lease';
-                      subtext = 'Factory floor and warehouse space';
+                      label = t('tax_lease_label', 'Plant Facility Lease');
+                      subtext = t('tax_lease_sub', 'Factory floor and warehouse space');
                     } else if (category === 'Utilities') {
-                      label = 'Industrial Steam & Power';
-                      subtext = 'High-voltage cutting & plant electricity';
+                      label = t('tax_power_label', 'Industrial Steam & Power');
+                      subtext = t('tax_power_sub', 'High-voltage cutting & plant electricity');
                     } else if (category === 'Marketing') {
-                      label = 'Wholesale Promotion';
-                      subtext = 'Trade shows & apparel showrooms';
+                      label = t('tax_marketing_label', 'Wholesale Promotion');
+                      subtext = t('tax_marketing_sub', 'Trade shows & apparel showrooms');
                     }
 
                     return (
@@ -421,7 +435,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         </div>
                         <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-primary to-primary-light transition-all duration-700"
+                            className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-700"
                             style={{ width: `${Math.min(pct, 100)}%` }}
                           />
                         </div>
@@ -435,7 +449,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-primary font-bold">ℹ</span>
-                  <span className="text-text-dark">Recorded Tax Prepayments / Withholdings:</span>
+                  <span className="text-text-dark">{t('tax_prior_prepayments', 'Recorded Tax Prepayments / Withholdings:')}</span>
                 </div>
                 <span className="font-mono font-semibold text-white">
                   ${data?.prior_tax_paid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -444,18 +458,18 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
             </div>
 
             {/* 2. Deadline Calendar View (5 cols) */}
-            <div className="lg:col-span-5 rounded-4xl bg-light border border-border p-8 space-y-6 flex flex-col">
+            <div className="lg:col-span-5 rounded-4xl card-electric p-8 space-y-6 flex flex-col">
               <div className="flex items-center justify-between pb-4 border-b border-border">
                 <div>
                   <h3 className="text-xl font-bold font-secondary text-white">
-                    Compliance Deadlines
+                    {t('tax_all_deadlines', 'Compliance Deadlines')}
                   </h3>
                   <p className="text-xs text-text-dark mt-0.5">
                     Regulatory calendar with dynamic countdown
                   </p>
                 </div>
 
-                <div className="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
+                <div className="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs font-mono">
                   {filteredDeadlines.length}
                 </div>
               </div>
@@ -463,9 +477,9 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               {/* Deadline Filter Tabs */}
               <div className="flex gap-2">
                 {[
-                  { key: 'ALL', label: 'All' },
-                  { key: 'FEDERAL', label: 'Federal' },
-                  { key: 'STATE_PAYROLL', label: 'State & Payroll' },
+                  { key: 'ALL', label: t('tax_all_deadlines', 'All') },
+                  { key: 'FEDERAL', label: t('tax_federal', 'Federal') },
+                  { key: 'STATE_PAYROLL', label: t('tax_state_payroll', 'State & Payroll') },
                 ].map((tab) => (
                   <button
                     key={tab.key}
@@ -547,9 +561,9 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
           </div>
 
           {/* Section 3: Redesigned Executive Accountant Summary Section */}
-          <div className="rounded-4xl bg-light border border-border overflow-hidden relative shadow-2xl">
+          <div className="rounded-4xl card-electric overflow-hidden relative shadow-2xl">
             {/* Top Header & Action Bar */}
-            <div className="p-6 lg:p-8 border-b border-border bg-gradient-to-r from-primary/10 via-transparent to-transparent flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="p-6 lg:p-8 border-b border-border bg-gradient-to-r from-primary/10 via-secondary/10 to-transparent flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
                 <div className="size-12 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-lg shadow-primary/20">
                   <IconAiSparkle className="size-6" />
@@ -557,10 +571,10 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-[11px] font-semibold mb-1">
                     <span className="size-1.5 rounded-full bg-primary animate-pulse"></span>
-                    Gemini AI Advisory • Audit-Ready CPA Workpaper
+                    {t('tax_ai_memo_badge', 'Gemini AI Advisory • Audit-Ready CPA Workpaper')}
                   </div>
                   <h3 className="text-2xl font-bold font-secondary text-white tracking-tight">
-                    Executive Tax Memorandum &amp; Compliance Summary
+                    {t('tax_ai_memo_title', 'Executive Tax Memorandum & Compliance Summary')}
                   </h3>
                 </div>
               </div>
@@ -574,8 +588,8 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                 >
                   {copied ? (
                     <>
-                      <span className="text-emerald-400 font-bold">✓</span>
-                      <span className="text-emerald-300">Copied</span>
+                      <span className="text-secondary-light font-bold">✓</span>
+                      <span className="text-secondary-light">{t('tax_copied', 'Copied')}</span>
                     </>
                   ) : (
                     <>
@@ -583,7 +597,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                         <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
                         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
                       </svg>
-                      Copy Memo
+                      {t('tax_copy_memo', 'Copy Memo')}
                     </>
                   )}
                 </button>
@@ -598,7 +612,7 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" x2="12" y1="15" y2="3" />
                   </svg>
-                  Download Report
+                  {t('tax_download_report_btn', 'Download Report')}
                 </button>
               </div>
             </div>
@@ -606,27 +620,27 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
             {/* Memorandum Metadata Header Strip */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 lg:p-8 bg-white/[0.015] border-b border-border">
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border/80">
-                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">To: Recipient</div>
-                <div className="text-xs font-semibold text-white">Lead Corporate CPA</div>
-                <div className="text-[11px] text-zinc-400">&amp; Financial Advisory Team</div>
+                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">{t('tax_memo_to', 'To: Recipient')}</div>
+                <div className="text-xs font-semibold text-white">{t('tax_cpa_team', 'Lead Corporate CPA')}</div>
+                <div className="text-[11px] text-zinc-400">{t('tax_advisory_team', '& Financial Advisory Team')}</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border/80">
-                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">Entity / Organization</div>
+                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">{t('tax_memo_entity', 'Entity / Organization')}</div>
                 <div className="text-xs font-semibold text-white">FinPilot Garment Mfg.</div>
-                <div className="text-[11px] text-zinc-400">Apparel Operations</div>
+                <div className="text-[11px] text-zinc-400">{t('tax_apparel_ops', 'Apparel Operations')}</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border/80">
-                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">Reporting Period</div>
+                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">{t('tax_memo_period', 'Reporting Period')}</div>
                 <div className="text-xs font-semibold text-white font-mono">Fiscal YTD 2024</div>
-                <div className="text-[11px] text-emerald-400">Books Closed &amp; Verified</div>
+                <div className="text-[11px] text-secondary-light">{t('tax_books_verified', 'Books Closed & Verified')}</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-border/80">
-                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">Audit Authority</div>
+                <div className="text-[11px] uppercase tracking-wider text-text-dark font-medium mb-1">{t('tax_memo_audit', 'Audit Authority')}</div>
                 <div className="text-xs font-semibold text-primary">IRC Sec. 162 &amp; COGS</div>
-                <div className="text-[11px] text-zinc-400">Safe-Harbor Compliant</div>
+                <div className="text-[11px] text-zinc-400">{t('tax_safe_harbor', 'Safe-Harbor Compliant')}</div>
               </div>
             </div>
 
@@ -635,124 +649,124 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
               {parsedSummary?.sec1 ? (
                 <>
                   {/* Section 1 Card */}
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-primary/30 transition-colors">
+                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-primary/40 transition-colors">
                     <div className="flex items-center justify-between pb-3 border-b border-border/60">
                       <div className="flex items-center gap-3">
                         <div className="size-8 rounded-xl bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
                           1
                         </div>
                         <h4 className="text-base font-bold font-secondary text-white">
-                          Executive Summary &amp; Tax Liability Posture
+                          {t('tax_sec1_title', 'Executive Summary & Tax Liability Posture')}
                         </h4>
                       </div>
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold font-mono">
-                        Net Balance: ${data?.net_balance_due?.toLocaleString()}
+                        {t('tax_net_bal_label', 'Net Balance:')} ${data?.net_balance_due?.toLocaleString()}
                       </span>
                     </div>
 
                     <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">
-                      {renderFormattedText(parsedSummary.sec1)}
+                      {renderFormattedText(translateGeminiContent(parsedSummary.sec1))}
                     </p>
 
                     {/* Tax Liability Quick Math Callout */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
-                        <div className="text-text-dark text-[11px]">Gross Revenue</div>
+                        <div className="text-text-dark text-[11px]">{t('tax_gross_rev_col', 'Gross Revenue')}</div>
                         <div className="font-mono font-semibold text-white mt-0.5">${data?.revenue_ytd?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
-                        <div className="text-text-dark text-[11px]">Net Taxable Base</div>
+                        <div className="text-text-dark text-[11px]">{t('tax_net_tax_base', 'Net Taxable Base')}</div>
                         <div className="font-mono font-semibold text-white mt-0.5">${data?.net_taxable_income?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
-                        <div className="text-text-dark text-[11px]">Est. Total Tax</div>
+                        <div className="text-text-dark text-[11px]">{t('tax_est_tot_tax', 'Est. Total Tax')}</div>
                         <div className="font-mono font-semibold text-primary mt-0.5">${data?.estimated_tax_due?.toLocaleString()}</div>
                       </div>
                       <div className="p-3 rounded-xl bg-white/[0.02] border border-border/60">
-                        <div className="text-text-dark text-[11px]">Prior Remittances</div>
-                        <div className="font-mono font-semibold text-emerald-400 mt-0.5">-${data?.prior_tax_paid?.toLocaleString()}</div>
+                        <div className="text-text-dark text-[11px]">{t('tax_prior_remit', 'Prior Remittances')}</div>
+                        <div className="font-mono font-semibold text-secondary-light mt-0.5">-${data?.prior_tax_paid?.toLocaleString()}</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Section 2 Card */}
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-emerald-500/30 transition-colors">
+                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-secondary/40 transition-colors">
                     <div className="flex items-center justify-between pb-3 border-b border-border/60">
                       <div className="flex items-center gap-3">
-                        <div className="size-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                        <div className="size-8 rounded-xl bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-xs">
                           2
                         </div>
                         <h4 className="text-base font-bold font-secondary text-white">
-                          Deductible Expense Classification &amp; Audit Readiness
+                          {t('tax_sec2_title', 'Deductible Expense Classification & Audit Readiness')}
                         </h4>
                       </div>
-                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold font-mono">
-                        ${data?.deductible_total?.toLocaleString()} Qualified
+                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary-light border border-secondary/30 font-semibold font-mono">
+                        ${data?.deductible_total?.toLocaleString()} {t('tax_qualified', 'Qualified')}
                       </span>
                     </div>
 
                     <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">
-                      Operational deductions reflect audited garment manufacturing cost allocations across statutory categories:
+                      {t('tax_sec2_desc', 'Operational deductions reflect audited garment manufacturing cost allocations across statutory categories:')}
                     </p>
 
                     {/* Categorized Visual Deduction Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
                       <div className="p-4 rounded-2xl bg-white/[0.015] border border-border/60 flex items-start gap-3">
-                        <div className="size-8 rounded-lg bg-indigo-500/15 text-indigo-300 flex items-center justify-center shrink-0 text-sm font-bold">
+                        <div className="size-8 rounded-lg bg-secondary/15 text-secondary-light flex items-center justify-center shrink-0 text-sm font-bold">
                           🧵
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-white">Raw Materials &amp; Supplies (COGS)</div>
-                          <div className="font-mono text-sm font-bold text-emerald-400 mt-0.5">
+                          <div className="text-xs font-semibold text-white">{t('tax_cogs_title', 'Raw Materials & Supplies (COGS)')}</div>
+                          <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
                             ${deductibles['Supplier Payment']?.toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
-                            Direct textile, trim, and fabric procurement. Under IRC Sec. 471, maintain closing inventory reconciliations.
+                            {t('tax_cogs_memo_sub', 'Direct textile, trim, and fabric procurement. Under IRC Sec. 471, maintain closing inventory reconciliations.')}
                           </p>
                         </div>
                       </div>
 
                       <div className="p-4 rounded-2xl bg-white/[0.015] border border-border/60 flex items-start gap-3">
-                        <div className="size-8 rounded-lg bg-sky-500/15 text-sky-300 flex items-center justify-center shrink-0 text-sm font-bold">
+                        <div className="size-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center shrink-0 text-sm font-bold">
                           👥
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-white">Direct &amp; Operational Payroll</div>
-                          <div className="font-mono text-sm font-bold text-emerald-400 mt-0.5">
+                          <div className="text-xs font-semibold text-white">{t('tax_direct_payroll', 'Direct & Operational Payroll')}</div>
+                          <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
                             ${deductibles['Salaries']?.toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
-                            Plant floor sewing operators, machine mechanics, and supervisors. Reconciled with quarterly Form 941 filings.
+                            {t('tax_payroll_memo_sub', 'Plant floor sewing operators, machine mechanics, and supervisors. Reconciled with quarterly Form 941 filings.')}
                           </p>
                         </div>
                       </div>
 
                       <div className="p-4 rounded-2xl bg-white/[0.015] border border-border/60 flex items-start gap-3">
-                        <div className="size-8 rounded-lg bg-amber-500/15 text-amber-300 flex items-center justify-center shrink-0 text-sm font-bold">
+                        <div className="size-8 rounded-lg bg-secondary/15 text-secondary-light flex items-center justify-center shrink-0 text-sm font-bold">
                           🏭
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-white">Facility &amp; Production Overhead</div>
-                          <div className="font-mono text-sm font-bold text-emerald-400 mt-0.5">
+                          <div className="text-xs font-semibold text-white">{t('tax_facility_overhead', 'Facility & Production Overhead')}</div>
+                          <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
                             ${((deductibles['Rent'] || 0) + (deductibles['Utilities'] || 0)).toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
-                            Factory warehouse lease (${deductibles['Rent']?.toLocaleString()}) and high-voltage cutting power (${deductibles['Utilities']?.toLocaleString()}).
+                            {t('tax_lease_memo_sub', 'Factory warehouse lease and high-voltage cutting power.')}
                           </p>
                         </div>
                       </div>
 
                       <div className="p-4 rounded-2xl bg-white/[0.015] border border-border/60 flex items-start gap-3">
-                        <div className="size-8 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center shrink-0 text-sm font-bold">
+                        <div className="size-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center shrink-0 text-sm font-bold">
                           📢
                         </div>
                         <div>
-                          <div className="text-xs font-semibold text-white">Wholesale Distribution &amp; SG&amp;A</div>
-                          <div className="font-mono text-sm font-bold text-emerald-400 mt-0.5">
+                          <div className="text-xs font-semibold text-white">{t('tax_wholesale_dist', 'Wholesale Distribution & SG&A')}</div>
+                          <div className="font-mono text-sm font-bold text-secondary-light mt-0.5">
                             ${deductibles['Marketing']?.toLocaleString()}
                           </div>
                           <p className="text-[11px] text-zinc-400 mt-1 leading-normal">
-                            Apparel trade show exhibits, showroom space, and B2B catalog marketing campaigns.
+                            {t('tax_wholesale_sub', 'Apparel trade show exhibits, showroom space, and B2B catalog marketing campaigns.')}
                           </p>
                         </div>
                       </div>
@@ -760,49 +774,49 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                   </div>
 
                   {/* Section 3 Card */}
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-amber-500/30 transition-colors">
+                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-border space-y-4 hover:border-secondary/40 transition-colors">
                     <div className="flex items-center justify-between pb-3 border-b border-border/60">
                       <div className="flex items-center gap-3">
-                        <div className="size-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">
+                        <div className="size-8 rounded-xl bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-xs">
                           3
                         </div>
                         <h4 className="text-base font-bold font-secondary text-white">
-                          Regulatory Filing Calendar &amp; Safe-Harbor Action Plan
+                          {t('tax_sec3_title', 'Regulatory Filing Calendar & Safe-Harbor Action Plan')}
                         </h4>
                       </div>
-                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold font-mono">
-                        {data?.filing_deadlines?.[0]?.days_remaining} Days to Next Filing
+                      <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary-light border border-secondary/30 font-semibold font-mono">
+                        {data?.filing_deadlines?.[0]?.days_remaining} {t('tax_days_next', 'Days to Next Filing')}
                       </span>
                     </div>
 
                     <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">
-                      {renderFormattedText(parsedSummary.sec3)}
+                      {renderFormattedText(translateGeminiContent(parsedSummary.sec3))}
                     </p>
 
                     {/* Action Plan Step Items */}
                     <div className="space-y-2.5 pt-1">
                       <div className="p-3.5 rounded-xl bg-white/[0.015] border border-border/60 flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2.5">
-                          <span className="size-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</span>
-                          <span className="text-zinc-200">Prepayment Safe-Harbor: Remit quarterly installment to satisfy 100% prior-year safe harbor</span>
+                          <span className="size-5 rounded-full bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-[10px]">✓</span>
+                          <span className="text-zinc-200">{t('tax_plan_1', 'Prepayment Safe-Harbor: Remit quarterly installment to satisfy 100% prior-year safe harbor')}</span>
                         </div>
-                        <span className="text-[11px] text-text-dark font-mono">Required</span>
+                        <span className="text-[11px] text-text-dark font-mono">{t('tax_required', 'Required')}</span>
                       </div>
 
                       <div className="p-3.5 rounded-xl bg-white/[0.015] border border-border/60 flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2.5">
-                          <span className="size-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</span>
-                          <span className="text-zinc-200">COGS Documentation: Preserve itemized supplier invoices for all fabric disbursements &gt; $2,500</span>
+                          <span className="size-5 rounded-full bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-[10px]">✓</span>
+                          <span className="text-zinc-200">{t('tax_plan_2', 'COGS Documentation: Preserve itemized supplier invoices for all fabric disbursements > $2,500')}</span>
                         </div>
-                        <span className="text-[11px] text-text-dark font-mono">Audit Record</span>
+                        <span className="text-[11px] text-text-dark font-mono">{t('tax_audit_record', 'Audit Record')}</span>
                       </div>
 
                       <div className="p-3.5 rounded-xl bg-white/[0.015] border border-border/60 flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2.5">
-                          <span className="size-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</span>
-                          <span className="text-zinc-200">Form 941 Reconciliation: Tie payroll clearing entries to State Unemployment insurance filings</span>
+                          <span className="size-5 rounded-full bg-secondary/20 text-secondary-light flex items-center justify-center font-bold text-[10px]">✓</span>
+                          <span className="text-zinc-200">{t('tax_plan_3', 'Form 941 Reconciliation: Tie payroll clearing entries to State Unemployment insurance filings')}</span>
                         </div>
-                        <span className="text-[11px] text-text-dark font-mono">Scheduled</span>
+                        <span className="text-[11px] text-text-dark font-mono">{t('tax_scheduled', 'Scheduled')}</span>
                       </div>
                     </div>
                   </div>
@@ -816,11 +830,11 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
                       .filter((p) => !p.startsWith('### ') && !p.startsWith('**To:') && !p.startsWith('---'))
                       .map((paragraph, idx) => (
                         <p key={idx} className="text-zinc-300 text-sm leading-relaxed">
-                          {renderFormattedText(paragraph)}
+                          {renderFormattedText(translateGeminiContent(paragraph))}
                         </p>
                       ))
                   ) : (
-                    <p className="text-text-dark italic">Generating tax summary...</p>
+                    <p className="text-text-dark italic">{t('tax_generating', 'Generating tax summary...')}</p>
                   )}
                 </div>
               )}
@@ -829,8 +843,8 @@ CONFIDENTIAL — PREPARED EXCLUSIVELY FOR FINANCIAL AUDIT & TAX FILING
             {/* Bottom CPA Compliance Footer */}
             <div className="p-6 border-t border-border bg-white/[0.01] flex flex-col sm:flex-row items-center justify-between text-xs text-text-dark gap-3">
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-emerald-400"></span>
-                <span className="text-zinc-300 font-medium">Calculations verified against IRC Sec. 162 &amp; Manufacturing COGS provisions</span>
+                <span className="size-2 rounded-full bg-secondary-light"></span>
+                <span className="text-zinc-300 font-medium">{t('tax_irc_verified', 'Calculations verified against IRC Sec. 162 & Manufacturing COGS provisions')}</span>
               </div>
               <div className="font-mono text-[11px] text-zinc-400">
                 Workpaper ID: FIN-TAX-{data?.generated_at?.slice(0, 10) || '2024'} • GAAP Manufacturing Ledger

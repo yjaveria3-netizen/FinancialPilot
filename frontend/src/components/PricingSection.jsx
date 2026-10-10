@@ -1,53 +1,64 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function PricingSection() {
+  const { t } = useLanguage();
   const [isYearly, setIsYearly] = useState(false);
 
   const plans = [
     {
-      title: 'Essentials',
+      title: t('pricing_plan_essentials', 'Essentials'),
       priceMonthly: 49,
       priceYearly: 39,
-      description: 'Essential financial runway visibility for solo founders & micro-businesses.',
+      description: t(
+        'pricing_desc_essentials',
+        'Essential financial runway visibility for solo founders & micro-businesses.'
+      ),
       featured: false,
       features: [
-        '30-Day Cash Flow Forecaster',
-        'Composite Credit Readiness Score',
-        'Basic Anomaly Thresholds',
-        'CSV Data Contract Import',
-        'Standard Email Support',
+        t('val_card1_item1', '30-Day Cash Flow Forecaster'),
+        t('val_card2_item1', 'Composite Credit Readiness Score'),
+        t('val_card3_item1', 'Basic Anomaly Thresholds'),
+        t('footer_local_csv', 'CSV Data Contract Import'),
+        t('cfo_title', 'Standard Email Support'),
       ],
     },
     {
-      title: 'Growth',
+      title: t('pricing_plan_growth', 'Growth'),
       priceMonthly: 149,
       priceYearly: 119,
-      description: 'Full financial intelligence for scaling businesses ready to qualify for credit.',
+      description: t(
+        'pricing_desc_growth',
+        'Full financial intelligence for scaling businesses ready to qualify for credit.'
+      ),
       featured: true,
-      badge: 'Most Popular',
+      badge: t('pricing_popular', 'Most Popular'),
       features: [
-        '90-Day Cash Flow Projections',
-        'Full Credit Score + Gemini Advice',
-        'Real-Time Anomaly Guard',
-        'Quarterly Tax Liability Estimator',
-        'AI CFO Chat Assistant',
-        'Priority Slack & Email Support',
+        t('val_card1_item1', '90-Day Cash Flow Projections'),
+        t('val_card2_item3', 'Full Credit Score + Gemini Advice'),
+        t('ag_title_1', 'Real-Time Anomaly Guard'),
+        t('tax_title_1', 'Quarterly Tax Liability Estimator'),
+        t('cfo_title', 'AI CFO Chat Assistant'),
+        t('badge_growth', 'Priority Slack & Email Support'),
       ],
     },
     {
-      title: 'Scale',
+      title: t('pricing_plan_scale', 'Scale'),
       priceMonthly: 349,
       priceYearly: 279,
-      description: 'Enterprise-grade financial analytics and multi-ledger intelligence.',
+      description: t(
+        'pricing_desc_scale',
+        'Enterprise-grade financial analytics and multi-ledger intelligence.'
+      ),
       featured: false,
       features: [
-        'Everything in Growth',
-        'Scenario Modeling Engine',
-        'Accountant Export Portal (PDF/Excel)',
-        'Procurement & Inventory Alerts',
-        'Custom Data Contract Validation',
-        'Dedicated Financial Success Manager',
+        t('badge_core', 'Everything in Growth'),
+        t('sp_title_1', 'Scenario Modeling Engine'),
+        t('ap_title_1', 'Accountant Export Portal (PDF/Excel)'),
+        t('val_card4_item1', 'Procurement & Inventory Alerts'),
+        t('ap_badge', 'Custom Data Contract Validation'),
+        t('badge_growth', 'Dedicated Financial Success Manager'),
       ],
     },
   ];
@@ -57,13 +68,19 @@ export default function PricingSection() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="section-intro text-center mb-12">
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
-            Pricing Built For <strong className="text-primary font-normal">Business Growth</strong>
+            {t('pricing_heading_1', 'Pricing Built For')}{' '}
+            <strong className="text-primary font-normal">
+              {t('pricing_heading_2', 'Business Growth')}
+            </strong>
           </h2>
           <p className="text-text-dark max-w-xl mx-auto text-base">
-            Start your free 14-day trial, scale as you grow. No credit card required. Cancel anytime.
+            {t(
+              'pricing_subheading',
+              'Start your free 14-day trial, scale as you grow. No credit card required. Cancel anytime.'
+            )}
           </p>
 
-          {/* Toggle pill matching user screenshot */}
+          {/* Toggle pill */}
           <div className="inline-flex items-center gap-1 bg-light border border-border p-1.5 rounded-full mt-8 shadow-inner">
             <button
               type="button"
@@ -72,7 +89,7 @@ export default function PricingSection() {
                 !isYearly ? 'bg-primary text-white shadow-lg' : 'text-text hover:text-white'
               }`}
             >
-              Monthly
+              {t('pricing_monthly', 'Monthly')}
             </button>
             <button
               type="button"
@@ -81,7 +98,10 @@ export default function PricingSection() {
                 isYearly ? 'bg-primary text-white shadow-lg' : 'text-text hover:text-white'
               }`}
             >
-              Yearly <span className="text-[10px] text-emerald-400 font-normal ml-1">Save 20%</span>
+              {t('pricing_yearly', 'Yearly')}{' '}
+              <span className="text-[10px] text-emerald-400 font-normal ml-1 font-mono">
+                {t('pricing_save', 'Save 20%')}
+              </span>
             </button>
           </div>
         </div>
@@ -93,10 +113,10 @@ export default function PricingSection() {
             return (
               <div
                 key={p.title}
-                className={`rounded-4xl p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 relative ${
+                className={`rounded-4xl p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 relative hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)] ${
                   p.featured
                     ? 'bg-light border-2 border-primary shadow-2xl shadow-primary/10 lg:-translate-y-2'
-                    : 'bg-light/60 border border-border hover:border-primary/40'
+                    : 'bg-light/60 border border-border'
                 }`}
               >
                 {p.badge && (
@@ -107,20 +127,38 @@ export default function PricingSection() {
 
                 <div>
                   <h3 className="text-xl font-bold font-secondary text-white mb-2">{p.title}</h3>
-                  <p className="text-xs text-text-dark leading-relaxed mb-6 min-h-[36px]">{p.description}</p>
+                  <p className="text-xs text-text-dark leading-relaxed mb-6 min-h-[36px]">
+                    {p.description}
+                  </p>
 
                   <div className="flex items-baseline gap-1 mb-8">
-                    <span className="text-4xl sm:text-5xl font-bold font-secondary text-white">${price}</span>
-                    <span className="text-xs text-text-dark">/ Per Month</span>
+                    <span className="text-4xl sm:text-5xl font-bold font-secondary text-white font-mono">
+                      ${price}
+                    </span>
+                    <span className="text-xs text-text-dark font-mono">
+                      {t('pricing_per_month', '/month')}
+                    </span>
                   </div>
 
                   <div className="border-t border-border/60 pt-6 mb-8">
-                    <div className="text-xs uppercase font-semibold text-text-dark tracking-wider mb-4">Included Features:</div>
+                    <div className="text-xs uppercase font-semibold text-text-dark tracking-wider mb-4">
+                      {t('badge_core', 'Included Features:')}
+                    </div>
                     <ul className="space-y-3 text-sm text-text">
                       {p.features.map((feat) => (
                         <li key={feat} className="flex items-start gap-3">
-                          <svg className="size-4 text-primary shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          <svg
+                            className="size-4 text-primary shrink-0 mt-0.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2.5}
+                              d="M5 13l4 4L19 7"
+                            />
                           </svg>
                           <span>{feat}</span>
                         </li>
@@ -133,7 +171,7 @@ export default function PricingSection() {
                   to="/dashboard"
                   className={`btn w-full text-center ${p.featured ? 'btn-primary' : 'btn-outline'}`}
                 >
-                  Start 14-Day Free Trial
+                  {t('pricing_start_trial', 'Start 14-Day Free Trial')}
                 </Link>
               </div>
             );

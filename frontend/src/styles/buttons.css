@@ -7,26 +7,80 @@
 }
 
 .btn-primary {
-  @apply text-white;
+  @apply text-white font-semibold;
   background: linear-gradient(
-    0deg,
-    var(--color-primary-light) 0%,
-    var(--color-primary) 100%
+    135deg,
+    #285B5C 0%,
+    #376E6F 45%,
+    #3FBFA8 100%
   );
+  box-shadow: 0px 4px 18px rgba(55, 110, 111, 0.45);
+  border: 1px solid rgba(63, 191, 168, 0.35);
 
   &:hover {
-    @apply brightness-125;
+    @apply brightness-115;
     transition: all 0.3s ease;
-    box-shadow: 0px 0px 20px var(--color-primary-light);
+    background: linear-gradient(
+      135deg,
+      #317071 0%,
+      #428788 45%,
+      #4EE2C9 100%
+    );
+    box-shadow: 0px 0px 25px rgba(63, 191, 168, 0.65), 0px 4px 15px rgba(55, 110, 111, 0.4);
+    transform: translateY(-1px);
   }
 }
 .btn-outline-primary {
-  @apply border-[1.5px] border-primary text-primary;
+  @apply border-[1.5px] border-[#3FBFA8] text-[#3FBFA8] hover:bg-[#376E6F]/20;
 }
 
 .btn-outline {
-  @apply border-[1.5px] border-text text-text-light hover:bg-primary hover:border-primary bg-transparent hover:text-white transition-all duration-300;
+  @apply border-[1.5px] border-[#376E6F]/60 text-zinc-100 hover:bg-[#376E6F]/20 hover:border-[#3FBFA8] bg-transparent hover:text-white transition-all duration-300;
 }
 .btn-outline:hover {
-  box-shadow: 0px 0px 15px var(--color-primary);
+  box-shadow: 0px 0px 18px rgba(63, 191, 168, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  @apply text-white font-semibold;
+  background: linear-gradient(
+    135deg,
+    #B85D75 0%,
+    #DA7B93 100%
+  );
+
+  &:hover {
+    @apply brightness-110;
+    transition: all 0.3s ease;
+    box-shadow: 0px 0px 20px rgba(218, 123, 147, 0.55);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-outline-secondary {
+  @apply border-[1.5px] border-primary text-primary hover:bg-primary/20 hover:border-primary-light transition-all duration-300;
+}
+
+.btn-gradient {
+  @apply text-white font-semibold;
+  background: linear-gradient(
+    135deg,
+    #DA7B93 0%,
+    #9A647B 48%,
+    #376E6F 100%
+  );
+  box-shadow: 0px 4px 20px rgba(218, 123, 147, 0.35);
+
+  &:hover {
+    @apply brightness-110 scale-[1.02];
+    background: linear-gradient(
+      135deg,
+      #F2A3B5 0%,
+      #AA738D 48%,
+      #4E8B8C 100%
+    );
+    box-shadow: 0px 0px 25px rgba(63, 191, 168, 0.5), 0px 0px 15px rgba(218, 123, 147, 0.5);
+    transform: translateY(-1px);
+  }
 }

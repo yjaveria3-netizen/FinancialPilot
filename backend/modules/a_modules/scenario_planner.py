@@ -94,11 +94,16 @@ def run_monte_carlo_simulation(params: dict | None = None) -> dict:
     daily_procurement_base = _get_procurement_daily_average(txn)
     daily_other_expenses = max(0.0, avg_expenses - daily_procurement_base)
 
-    # 3. Apply scenario parameter shifts
-    shifted_avg_income = max(0.0, avg_income * (1.0 + sales_change_pct / 100.0))
+    # 3. Apply scenario parameter shifts (including dynamic live demo custom inflows/outflows)
+    custom_inflow = float(params.get("custom_inflow", 0.0))
+    custom_outflow = float(params.get("custom_outflow", 0.0))
+    daily_custom_inflow = custom_inflow / float(days) if custom_inflow != 0 else 0.0
+    daily_custom_outflow = custom_outflow / float(days) if custom_outflow != 0 else 0.0
+
+    shifted_avg_income = max(0.0, (avg_income + daily_custom_inflow) * (1.0 + sales_change_pct / 100.0))
     shifted_daily_procurement = max(0.0, daily_procurement_base * (1.0 + procurement_cost_pct / 100.0))
     daily_addl_payroll = max(0.0, hiring_count * (hiring_monthly_cost / 30.0))
-    shifted_avg_expenses = daily_other_expenses + shifted_daily_procurement + daily_addl_payroll
+    shifted_avg_expenses = max(0.0, daily_other_expenses + shifted_daily_procurement + daily_addl_payroll + daily_custom_outflow)
 
     # 4. Vectorized Monte Carlo Stochastic Engine (NumPy)
     rng = np.random.default_rng(seed=101)

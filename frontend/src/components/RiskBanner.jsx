@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getRiskAlert } from '../api/client';
 import { IconAiSparkle, IconClose } from './Icons';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function RiskBanner() {
+  const { t, translateGeminiContent, lang } = useLanguage();
   const [alertData, setAlertData] = useState(null);
   const [dismissed, setDismissed] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,8 +22,8 @@ export default function RiskBanner() {
       setAlertData(data);
       if (data?.email_draft) {
         setToEmail(data.email_draft.to || 'billing@customer.com');
-        setSubject(data.email_draft.subject || 'Expedited Settlement Notice');
-        setBodyText(data.email_draft.body || '');
+        setSubject(translateGeminiContent(data.email_draft.subject || 'Expedited Settlement Notice'));
+        setBodyText(translateGeminiContent(data.email_draft.body || ''));
       }
       // If crisis occurs, un-dismiss immediately
       if (data?.severity === 'CRITICAL') {
@@ -30,11 +32,19 @@ export default function RiskBanner() {
     } catch (err) {
       console.warn('Risk alert check non-blocking error:', err);
     }
-  }, []);
+  }, [translateGeminiContent]);
 
   useEffect(() => {
     fetchAlert();
   }, [fetchAlert]);
+
+  // Sync draft text on language switch
+  useEffect(() => {
+    if (alertData?.email_draft) {
+      setSubject(translateGeminiContent(alertData.email_draft.subject || 'Expedited Settlement Notice'));
+      setBodyText(translateGeminiContent(alertData.email_draft.body || ''));
+    }
+  }, [lang, alertData, translateGeminiContent]);
 
   // Listen to both global refresh and crisis trigger
   useEffect(() => {
@@ -77,10 +87,10 @@ export default function RiskBanner() {
   const handleDownload = () => {
     const content = `================================================================================
 FINPILOT AUTONOMOUS MITIGATION NOTICE — TRANSMISSION DISPATCH
-Generated: ${new Date().toLocaleString()}
+Generated: ${new Date().toLocaleString('en-US')}
 Target Account: ${alertData.target_invoice?.entity || 'Client'}
 Invoice ID: ${alertData.target_invoice?.invoice_id || 'N/A'}
-Amount: $${alertData.target_invoice?.amount?.toLocaleString() || '0'}
+Amount: $${alertData.target_invoice?.amount?.toLocaleString('en-US') || '0'}
 ================================================================================
 TO: ${toEmail}
 SUBJECT: ${subject}
@@ -107,7 +117,7 @@ ${bodyText}
           isCritical
             ? 'bg-rose-950/20 border-rose-500/50 shadow-2xl shadow-rose-950/30'
             : 'bg-amber-950/20 border-amber-500/40 shadow-xl shadow-amber-950/20'
-        } animate-fadeIn`}
+        } animate-fadeIn hover:shadow-[0_0_25px_rgba(218,123,147,0.35)] hover:border-[#DA7B93]/60 duration-300`}
       >
         {/* Ambient background pulsing glow */}
         <div
@@ -138,28 +148,32 @@ ${bodyText}
                       : 'bg-amber-500/20 text-amber-300 border-amber-500/30'
                   }`}
                 >
-                  {isCritical ? '🚨 Autonomous Priority Alert' : '⚡ Actionable Risk Signal'}
+                  {isCritical
+                    ? t('risk_priority_alert', '🚨 Autonomous Priority Alert')
+                    : t('risk_signal_alert', '⚡ Actionable Risk Signal')}
                 </span>
 
                 {alertData.low_cash_day && (
-                  <span className="text-[10px] font-mono text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
-                    Threshold breach on: {alertData.low_cash_day}
+                  <span className="text-[10px] text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
+                    {t('threshold_breach_on', 'Threshold breach on:')}{' '}
+                    <span className="font-mono">{alertData.low_cash_day}</span>
                   </span>
                 )}
 
                 {alertData.high_severity_count > 0 && (
-                  <span className="text-[10px] font-mono text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
-                    {alertData.high_severity_count} High-Severity Anomalies
+                  <span className="text-[10px] text-rose-300 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
+                    <span className="font-mono">{alertData.high_severity_count}</span>{' '}
+                    {t('high_severity_anomalies', 'High-Severity Anomalies')}
                   </span>
                 )}
               </div>
 
               <h3 className="text-sm sm:text-base font-bold font-secondary text-white leading-snug">
-                {alertData.headline}
+                {translateGeminiContent(alertData.headline)}
               </h3>
 
               <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                {alertData.message}
+                {translateGeminiContent(alertData.message)}
               </p>
             </div>
           </div>
@@ -176,7 +190,7 @@ ${bodyText}
               }`}
             >
               <IconAiSparkle className="size-4" />
-              <span>{alertData.action_label}</span>
+              <span>{translateGeminiContent(alertData.action_label)}</span>
               <span>→</span>
             </button>
 
@@ -209,14 +223,17 @@ ${bodyText}
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-base font-bold font-secondary text-white">
-                      Autonomous Agent Collection Draft
+                      {t('modal_agent_draft', 'Autonomous Agent Collection Draft')}
                     </h3>
                     <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded-full font-semibold">
-                      Gemini Synthesized
+                      {t('modal_gemini_synth', 'Gemini Synthesized')}
                     </span>
                   </div>
                   <p className="text-xs text-text-dark">
-                    Automated debt settlement notice with early-pay discount &amp; wire routing
+                    {t(
+                      'modal_debt_settlement',
+                      'Automated debt settlement notice with early-pay discount & wire routing'
+                    )}
                   </p>
                 </div>
               </div>
@@ -234,7 +251,12 @@ ${bodyText}
             {sentSuccess && (
               <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-3 animate-fadeIn">
                 <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Notice successfully queued and transmitted to target accounts payable server!</span>
+                <span>
+                  {t(
+                    'modal_notice_success',
+                    'Notice successfully queued and transmitted to target accounts payable server!'
+                  )}
+                </span>
               </div>
             )}
 
@@ -242,7 +264,9 @@ ${bodyText}
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-text-dark font-medium mb-1">Recipient (AP Contact):</label>
+                  <label className="block text-text-dark font-medium mb-1">
+                    {t('modal_recipient', 'Recipient (AP Contact):')}
+                  </label>
                   <input
                     type="email"
                     value={toEmail}
@@ -251,18 +275,22 @@ ${bodyText}
                   />
                 </div>
                 <div>
-                  <label className="block text-text-dark font-medium mb-1">Target Invoice &amp; Value:</label>
+                  <label className="block text-text-dark font-medium mb-1">
+                    {t('modal_target_invoice', 'Target Invoice & Value:')}
+                  </label>
                   <div className="bg-white/5 border border-border rounded-xl px-3.5 py-2 text-white font-mono flex justify-between items-center">
                     <span>{alertData.target_invoice?.invoice_id || 'INV-0203'}</span>
                     <span className="text-primary font-bold">
-                      ${alertData.target_invoice?.amount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      ${alertData.target_invoice?.amount?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-text-dark font-medium mb-1">Subject Line:</label>
+                <label className="block text-text-dark font-medium mb-1">
+                  {t('modal_subject', 'Subject Line:')}
+                </label>
                 <input
                   type="text"
                   value={subject}
@@ -273,8 +301,10 @@ ${bodyText}
 
               <div>
                 <label className="block text-text-dark font-medium mb-1 flex items-center justify-between">
-                  <span>Executive Email Body (Editable):</span>
-                  <span className="text-[10px] text-text-dark">Includes 2% wire settlement incentive</span>
+                  <span>{t('modal_body_title', 'Executive Email Body (Editable):')}</span>
+                  <span className="text-[10px] text-text-dark">
+                    {t('modal_wire_incentive', 'Includes 2% wire settlement incentive')}
+                  </span>
                 </label>
                 <textarea
                   rows={8}
@@ -293,14 +323,14 @@ ${bodyText}
                   onClick={handleCopy}
                   className="px-3 py-2 rounded-xl text-xs bg-white/5 hover:bg-white/10 border border-border text-text-dark hover:text-white transition-colors cursor-pointer"
                 >
-                  {copied ? '✓ Copied Draft' : 'Copy Text'}
+                  {copied ? t('modal_copied_draft', '✓ Copied Draft') : t('modal_copy_text', 'Copy Text')}
                 </button>
                 <button
                   type="button"
                   onClick={handleDownload}
                   className="px-3 py-2 rounded-xl text-xs bg-white/5 hover:bg-white/10 border border-border text-text-dark hover:text-white transition-colors cursor-pointer"
                 >
-                  Download .txt
+                  {t('modal_download_txt', 'Download .txt')}
                 </button>
               </div>
 
@@ -310,7 +340,7 @@ ${bodyText}
                   onClick={() => setModalOpen(false)}
                   className="btn btn-outline btn-sm text-xs py-2 px-4 flex-1 sm:flex-none cursor-pointer"
                 >
-                  Cancel
+                  {t('modal_cancel', 'Cancel')}
                 </button>
                 <button
                   type="button"
@@ -318,7 +348,7 @@ ${bodyText}
                   disabled={sentSuccess}
                   className="btn btn-primary btn-sm text-xs py-2 px-5 flex-1 sm:flex-none flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
-                  <span>⚡ Transmit Notice</span>
+                  <span>{t('modal_transmit', '⚡ Transmit Notice')}</span>
                 </button>
               </div>
             </div>

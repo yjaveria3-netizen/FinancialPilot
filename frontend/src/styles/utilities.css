@@ -25,7 +25,7 @@
 @utility gradient-border {
   background:
     linear-gradient(var(--color-body), var(--color-body)) padding-box,
-    linear-gradient(to right, darkblue, darkorchid) border-box;
+    linear-gradient(to right, var(--color-border), var(--color-primary)) border-box;
   border-radius: 12px;
   border: 4px solid transparent;
   animation: gradientAnimation 3s ease infinite;
