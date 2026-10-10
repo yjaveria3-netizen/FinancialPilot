@@ -226,7 +226,7 @@ export default function DashboardMetrics() {
         </div>
 
         {/* Cross-Module Quick Jump Hub */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Link
             to="/anomaly-guard"
             className="p-4 rounded-2xl bg-light/80 border border-border hover:border-rose-500/50 transition-all flex items-center gap-3.5 group cursor-pointer"
@@ -315,26 +315,7 @@ export default function DashboardMetrics() {
             </div>
           </Link>
 
-          <Link
-            to="/whatsapp-collector"
-            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-emerald-500/50 transition-all flex items-center gap-3.5 group cursor-pointer"
-            title="Automated WhatsApp payment reminders & one-click reconciliation"
-          >
-            <div className="size-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <IconWhatsApp className="size-5" />
-            </div>
-            <div className="overflow-hidden flex-1">
-              <div className="text-xs font-semibold text-white group-hover:text-emerald-400 transition-colors flex items-center justify-between">
-                <span>{t('module_whatsapp', 'WhatsApp Agent')}</span>
-                <span className="text-[10px] text-emerald-400 font-mono">
-                  {t('badge_ai_collections', 'AI Collections')}
-                </span>
-              </div>
-              <div className="text-[11px] text-text-dark truncate">
-                {t('module_whatsapp_sub', 'Overdue reminders & cash')}
-              </div>
-            </div>
-          </Link>
+
         </div>
 
         {/* Top 4 Metric Cards — Clickable with Skeleton Loading & Electric Current Hover */}

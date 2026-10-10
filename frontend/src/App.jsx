@@ -22,6 +22,7 @@ import {
   IconAccountantPortal,
   IconCfoChat,
   IconScanInvoice,
+  IconWhatsApp,
 } from './components/Icons';
 import { LanguageProvider } from './context/LanguageContext';
 
@@ -65,9 +66,27 @@ export default function App() {
           {/* 11. Accountant & Lender Portal */}
           <Route path="accountant-portal" element={<AccountantPortal />} />
 
-          {/* 12. WhatsApp Automated Collection Agent */}
-          <Route path="whatsapp-collector" element={<WhatsAppCollector />} />
-          <Route path="whatsapp-agent" element={<WhatsAppCollector />} />
+          {/* 12. WhatsApp Automated Collection Agent (Disabled) */}
+          <Route
+            path="whatsapp-collector"
+            element={
+              <ComingSoon
+                title="WhatsApp Collection Agent (Disabled)"
+                icon={<IconWhatsApp className="size-10 text-secondary-light opacity-50" />}
+                assignee="Feature Disabled"
+              />
+            }
+          />
+          <Route
+            path="whatsapp-agent"
+            element={
+              <ComingSoon
+                title="WhatsApp Collection Agent (Disabled)"
+                icon={<IconWhatsApp className="size-10 text-secondary-light opacity-50" />}
+                assignee="Feature Disabled"
+              />
+            }
+          />
 
           {/* 12. AI CFO Chat */}
           <Route path="cfo-chat" element={<CfoChatPage />} />

@@ -156,13 +156,6 @@ export default function Header() {
           desc: t('desc_scenario', 'Monte Carlo what-if cash flow simulation models'),
           live: true,
         },
-        {
-          name: t('nav_whatsapp', 'WhatsApp Collection Agent'),
-          to: '/whatsapp-collector',
-          Icon: IconWhatsApp,
-          desc: t('desc_whatsapp', 'AI-automated overdue follow-ups & 1-click cash reconciliation'),
-          live: true,
-        },
       ],
     },
     {
