@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage';
 import CashFlowPage from './pages/CashFlowPage';
 import CreditScorePage from './pages/CreditScorePage';
 import ComingSoon from './pages/ComingSoon';
+import { ProcurePage, InventoryPage, PricingPage, NegotiationPage, CfoChatPage } from './pages/BPages';
 import {
   IconAnomalyGuard,
   IconTaxAssistant,
@@ -70,52 +71,16 @@ export default function App() {
           />
 
           {/* 7. ProcureAI */}
-          <Route
-            path="procure-ai"
-            element={
-              <ComingSoon
-                title="ProcureAI"
-                icon={<IconProcureAi className="size-10 text-primary" />}
-                assignee="Procurement Intelligence"
-              />
-            }
-          />
+          <Route path="procure-ai" element={<ProcurePage />} />
 
           {/* 8. Inventory Alerts */}
-          <Route
-            path="inventory"
-            element={
-              <ComingSoon
-                title="Inventory Alerts"
-                icon={<IconInventory className="size-10 text-primary" />}
-                assignee="Supply Chain Intelligence"
-              />
-            }
-          />
+          <Route path="inventory" element={<InventoryPage />} />
 
           {/* 9. Pricing Advisor */}
-          <Route
-            path="pricing-advisor"
-            element={
-              <ComingSoon
-                title="Pricing Advisor"
-                icon={<IconPricingAdvisor className="size-10 text-primary" />}
-                assignee="Revenue Optimization"
-              />
-            }
-          />
+          <Route path="pricing-advisor" element={<PricingPage />} />
 
           {/* 10. Negotiation Copilot */}
-          <Route
-            path="negotiation-copilot"
-            element={
-              <ComingSoon
-                title="Negotiation Copilot"
-                icon={<IconNegotiation className="size-10 text-primary" />}
-                assignee="Supplier Strategy"
-              />
-            }
-          />
+          <Route path="negotiation-copilot" element={<NegotiationPage />} />
 
           {/* 11. Accountant & Lender Portal */}
           <Route
@@ -130,16 +95,7 @@ export default function App() {
           />
 
           {/* 12. AI CFO Chat */}
-          <Route
-            path="cfo-chat"
-            element={
-              <ComingSoon
-                title="AI CFO Chat"
-                icon={<IconCfoChat className="size-10 text-primary" />}
-                assignee="Conversational Intelligence"
-              />
-            }
-          />
+          <Route path="cfo-chat" element={<CfoChatPage />} />
 
           {/* 13. Invoice & Receipt Scanner */}
           <Route

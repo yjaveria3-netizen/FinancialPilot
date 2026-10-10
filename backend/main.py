@@ -30,6 +30,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000"],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -86,31 +87,6 @@ def get_credit_score():
         raise HTTPException(status_code=500, detail=f"Credit score error: {str(e)}")
 
 
-# ── Member B Stubs (to be implemented) ────────────────────────────────────────
-@app.get("/api/procure-ai", tags=["Member B — Procurement & Ops"])
-def get_procure_ai():
-    """[Member B Sprint 1] Procurement AI insights."""
-    raise HTTPException(status_code=501, detail="Not yet implemented — Member B Sprint 1")
-
-
-@app.get("/api/inventory-alerts", tags=["Member B — Procurement & Ops"])
-def get_inventory_alerts():
-    """[Member B Sprint 2] Inventory low-stock alerts."""
-    raise HTTPException(status_code=501, detail="Not yet implemented — Member B Sprint 2")
-
-
-@app.post("/api/cfo-chat", tags=["Member B — Procurement & Ops"])
-def cfo_chat(body: dict):
-    """[Member B Sprint 1] AI CFO Chat interface."""
-    raise HTTPException(status_code=501, detail="Not yet implemented — Member B Sprint 1")
-
-
-# ---- B: Gemini endpoint ----
-from backend.services.gemini import ask
-
-class Prompt(BaseModel):
-    prompt: str
-
-@app.post("/ask")
-def ask_gemini(p: Prompt):
-    return {"answer": ask(p.prompt)}
+# ---- Member B routes ----
+from backend.b_routes import router as b_router
+app.include_router(b_router)
