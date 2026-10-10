@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 """
 FinPilot Backend API Server
 Framework: FastAPI
@@ -39,6 +42,7 @@ app.include_router(whatsapp_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000"],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -194,6 +198,9 @@ def get_credit_score():
         raise HTTPException(status_code=500, detail=f"Credit score error: {str(e)}")
 
 
+# ---- Member B routes ----
+from backend.b_routes import router as b_router
+app.include_router(b_router)
 # ── Member A: Anomaly and Fraud Guard ────────────────────────────────────────
 @app.get("/api/anomalies", tags=["Member A — Risk & Compliance"])
 def get_anomalies():
