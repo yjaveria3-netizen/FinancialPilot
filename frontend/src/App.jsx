@@ -51,7 +51,6 @@ export default function App() {
           <Route path="scenario-planner" element={<ScenarioPlanner />} />
 
           {/* 7. ProcureAI */}
-<<<<<<< HEAD
           <Route path="procure-ai" element={<ProcurePage />} />
 
           {/* 8. Inventory Alerts */}
@@ -62,55 +61,7 @@ export default function App() {
 
           {/* 10. Negotiation Copilot */}
           <Route path="negotiation-copilot" element={<NegotiationPage />} />
-=======
-          <Route
-            path="procure-ai"
-            element={
-              <ComingSoon
-                title="ProcureAI"
-                icon={<IconProcureAi className="size-10 text-secondary-light" />}
-                assignee="Procurement Intelligence"
-              />
-            }
-          />
-
-          {/* 8. Inventory Alerts */}
-          <Route
-            path="inventory"
-            element={
-              <ComingSoon
-                title="Inventory Alerts"
-                icon={<IconInventory className="size-10 text-secondary-light" />}
-                assignee="Supply Chain Intelligence"
-              />
-            }
-          />
-
-          {/* 9. Pricing Advisor */}
-          <Route
-            path="pricing-advisor"
-            element={
-              <ComingSoon
-                title="Pricing Advisor"
-                icon={<IconPricingAdvisor className="size-10 text-secondary-light" />}
-                assignee="Revenue Optimization"
-              />
-            }
-          />
-
-          {/* 10. Negotiation Copilot */}
-          <Route
-            path="negotiation-copilot"
-            element={
-              <ComingSoon
-                title="Negotiation Copilot"
-                icon={<IconNegotiation className="size-10 text-secondary-light" />}
-                assignee="Supplier Strategy"
-              />
-            }
-          />
->>>>>>> dcc951a4e33e7b9e06e3ddb97628aed826089a37
-
+          
           {/* 11. Accountant & Lender Portal */}
           <Route path="accountant-portal" element={<AccountantPortal />} />
 
@@ -119,20 +70,7 @@ export default function App() {
           <Route path="whatsapp-agent" element={<WhatsAppCollector />} />
 
           {/* 12. AI CFO Chat */}
-<<<<<<< HEAD
           <Route path="cfo-chat" element={<CfoChatPage />} />
-=======
-          <Route
-            path="cfo-chat"
-            element={
-              <ComingSoon
-                title="AI CFO Chat"
-                icon={<IconCfoChat className="size-10 text-secondary-light" />}
-                assignee="Conversational Intelligence"
-              />
-            }
-          />
->>>>>>> dcc951a4e33e7b9e06e3ddb97628aed826089a37
 
           {/* 13. Invoice & Receipt Scanner */}
           <Route
