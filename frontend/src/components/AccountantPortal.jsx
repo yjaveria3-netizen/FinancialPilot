@@ -213,12 +213,12 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-secondary/30 text-xs text-secondary-light mb-3 font-semibold">
             <IconAccountantPortal className="size-4" />
             {t('ap_badge', 'GAAP Certified Workpapers • External Underwriting Portal')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
-            {t('ap_title_1', 'Accountant & Lender')} <span className="text-primary font-normal">{t('ap_title_2', 'Portal')}</span>
+            {t('ap_title_1', 'Accountant & Lender')} <span className="text-secondary-light font-normal">{t('ap_title_2', 'Portal')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
             {t('ap_subtitle', 'Read-only external portal for CPA auditors, bank lenders, and credit underwriters')}
@@ -343,7 +343,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
       <div className="rounded-4xl card-electric p-6 lg:p-8 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
           <div>
-            <div className="text-xs uppercase tracking-wider text-primary font-semibold mb-1">
+            <div className="text-xs uppercase tracking-wider text-secondary-light font-semibold mb-1">
               {t('ap_underwriting_lens', 'Active Underwriting Lens:')} {activeRole === 'Auditor' ? t('ap_role_auditor', 'Auditor') : activeRole === 'Lender' ? t('ap_role_lender', 'Lender') : t('ap_role_accountant', 'Accountant')}
             </div>
             <h3 className="text-xl font-bold font-secondary text-white">
@@ -463,7 +463,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
 
                     <div className="pt-3 border-t border-border flex justify-between items-center text-sm font-bold">
                       <span className="text-white">{t('ap_total_current_assets', 'TOTAL CURRENT ASSETS')}</span>
-                      <span className="font-mono text-primary text-base">
+                      <span className="font-mono text-secondary-light text-base">
                         ${bs.assets?.total_current_assets?.toLocaleString()}
                       </span>
                     </div>
@@ -512,7 +512,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
 
                     <div className="pt-3 border-t border-border flex justify-between items-center text-sm font-bold">
                       <span className="text-white">{t('ap_total_liab_equity', 'TOTAL LIABILITIES & EQUITY')}</span>
-                      <span className="font-mono text-primary text-base">
+                      <span className="font-mono text-secondary-light text-base">
                         ${bs.total_liabilities_and_equity?.toLocaleString()}
                       </span>
                     </div>
@@ -558,7 +558,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                   {/* Gross Profit */}
                   <div className="flex justify-between items-center py-2.5 px-3 rounded-xl bg-white/[0.02] font-bold text-white">
                     <span>{t('ap_gross_profit', 'GROSS PROFIT')}</span>
-                    <span className="font-mono text-primary text-sm">${is.gross_profit?.toLocaleString()}</span>
+                    <span className="font-mono text-secondary-light text-sm">${is.gross_profit?.toLocaleString()}</span>
                   </div>
 
                   {/* OpEx Breakdown */}
@@ -631,7 +631,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
 
                   <div className="pt-4 border-t border-border flex justify-between items-center text-sm font-bold text-white">
                     <span>{t('ap_cf_ending', 'Ending Cash & Liquid Reserves')}</span>
-                    <span className="font-mono text-primary text-base">${cf.ending_cash?.toLocaleString()}</span>
+                    <span className="font-mono text-secondary-light text-base">${cf.ending_cash?.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -646,7 +646,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
         <div className="lg:col-span-5 rounded-4xl card-electric p-6 lg:p-8 space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-border">
             <h3 className="text-base font-bold font-secondary text-white">{t('ap_consent_title', 'Data Consent & Sharing Link')}</h3>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/10 text-primary border border-primary/20">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary/15 text-secondary-light border border-secondary/30">
               {t('ap_active_grant', 'Active Grant')}
             </span>
           </div>
@@ -724,7 +724,7 @@ SIGNED AND SEALED VIA FINPILOT DECENTRALIZED DATA CONSENT ENGINE
                     </td>
                     <td className="py-3 px-3">
                       <div className="font-semibold text-white">{entry.actor}</div>
-                      <span className="text-[10px] text-primary">{translateGeminiContent(entry.role)}</span>
+                      <span className="text-[10px] text-secondary-light">{translateGeminiContent(entry.role)}</span>
                     </td>
                     <td className="py-3 px-3 text-zinc-300 text-[11px]">
                       {translateGeminiContent(entry.action)}

@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="flex flex-col gap-1.5 text-text">
         <div>
           <span className="text-text-dark">Projected Balance: </span>
-          <strong className="text-primary font-mono">${d?.projected_balance?.toLocaleString()}</strong>
+          <strong className="text-secondary-light font-mono">${d?.projected_balance?.toLocaleString()}</strong>
         </div>
         <div>
           <span className="text-text-dark">Income: </span>
@@ -47,7 +47,7 @@ const CustomTooltip = ({ active, payload, label }) => {
         </div>
         <div>
           <span className="text-text-dark">Expenses: </span>
-          <span className="text-primary-light font-mono">-${d?.expenses?.toLocaleString()}</span>
+          <span className="text-rose-400 font-mono">-${d?.expenses?.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -143,13 +143,13 @@ export default function DashboardMetrics() {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="section-intro text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-light border border-border text-xs text-primary mb-4 font-semibold tracking-wide uppercase">
-            <span className="size-2 rounded-full bg-primary animate-pulse"></span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-light border border-secondary/40 text-xs text-secondary-light mb-4 font-semibold tracking-wide uppercase">
+            <span className="size-2 rounded-full bg-secondary-light animate-pulse"></span>
             {t('live_engine_status', 'Live Data Engine • Python Backend Connected')}
           </div>
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
             {t('real_time_financial', 'Real-Time Financial')}{' '}
-            <strong className="text-primary font-normal">{t('intelligence_hub', 'Intelligence Hub')}</strong>
+            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">{t('intelligence_hub', 'Intelligence Hub')}</strong>
           </h2>
           <p className="text-text-dark max-w-2xl mx-auto text-base">
             {t(
@@ -203,7 +203,7 @@ export default function DashboardMetrics() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 bg-light/70 border border-border rounded-3xl p-4 backdrop-blur-md">
           <div className="text-sm font-semibold text-white flex items-center gap-2">
             <span>{t('forecast_horizon', 'Forecast Horizon:')}</span>
-            <span className="text-primary font-mono">
+            <span className="text-secondary-light font-mono">
               {days} {t('days_ahead', 'Days Ahead')}
             </span>
           </div>
@@ -275,16 +275,16 @@ export default function DashboardMetrics() {
 
           <Link
             to="/scenario-planner"
-            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-primary/50 transition-all flex items-center gap-3.5 group cursor-pointer"
+            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-secondary/50 transition-all flex items-center gap-3.5 group cursor-pointer"
             title="Run Monte Carlo simulations for sales & cost shocks"
           >
-            <div className="size-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <div className="size-10 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary-light flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <IconScenarioPlanner className="size-5" />
             </div>
             <div className="overflow-hidden flex-1">
-              <div className="text-xs font-semibold text-white group-hover:text-primary transition-colors flex items-center justify-between">
+              <div className="text-xs font-semibold text-white group-hover:text-secondary-light transition-colors flex items-center justify-between">
                 <span>{t('module_scenario', 'Scenario Planner')}</span>
-                <span className="text-[10px] text-primary font-mono">
+                <span className="text-[10px] text-secondary-light font-mono">
                   {t('badge_monte_carlo', 'Monte Carlo')}
                 </span>
               </div>
@@ -347,7 +347,7 @@ export default function DashboardMetrics() {
           >
             <div className="text-xs text-text-dark uppercase font-semibold tracking-wider mb-2 flex items-center justify-between">
               <span>{t('starting_cash', 'Starting Cash')}</span>
-              <IconCashFlow className="size-3.5 text-text-dark group-hover:text-primary transition-colors" />
+              <IconCashFlow className="size-3.5 text-text-dark group-hover:text-secondary-light transition-colors" />
             </div>
             {loadingCash ? (
               <div className="h-9 w-28 bg-white/10 rounded-lg animate-pulse my-1" />
@@ -356,11 +356,11 @@ export default function DashboardMetrics() {
                 ${summary.starting_cash?.toLocaleString() || '0'}
               </div>
             )}
-            <div className="text-xs text-text-dark mt-2 group-hover:text-primary transition-colors flex items-center gap-1">
+            <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
               <span>{t('current_liquid_pos', 'Current liquid position')}</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
             </div>
-            <div className="absolute top-0 right-0 size-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+            <div className="absolute top-0 right-0 size-24 bg-secondary/5 rounded-full blur-xl pointer-events-none"></div>
           </Link>
 
           {/* Card 2: Projected Ending */}
@@ -373,26 +373,20 @@ export default function DashboardMetrics() {
               <span>
                 {t('projected', 'Projected')} ({days}d)
               </span>
-              <IconScenarioPlanner className="size-3.5 text-text-dark group-hover:text-primary transition-colors" />
+              <IconScenarioPlanner className="size-3.5 text-text-dark group-hover:text-secondary-light transition-colors" />
             </div>
             {loadingCash ? (
               <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
             ) : (
-              <div
-                className={`text-2xl lg:text-3xl font-bold font-secondary font-mono ${
-                  (summary.ending_balance || 0) >= (summary.starting_cash || 0)
-                    ? 'text-primary'
-                    : 'text-secondary-light'
-                }`}
-              >
+              <div className="text-2xl lg:text-3xl font-bold font-secondary font-mono text-secondary-light">
                 ${summary.ending_balance?.toLocaleString() || '0'}
               </div>
             )}
-            <div className="text-xs text-text-dark mt-2 group-hover:text-primary transition-colors flex items-center gap-1">
+            <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
               <span>{t('projected_end_bal', 'Projected end balance')}</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
             </div>
-            <div className="absolute top-0 right-0 size-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+            <div className="absolute top-0 right-0 size-24 bg-secondary/5 rounded-full blur-xl pointer-events-none"></div>
           </Link>
 
           {/* Card 3: Avg Daily Income */}
@@ -427,20 +421,20 @@ export default function DashboardMetrics() {
           >
             <div className="text-xs text-text-dark uppercase font-semibold tracking-wider mb-2 flex items-center justify-between">
               <span>{t('pending_invoices', 'Pending Invoices')}</span>
-              <IconAnomalyGuard className="size-3.5 text-text-dark group-hover:text-primary transition-colors" />
+              <IconAnomalyGuard className="size-3.5 text-text-dark group-hover:text-secondary-light transition-colors" />
             </div>
             {loadingCash ? (
               <div className="h-9 w-32 bg-white/10 rounded-lg animate-pulse my-1" />
             ) : (
-              <div className="text-2xl lg:text-3xl font-bold font-secondary text-primary font-mono">
+              <div className="text-2xl lg:text-3xl font-bold font-secondary text-secondary-light font-mono">
                 ${summary.pending_invoices?.toLocaleString() || '0'}
               </div>
             )}
-            <div className="text-xs text-text-dark mt-2 group-hover:text-primary transition-colors flex items-center gap-1">
+            <div className="text-xs text-text-dark mt-2 group-hover:text-secondary-light transition-colors flex items-center gap-1">
               <span>{t('unpaid_bills', 'Unpaid & overdue bills')}</span>
               <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
             </div>
-            <div className="absolute top-0 right-0 size-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+            <div className="absolute top-0 right-0 size-24 bg-secondary/5 rounded-full blur-xl pointer-events-none"></div>
           </Link>
         </div>
 
@@ -459,12 +453,12 @@ export default function DashboardMetrics() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+                  <span className="text-xs font-mono text-secondary-light bg-secondary/10 border border-secondary/20 px-3 py-1 rounded-full">
                     {days} {t('day_window', 'Day Window')}
                   </span>
                   <Link
                     to="/cash-flow"
-                    className="text-xs text-text-dark hover:text-primary transition-colors hidden sm:inline"
+                    className="text-xs text-text-dark hover:text-secondary-light transition-colors hidden sm:inline"
                   >
                     {t('forecaster_tool', 'Forecaster')} ↗
                   </Link>
@@ -494,8 +488,8 @@ export default function DashboardMetrics() {
                     <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="finpilotGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#DA7B93" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#DA7B93" stopOpacity={0.0} />
+                          <stop offset="5%" stopColor="#3FBFA8" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#3FBFA8" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#4D2330" opacity={0.6} />
@@ -512,11 +506,11 @@ export default function DashboardMetrics() {
                         width={50}
                       />
                       <Tooltip content={<CustomTooltip />} />
-                      <ReferenceLine y={5000} stroke="#DA7B93" strokeDasharray="3 3" />
+                      <ReferenceLine y={5000} stroke="#EF4444" strokeDasharray="3 3" />
                       <Area
                         type="monotone"
                         dataKey="projected_balance"
-                        stroke="#DA7B93"
+                        stroke="#3FBFA8"
                         strokeWidth={2.5}
                         fill="url(#finpilotGrad)"
                       />
@@ -528,7 +522,7 @@ export default function DashboardMetrics() {
 
             <div className="pt-4 border-t border-border/50 flex items-center justify-between text-xs text-text-dark">
               <span>{t('buffer_threshold', 'Red dashed indicator = $5,000 liquidity buffer threshold')}</span>
-              <Link to="/cash-flow" className="text-primary hover:underline font-medium">
+              <Link to="/cash-flow" className="text-secondary-light hover:underline font-medium">
                 {t('detailed_simulation', 'Detailed 90-Day Simulation')} →
               </Link>
             </div>
@@ -537,25 +531,25 @@ export default function DashboardMetrics() {
           {/* Credit Score Gauge & Breakdown (1 col) — Organic Floating Card with Electric Current */}
           <div className="rounded-4xl card-electric p-8 flex flex-col justify-between relative overflow-hidden group">
             {/* Ambient Corner Plasma Glows */}
-            <div className="absolute -top-24 -right-24 size-48 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 size-48 bg-primary-light/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-24 -right-24 size-48 bg-secondary/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 size-48 bg-secondary-light/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                  <div className="size-2 rounded-full bg-primary shadow-[0_0_8px_#DA7B93] animate-pulse" />
+                  <div className="size-2 rounded-full bg-secondary-light shadow-[0_0_8px_#3FBFA8] animate-pulse" />
                   <h3 className="text-lg font-bold text-white font-secondary">
                     {t('credit_readiness', 'Credit Readiness')}
                   </h3>
                 </div>
                 <Link
                   to="/credit-score"
-                  className="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 to-primary-light/20 text-white/90 border border-primary/30 font-semibold hover:border-primary/60 hover:shadow-[0_0_12px_rgba(218,123,147,0.35)] transition-all cursor-pointer inline-flex items-center gap-1 group/btn"
+                  className="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-secondary/20 to-secondary-light/20 text-white/90 border border-secondary/30 font-semibold hover:border-secondary/60 hover:shadow-[0_0_12px_rgba(63,191,168,0.35)] transition-all cursor-pointer inline-flex items-center gap-1 group/btn"
                 >
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-light to-primary">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-secondary-light to-secondary">
                     {t('score_engine', 'Score Engine')}
                   </span>
-                  <span className="text-primary group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform">↗</span>
+                  <span className="text-secondary-light group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform">↗</span>
                 </Link>
               </div>
 
@@ -609,12 +603,12 @@ export default function DashboardMetrics() {
             <div className="mt-6 pt-4 border-t border-border/50 text-center relative z-10">
               <Link
                 to="/credit-score"
-                className="text-xs font-semibold text-primary hover:text-white transition-all inline-flex items-center gap-1.5 group/link py-1.5 px-4 rounded-full hover:bg-primary/10 border border-transparent hover:border-primary/25"
+                className="text-xs font-semibold text-secondary-light hover:text-white transition-all inline-flex items-center gap-1.5 group/link py-1.5 px-4 rounded-full hover:bg-secondary/10 border border-transparent hover:border-secondary/25"
               >
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-light to-primary">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-secondary-light to-secondary">
                   {t('view_pillars_tips', 'View 4 Underwriting Pillars & Tips')}
                 </span>
-                <span className="text-primary group-hover/link:translate-x-1 transition-transform">→</span>
+                <span className="text-secondary-light group-hover/link:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
           </div>
@@ -623,8 +617,8 @@ export default function DashboardMetrics() {
         {/* Gemini Executive Summary & Advice */}
         <div className="rounded-4xl card-electric p-8 relative overflow-hidden">
           <div className="flex items-center gap-3 mb-4">
-            <div className="size-8 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-              <IconAiSparkle className="size-4 text-primary" />
+            <div className="size-8 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary-light font-bold text-sm">
+              <IconAiSparkle className="size-4 text-secondary-light" />
             </div>
             <div>
               <h4 className="text-base font-bold text-white font-secondary">
@@ -640,7 +634,7 @@ export default function DashboardMetrics() {
             <div className="bg-dark/40 rounded-2xl p-5 border border-border/40">
               <strong className="text-white block mb-2 font-semibold flex items-center justify-between">
                 <span>{t('cash_exec_summary', 'Cash Flow Executive Summary:')}</span>
-                <Link to="/cash-flow" className="text-xs text-primary font-normal hover:underline">
+                <Link to="/cash-flow" className="text-xs text-secondary-light font-normal hover:underline">
                   {t('forecaster_tool', 'Forecaster')} →
                 </Link>
               </strong>
@@ -649,7 +643,7 @@ export default function DashboardMetrics() {
             <div className="bg-dark/40 rounded-2xl p-5 border border-border/40">
               <strong className="text-white block mb-2 font-semibold flex items-center justify-between">
                 <span>{t('credit_opt_tips', 'Credit Score Optimization Tips:')}</span>
-                <Link to="/credit-score" className="text-xs text-primary font-normal hover:underline">
+                <Link to="/credit-score" className="text-xs text-secondary-light font-normal hover:underline">
                   {t('score_engine', 'Scorecard')} →
                 </Link>
               </strong>

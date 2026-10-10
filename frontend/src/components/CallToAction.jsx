@@ -7,10 +7,10 @@ export default function CallToAction() {
   return (
     <section className="section py-20 relative overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="rounded-4xl bg-light border border-border p-10 sm:p-16 text-center relative overflow-hidden shadow-2xl hover:border-[#DA7B93]/60 hover:shadow-[0_0_35px_rgba(218,123,147,0.35)] transition-all duration-300">
+        <div className="rounded-4xl bg-light border border-border p-10 sm:p-16 text-center relative overflow-hidden shadow-2xl hover:border-secondary/60 hover:shadow-[0_0_35px_rgba(63,191,168,0.35)] transition-all duration-300">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-secondary text-white mb-6 max-w-2xl mx-auto leading-tight">
             {t('cta_heading_1', 'Ready to Stop Flying Blind on Your')}{' '}
-            <span className="text-primary font-normal">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">
               {t('cta_heading_2', 'Business Finances?')}
             </span>
           </h2>

@@ -55,7 +55,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="ProcureAI"
-                icon={<IconProcureAi className="size-10 text-primary" />}
+                icon={<IconProcureAi className="size-10 text-secondary-light" />}
                 assignee="Procurement Intelligence"
               />
             }
@@ -67,7 +67,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="Inventory Alerts"
-                icon={<IconInventory className="size-10 text-primary" />}
+                icon={<IconInventory className="size-10 text-secondary-light" />}
                 assignee="Supply Chain Intelligence"
               />
             }
@@ -79,7 +79,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="Pricing Advisor"
-                icon={<IconPricingAdvisor className="size-10 text-primary" />}
+                icon={<IconPricingAdvisor className="size-10 text-secondary-light" />}
                 assignee="Revenue Optimization"
               />
             }
@@ -91,7 +91,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="Negotiation Copilot"
-                icon={<IconNegotiation className="size-10 text-primary" />}
+                icon={<IconNegotiation className="size-10 text-secondary-light" />}
                 assignee="Supplier Strategy"
               />
             }
@@ -110,7 +110,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="AI CFO Chat"
-                icon={<IconCfoChat className="size-10 text-primary" />}
+                icon={<IconCfoChat className="size-10 text-secondary-light" />}
                 assignee="Conversational Intelligence"
               />
             }
@@ -122,7 +122,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="Invoice & Receipt Scanner"
-                icon={<IconScanInvoice className="size-10 text-primary" />}
+                icon={<IconScanInvoice className="size-10 text-secondary-light" />}
                 assignee="OCR Vision Ingestion"
               />
             }
@@ -134,7 +134,7 @@ export default function App() {
             element={
               <ComingSoon
                 title="Page Not Found"
-                icon={<span className="text-2xl font-bold font-secondary text-primary">404</span>}
+                icon={<span className="text-2xl font-bold font-secondary text-secondary-light">404</span>}
                 assignee="Navigation"
               />
             }

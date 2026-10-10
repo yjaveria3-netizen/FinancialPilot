@@ -56,7 +56,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-border/80 mb-6">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary">
+            <div className="size-10 rounded-2xl bg-secondary/20 border border-secondary/35 flex items-center justify-center text-secondary-light">
               <IconScanInvoice className="size-5" />
             </div>
             <div>
@@ -82,11 +82,11 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
         {/* Upload Dropzone */}
         {!scannedResult && !scanning && (
           <div className="space-y-6">
-            <label className="border-2 border-dashed border-border hover:border-primary/60 rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-dark/40 group">
-              <span className="mb-3 group-hover:scale-110 transition-transform text-primary">
+            <label className="border-2 border-dashed border-border hover:border-secondary/60 rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-dark/40 group">
+              <span className="mb-3 group-hover:scale-110 transition-transform text-secondary-light">
                 <IconUploadCloud className="size-10" />
               </span>
-              <span className="text-sm font-semibold text-white group-hover:text-primary transition-colors">
+              <span className="text-sm font-semibold text-white group-hover:text-secondary-light transition-colors">
                 {t('scan_dropzone', 'Drop invoice or receipt here, or browse')}
               </span>
               <span className="text-xs text-text-dark mt-1">
@@ -109,17 +109,17 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                 <button
                   type="button"
                   onClick={() => simulateScan('acme_freight_october.pdf')}
-                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-[#DA7B93]/60"
+                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-secondary/60"
                 >
-                  <IconLightning className="size-3.5 text-secondary" />
+                  <IconLightning className="size-3.5 text-secondary-light" />
                   <span>{t('scan_sample_1', 'Acme Freight Bill ($3,480)')}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => simulateScan('aws_cloud_servers.pdf')}
-                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-[#DA7B93]/60"
+                  className="btn btn-outline btn-sm text-xs py-1.5 px-3 flex items-center gap-1.5 cursor-pointer hover:border-secondary/60"
                 >
-                  <IconLightning className="size-3.5 text-secondary" />
+                  <IconLightning className="size-3.5 text-secondary-light" />
                   <span>{t('scan_sample_2', 'Cloud Infrastructure ($1,850)')}</span>
                 </button>
               </div>
@@ -130,9 +130,9 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
         {/* Scanning Animation */}
         {scanning && (
           <div className="py-16 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="relative size-20 rounded-2xl bg-dark/80 border border-primary/50 flex items-center justify-center overflow-hidden">
-              <IconScanInvoice className="size-8 text-primary" />
-              <div className="absolute inset-x-0 h-1 bg-primary animate-pulse top-1/2 -translate-y-1/2 shadow-lg shadow-primary" />
+            <div className="relative size-20 rounded-2xl bg-dark/80 border border-secondary/50 flex items-center justify-center overflow-hidden">
+              <IconScanInvoice className="size-8 text-secondary-light" />
+              <div className="absolute inset-x-0 h-1 bg-secondary animate-pulse top-1/2 -translate-y-1/2 shadow-lg shadow-secondary" />
             </div>
             <div>
               <div className="text-sm font-bold text-white">
@@ -196,7 +196,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                   ))}
                   <div className="flex justify-between font-bold text-sm text-white pt-2 border-t border-border/40">
                     <span>{t('scan_total_amount', 'Total Amount')}</span>
-                    <span className="text-primary font-mono font-bold">
+                    <span className="text-secondary-light font-mono font-bold">
                       ${scannedResult.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   </div>
@@ -209,7 +209,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={() => setScannedResult(null)}
-                className="btn btn-outline btn-sm text-xs cursor-pointer hover:border-[#DA7B93]/60"
+                className="btn btn-outline btn-sm text-xs cursor-pointer hover:border-secondary/60"
               >
                 {t('scan_another', 'Scan Another')}
               </button>
@@ -219,7 +219,7 @@ export default function InvoiceScannerModal({ isOpen, onClose }) {
                   alert(t('scan_recorded_alert', 'Invoice successfully recorded to /backend/data/invoices.csv!'));
                   onClose();
                 }}
-                className="btn btn-primary btn-sm text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-primary/20 hover:border-[#DA7B93]/60"
+                className="btn btn-primary btn-sm text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-secondary/20 hover:border-secondary/60"
               >
                 <IconCheck className="size-3.5" />
                 <span>{t('scan_confirm_sync', 'Confirm & Sync to Ledger')}</span>

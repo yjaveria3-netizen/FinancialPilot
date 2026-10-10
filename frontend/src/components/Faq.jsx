@@ -42,7 +42,7 @@ export default function Faq() {
         <div className="section-intro text-center mb-12">
           <h2 className="text-h3 lg:text-h2 font-secondary font-bold text-white mb-4">
             {t('faq_heading_1', 'Frequently Asked')}{' '}
-            <strong className="text-primary font-normal">
+            <strong className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">
               {t('faq_heading_2', 'Questions')}
             </strong>
           </h2>
@@ -58,7 +58,7 @@ export default function Faq() {
           {faqs.map((f, i) => (
             <div
               key={f.q}
-              className="rounded-3xl bg-light border border-border overflow-hidden hover:border-[#DA7B93]/60 hover:shadow-[0_0_25px_rgba(218,123,147,0.35)] transition-all duration-300"
+              className="rounded-3xl bg-light border border-border overflow-hidden hover:border-secondary/60 hover:shadow-[0_0_25px_rgba(63,191,168,0.35)] transition-all duration-300"
             >
               <button
                 type="button"
@@ -66,7 +66,7 @@ export default function Faq() {
                 className="w-full p-6 text-left flex items-center justify-between text-white font-semibold font-secondary text-base cursor-pointer"
               >
                 <span>{f.q}</span>
-                <span className="text-primary text-xl font-mono">{openIdx === i ? '−' : '+'}</span>
+                <span className="text-secondary-light text-xl font-mono">{openIdx === i ? '−' : '+'}</span>
               </button>
               {openIdx === i && (
                 <div className="px-6 pb-6 text-sm text-slate-300 leading-relaxed border-t border-border/40 pt-4">

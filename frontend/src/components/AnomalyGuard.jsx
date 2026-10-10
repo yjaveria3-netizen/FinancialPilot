@@ -128,10 +128,10 @@ export default function AnomalyGuard() {
 
   // Category Badge Styling
   const renderCategoryBadge = (category) => {
-    let colorClasses = 'text-primary bg-primary/10 border-primary/20';
+    let colorClasses = 'text-secondary-light bg-secondary/15 border-secondary/30';
     let catLabel = category;
     if (category === 'Duplicate') {
-      colorClasses = 'text-primary-light bg-primary/10 border-primary/20';
+      colorClasses = 'text-secondary-light bg-secondary/15 border-secondary/30';
       catLabel = t('ag_filter_dup', 'Duplicate Invoices');
     }
     if (category === 'Unusual Payment') {
@@ -139,7 +139,7 @@ export default function AnomalyGuard() {
       catLabel = t('ag_filter_pay', 'Unusual Payments');
     }
     if (category === 'Price Spike') {
-      colorClasses = 'text-primary bg-primary/10 border-primary/20';
+      colorClasses = 'text-secondary-light bg-secondary/15 border-secondary/30';
       catLabel = t('ag_filter_price', 'Price Spikes');
     }
 
@@ -155,13 +155,13 @@ export default function AnomalyGuard() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-secondary/30 text-xs text-secondary-light mb-3 font-semibold">
             <IconAnomalyGuard className="size-4" />
             {t('ag_badge', 'Audit & Forensic Risk Engine')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
             {t('ag_title_1', 'Anomaly & Fraud')}{' '}
-            <span className="text-primary font-normal">{t('ag_title_2', 'Guard')}</span>
+            <span className="text-secondary-light font-normal">{t('ag_title_2', 'Guard')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
             {t(
@@ -215,7 +215,7 @@ export default function AnomalyGuard() {
             </div>
           )}
           <div className="text-xs text-text-dark mt-2 flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-primary"></span>
+            <span className="size-1.5 rounded-full bg-secondary-light"></span>
             {t('ag_across_algos', 'Across 3 audit algorithms')}
           </div>
         </div>
@@ -227,12 +227,12 @@ export default function AnomalyGuard() {
           {loading ? (
             <div className="h-9 w-16 bg-white/10 rounded-lg animate-pulse my-1" />
           ) : (
-            <div className="text-3xl font-bold font-secondary text-primary font-mono">
+            <div className="text-3xl font-bold font-secondary text-secondary-light font-mono">
               {stats.highCount}
             </div>
           )}
-          <div className="text-xs text-primary/80 mt-2 flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-primary animate-pulse"></span>
+          <div className="text-xs text-secondary-light/80 mt-2 flex items-center gap-1.5">
+            <span className="size-1.5 rounded-full bg-secondary-light animate-pulse"></span>
             {t('ag_cpa_review', 'Requires immediate CPA review')}
           </div>
         </div>
@@ -299,7 +299,7 @@ export default function AnomalyGuard() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t('ag_search', 'Search reference, vendor, reason...')}
-            className="w-full bg-white/5 border border-border rounded-xl px-4 py-2 pl-9 text-xs text-white placeholder-text-dark focus:outline-none focus:border-primary transition-colors"
+            className="w-full bg-white/5 border border-border rounded-xl px-4 py-2 pl-9 text-xs text-white placeholder-text-dark focus:outline-none focus:border-secondary transition-colors"
           />
           <svg className="size-4 text-text-dark absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
@@ -412,7 +412,7 @@ export default function AnomalyGuard() {
                       key={item.id}
                       onClick={() => toggleExpand(item.id)}
                       className={`cursor-pointer transition-colors ${
-                        isExpanded ? 'bg-primary/5' : 'hover:bg-white/[0.03]'
+                        isExpanded ? 'bg-secondary/10' : 'hover:bg-white/[0.03]'
                       } ${isReviewed ? 'opacity-60' : ''}`}
                     >
                       {/* ID & Date */}
@@ -458,7 +458,7 @@ export default function AnomalyGuard() {
                             e.stopPropagation();
                             toggleExpand(item.id);
                           }}
-                          className="text-[11px] text-primary hover:underline mt-1 font-medium inline-flex items-center gap-1 cursor-pointer"
+                          className="text-[11px] text-secondary-light hover:underline mt-1 font-medium inline-flex items-center gap-1 cursor-pointer"
                         >
                           {isExpanded ? t('ag_hide', 'Hide ▲') : t('ag_details', 'Details ▼')}
                         </button>
@@ -472,7 +472,7 @@ export default function AnomalyGuard() {
                           className={`px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer ${
                             isReviewed
                               ? 'bg-secondary/20 text-secondary-light border border-secondary/35'
-                              : 'bg-white/5 text-text-dark border border-border hover:text-white hover:border-primary'
+                              : 'bg-white/5 text-text-dark border border-border hover:text-white hover:border-secondary'
                           }`}
                         >
                           {isReviewed ? t('ag_btn_reviewed', '✓ Reviewed') : t('ag_btn_review', 'Mark Reviewed')}
@@ -497,7 +497,7 @@ export default function AnomalyGuard() {
                 <div className="space-y-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
                     <div className="flex items-center gap-3">
-                      <div className="size-10 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold">
+                      <div className="size-10 rounded-2xl bg-secondary/20 border border-secondary/30 flex items-center justify-center text-secondary-light font-bold">
                         !
                       </div>
                       <div>
@@ -519,7 +519,7 @@ export default function AnomalyGuard() {
                   {/* Deep Reason Container */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 rounded-2xl bg-light border border-border p-5 space-y-3">
-                      <div className="text-xs font-semibold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                      <div className="text-xs font-semibold text-secondary-light uppercase tracking-wider flex items-center gap-1.5">
                         <IconAiSparkle className="size-3.5" />
                         Detailed Algorithmic Audit Reason
                       </div>
@@ -544,15 +544,15 @@ export default function AnomalyGuard() {
                       </div>
                       <ul className="text-xs text-text space-y-2.5">
                         <li className="flex items-start gap-2">
-                          <span className="text-primary mt-0.5">•</span>
+                          <span className="text-secondary-light mt-0.5">•</span>
                           <span>{translateGeminiContent(`Contact ${activeItem.entity} accounts receivable to verify billing schedule.`)}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-primary mt-0.5">•</span>
+                          <span className="text-secondary-light mt-0.5">•</span>
                           <span>{translateGeminiContent('Cross-reference bank ledger remittance slip with approved purchase orders.')}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <span className="text-primary mt-0.5">•</span>
+                          <span className="text-secondary-light mt-0.5">•</span>
                           <span>{translateGeminiContent('Require dual-signature sign-off before releasing pending disbursements.')}</span>
                         </li>
                       </ul>

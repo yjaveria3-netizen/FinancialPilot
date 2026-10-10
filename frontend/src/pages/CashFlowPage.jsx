@@ -22,7 +22,7 @@ const CustomTooltip = ({ active, payload, label, t }) => {
       <div className="flex flex-col gap-1.5 text-text">
         <div>
           <span className="text-text-dark">{t('projected_end_bal', 'Projected Balance')}: </span>
-          <strong className="text-primary font-mono">${d?.projected_balance?.toLocaleString()}</strong>
+          <strong className="text-secondary-light font-mono">${d?.projected_balance?.toLocaleString()}</strong>
         </div>
         <div>
           <span className="text-text-dark">{t('daily_avg_inflow', 'Income')}: </span>
@@ -30,7 +30,7 @@ const CustomTooltip = ({ active, payload, label, t }) => {
         </div>
         <div>
           <span className="text-text-dark">{t('expense_control', 'Expenses')}: </span>
-          <span className="text-primary-light font-mono">-${d?.expenses?.toLocaleString()}</span>
+          <span className="text-secondary-light font-mono">-${d?.expenses?.toLocaleString()}</span>
         </div>
       </div>
     </div>
@@ -69,12 +69,12 @@ export default function CashFlowPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-border text-xs text-primary mb-3 font-semibold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-light border border-secondary/40 text-xs text-secondary-light mb-3 font-semibold">
             {t('cf_badge', 'Predictive Liquidity Engine')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold font-secondary text-white">
             {t('cf_title_1', 'Cash Flow')}{' '}
-            <span className="text-primary font-normal">{t('cf_title_2', 'Forecaster')}</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4EE2C9] via-[#3FBFA8] to-[#80F4E0] font-normal">{t('cf_title_2', 'Forecaster')}</span>
           </h1>
           <p className="text-sm text-text-dark mt-1">
             {t(
@@ -147,8 +147,8 @@ export default function CashFlowPage() {
           <div
             className={`text-2xl font-bold font-secondary font-mono ${
               (summary.ending_balance || 0) >= (summary.starting_cash || 0)
-                ? 'text-primary'
-                : 'text-secondary-light'
+                ? 'text-secondary-light'
+                : 'text-amber-400'
             }`}
           >
             ${summary.ending_balance?.toLocaleString() ?? '—'}
@@ -174,7 +174,7 @@ export default function CashFlowPage() {
           <div className="text-xs text-text-dark uppercase font-semibold mb-2">
             {t('pending_invoices', 'Pending Invoices')}
           </div>
-          <div className="text-2xl font-bold font-secondary text-primary font-mono">
+          <div className="text-2xl font-bold font-secondary text-secondary-light font-mono">
             ${summary.pending_invoices?.toLocaleString() ?? '—'}
           </div>
           <div className="text-xs text-text-dark mt-2">
@@ -198,7 +198,7 @@ export default function CashFlowPage() {
 
         {loading ? (
           <div className="h-80 flex items-center justify-center">
-            <div className="size-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
+            <div className="size-8 rounded-full border-2 border-secondary border-t-transparent animate-spin"></div>
           </div>
         ) : (
           <div className="h-80 w-full">
@@ -241,8 +241,8 @@ export default function CashFlowPage() {
       {/* Gemini AI Executive Analysis */}
       <div className="rounded-4xl card-electric p-8">
         <div className="flex items-center gap-3 mb-4">
-          <div className="size-8 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-            <IconAiSparkle className="size-4 text-primary" />
+          <div className="size-8 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary-light font-bold text-sm">
+            <IconAiSparkle className="size-4 text-secondary-light" />
           </div>
           <div>
             <h4 className="text-base font-bold font-secondary text-white">

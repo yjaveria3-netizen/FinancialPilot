@@ -60,7 +60,7 @@ export default function Logo() {
 
       {/* Brand Text */}
       <span className="font-secondary font-bold text-lg tracking-tight text-white flex items-center gap-1">
-        Financial <span className="text-primary font-extrabold">Pilot</span>
+        Financial <span className="text-secondary-light font-extrabold">Pilot</span>
       </span>
     </div>
   );
