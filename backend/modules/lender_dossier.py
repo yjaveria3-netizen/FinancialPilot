@@ -156,7 +156,7 @@ def _generate_underwriter_memo(
         system_instruction="You are an institutional commercial loan underwriter evaluating middle-market credits.",
     )
 
-    if memo:
+    if memo and "unavailable" not in memo.lower():
         return memo.strip()
 
     return (

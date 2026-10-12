@@ -130,8 +130,28 @@ def forecast_cash(days: int = 30) -> dict:
         "avg_daily_expenses": round(avg_expenses, 2),
     }
 
-    prompt         = cash_forecast_prompt(days, summary)
-    ai_explanation = ask_gemini(prompt)
+    net_change = ending_balance - starting_cash
+    trend = "net liquidity accumulation" if net_change >= 0 else "gradual operational burn"
+    alert_text = (
+        f"Critical Warning: Projected balance dips below the Rs. 5,000 threshold on {low_cash_day}. Immediate collection acceleration is recommended."
+        if low_cash_alert else
+        "Zero liquidity breaches detected; projected cash trajectory remains securely above the minimum reserve threshold throughout the forecast horizon."
+    )
+    fallback_explanation = (
+        f"Executive Liquidity Analysis ({days}-Day Trajectory):\n\n"
+        f"1. Cash Flow Movement: Opening balance of Rs. {starting_cash:,.2f} moves to an ending position of "
+        f"Rs. {ending_balance:,.2f}, indicating a {trend} of Rs. {abs(net_change):,.2f}.\n\n"
+        f"2. Revenue Run-Rate vs Disbursements: Anticipated inflows total Rs. {total_projected_income:,.2f} "
+        f"(avg Rs. {avg_income:,.2f}/day) against projected operating outflows of Rs. {total_projected_expenses:,.2f} "
+        f"(avg Rs. {avg_expenses:,.2f}/day).\n\n"
+        f"3. Working Capital Health: {alert_text} Pending receivables of Rs. {pending_invoices:,.2f} offer "
+        f"additional liquidity buffer upon collection."
+    )
+
+    prompt = cash_forecast_prompt(days, summary)
+    ai_explanation = ask_gemini(prompt, fallback=fallback_explanation)
+    if not ai_explanation or "unavailable" in ai_explanation.lower():
+        ai_explanation = fallback_explanation
 
     return {
         "forecast":       forecast_rows,

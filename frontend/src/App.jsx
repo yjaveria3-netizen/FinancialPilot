@@ -10,6 +10,7 @@ import ScenarioPlanner from './components/ScenarioPlanner';
 import AccountantPortal from './components/AccountantPortal';
 import WhatsAppCollector from './components/WhatsAppCollector';
 import ComingSoon from './pages/ComingSoon';
+import InvoiceScannerPage from './pages/InvoiceScannerPage';
 import { ProcurePage, InventoryPage, PricingPage, NegotiationPage, CfoChatPage } from './pages/BPages';
 import {
   IconAnomalyGuard,
@@ -92,16 +93,7 @@ export default function App() {
           <Route path="cfo-chat" element={<CfoChatPage />} />
 
           {/* 13. Invoice & Receipt Scanner */}
-          <Route
-            path="invoice-scanner"
-            element={
-              <ComingSoon
-                title="Invoice & Receipt Scanner"
-                icon={<IconScanInvoice className="size-10 text-secondary-light" />}
-                assignee="OCR Vision Ingestion"
-              />
-            }
-          />
+          <Route path="invoice-scanner" element={<InvoiceScannerPage />} />
 
           {/* Catch-all */}
           <Route

@@ -58,9 +58,11 @@ def suggest_price(
         + f"You make {rs(profit)} per unit."
     )
     out["reason"] = (ask_safe(
-        "You are a pricing advisor for a small business. Using ONLY these numbers, explain the "
-        f"suggested price in 2 short sentences. Do not invent numbers.\n{out}", fallback)
+        "You are an expert pricing strategist for a manufacturing SME. Using ONLY these numbers, explain the "
+        f"suggested price and strategic rationale in 2 concise sentences. Do not invent numbers.\n{out}", fallback)
         if explain else fallback)
+    out["explanation"] = out["reason"]
+    out["ai_insights"] = out["reason"]
     return out
 
 

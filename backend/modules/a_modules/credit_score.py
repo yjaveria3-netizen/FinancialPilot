@@ -181,12 +181,25 @@ def calculate_credit_score() -> dict:
         {"factor": "Expense Control",     "score": exp_score, "max_score": 20, "explanation": exp_exp},
     ]
 
-    prompt     = credit_score_prompt(total, factors)
-    ai_advice  = ask_gemini(prompt)
+    grade = _grade(total)
+    fallback_advice = (
+        f"Institutional Credit Improvement Advisory (Grade {grade} — Score {total}/100):\n\n"
+        f"1. Revenue Consistency ({rev_score:.1f}/30): {rev_exp}\n"
+        f"2. Operating Margin ({mar_score:.1f}/25): {mar_exp}\n"
+        f"3. Payment Discipline ({pay_score:.1f}/25): {pay_exp}\n"
+        f"4. Expense Control ({exp_score:.1f}/20): {exp_exp}\n\n"
+        f"Key Underwriting Recommendation: To elevate your lending rating to Grade A (85+), focus on converting "
+        f"pending receivables on time and maintaining gross margins above 25%."
+    )
+
+    prompt = credit_score_prompt(total, factors)
+    ai_advice = ask_gemini(prompt, fallback=fallback_advice)
+    if not ai_advice or "unavailable" in ai_advice.lower():
+        ai_advice = fallback_advice
 
     return {
         "score":     total,
-        "grade":     _grade(total),
+        "grade":     grade,
         "factors":   factors,
         "breakdown": breakdown,
         "ai_advice": ai_advice,
