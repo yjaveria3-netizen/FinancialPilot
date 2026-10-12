@@ -12,7 +12,24 @@ from datetime import date, timedelta
 
 import pandas as pd
 
-from ._common import DATA_DIR, rs
+from ._common import DATA_DIR, ask_safe, rs
+
+
+def _inventory_explanation(summary: dict, alerts: list[dict]) -> str:
+    fallback = (
+        f"Inventory Audit: {summary['flagged_items']} of {summary['total_items']} SKUs require operational intervention. "
+        f"Total stock value at risk is {rs(summary['stock_value_at_risk'])}, driven by {summary['expired']} expired and "
+        f"{summary['near_expiry']} near-expiry items. Prioritize discounting slow-moving items to recover working capital, "
+        f"and allocate {rs(summary['reorder_cost'])} to replenish {summary['low_stock']} critical low-stock SKUs before disruption."
+    )
+    prompt = (
+        "You are an expert supply chain and inventory risk advisor for a garment and manufacturing SME. "
+        "Analyze these inventory audit metrics and provide a concise, 2-3 sentence strategic executive assessment. "
+        "Highlight working capital at risk, urgent liquidation priorities, and reorder urgency. Do not make up numbers.\n"
+        f"Audit Summary: {summary}\n"
+        f"Top Flagged Items: {[a['item'] + ' (' + a['status'] + ')' for a in alerts[:3]]}\n"
+    )
+    return ask_safe(prompt, fallback)
 
 
 def _demo_inventory(today: date) -> pd.DataFrame:
@@ -133,9 +150,17 @@ def get_inventory_alerts(expiry_days: int = 30, slow_days: int = 60, today: date
         "stock_value_at_risk": at_risk,
         "reorder_cost": reorder_total,
     }
+    explanation = _inventory_explanation(summary, alerts)
     text = (f"{len(alerts)} of {len(df)} items need attention. Reordering the low-stock items costs "
             f"{rs(reorder_total)}." if alerts else "No items need attention right now.")
-    return {"source": source, "summary": summary, "alerts": alerts, "message": text}
+    return {
+        "source": source,
+        "summary": summary,
+        "alerts": alerts,
+        "message": text,
+        "explanation": explanation,
+        "ai_insights": explanation,
+    }
 
 
 if __name__ == "__main__":

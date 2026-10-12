@@ -123,7 +123,7 @@ def cfo_suggestions():
 @router.get("/api/pricing-advisor", tags=TAG)
 def pricing_advisor(cost: float = Query(..., gt=0), margin: float = Query(0.25, ge=0, le=5),
                     competitor_price: float | None = Query(None, gt=0),
-                    explain: bool = Query(False, description="true = ask Gemini to explain")):
+                    explain: bool = Query(True, description="true = ask Gemini to explain")):
     try:
         return suggest_price(cost, margin, competitor_price, explain=explain)
     except Exception as e:

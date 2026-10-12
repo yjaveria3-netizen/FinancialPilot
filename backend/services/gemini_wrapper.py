@@ -26,13 +26,13 @@ def ask_gemini(
     Returns:
         str: Gemini's text response or fallback string.
     """
-    api_key = os.getenv("GEMINI_API_KEY", "").strip()
+    api_key = (os.getenv("GEMINI_API_KEY") or os.getenv("GEMINI_KEY") or "").strip()
     if not api_key:
-        print("[GeminiWrapper] GEMINI_API_KEY is not set. Using contextual fallback.")
+        print("[GeminiWrapper] Neither GEMINI_API_KEY nor GEMINI_KEY is set. Using contextual fallback.")
         return fallback
 
-    # Support multiple models, default to gemini-1.5-flash
-    model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+    # Support multiple models, default to gemini-3.8-flash
+    model_name = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
     
     full_prompt = f"Instructions: {system_instruction}\n\nTask: {prompt}" if system_instruction else prompt
@@ -58,7 +58,7 @@ def ask_gemini(
             headers={"Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=15) as response:
+        with urllib.request.urlopen(req, timeout=25) as response:
             result = json.loads(response.read().decode("utf-8"))
             candidates = result.get("candidates", [])
             if candidates:
