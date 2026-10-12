@@ -14,13 +14,9 @@ def ask(prompt):
         except Exception:
             pass
     try:
-        resp = ask_gemini(prompt, fallback="")
-        if resp and "unavailable" not in resp.lower():
-            try:
-                json.dump({"a": resp}, open(f, "w", encoding="utf-8"))
-            except Exception:
-                pass
-            return resp
-        return ""
+        client = genai.Client(api_key=os.environ["GEMINI_KEY"])
+        r = client.models.generate_content(model="gemini-3.8-flash", contents=prompt)
+        json.dump({"a": r.text}, open(f, "w"))
+        return r.text
     except Exception:
         return ""

@@ -3,6 +3,12 @@ FinPilot Gemini AI Wrapper
 Shared service for all modules. Uses direct HTTPS REST API to prevent
 gRPC DLL blockages on Windows Application Control environments.
 """
+# --- load backend/.env before reading the key ---
+from pathlib import Path as _P
+from dotenv import load_dotenv as _ld
+_ld(_P(__file__).resolve().parents[1] / '.env')
+# ---
+
 import os
 import json
 import urllib.request
