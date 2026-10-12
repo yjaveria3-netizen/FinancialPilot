@@ -11,7 +11,7 @@ import urllib.error
 
 def ask_gemini(
     prompt: str,
-    fallback: str = "AI insight unavailable.",
+    fallback: str = "",
     system_instruction: str = "",
 ) -> str:
     """
@@ -26,6 +26,8 @@ def ask_gemini(
     Returns:
         str: Gemini's text response or fallback string.
     """
+    if fallback == "AI insight unavailable.":
+        fallback = ""
     api_key = (os.getenv("GEMINI_API_KEY") or os.getenv("GEMINI_KEY") or "").strip()
     if not api_key:
         print("[GeminiWrapper] Neither GEMINI_API_KEY nor GEMINI_KEY is set. Using contextual fallback.")

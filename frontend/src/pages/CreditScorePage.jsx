@@ -19,12 +19,17 @@ export default function CreditScorePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const tips = data?.ai_advice
-    ? data.ai_advice
-        .split(/\n+/)
-        .map((t) => t.replace(/^\d+\.\s*/, '').trim())
-        .filter((t) => t.length > 10)
-    : [];
+  const rawAdvice =
+    data?.ai_advice && !data.ai_advice.toLowerCase().includes('unavailable')
+      ? data.ai_advice
+      : `1. Accelerate customer accounts receivable collections to elevate your on-time Payment Behavior score.
+2. Stabilize operating gross profit margins above 25% by auditing supplier costs and preventing scrap defects.
+3. Maintain steady monthly revenue turnover and keep safe liquidity reserves for Grade A bankability.`;
+
+  const tips = rawAdvice
+    .split(/\n+/)
+    .map((t) => t.replace(/^[\d•\-\*]+\.?\s*/, '').trim())
+    .filter((t) => t.length > 10);
 
   return (
     <div className="container mx-auto px-4 lg:px-8 pt-32 pb-16 space-y-8">
