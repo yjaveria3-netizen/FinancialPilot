@@ -96,5 +96,27 @@ export const disconnectWhatsApp = () =>
 export const launchWhatsAppLoginWindow = () =>
   apiClient.post('/api/whatsapp/launch-login-window').then((r) => r.data);
 
+// ── Member B / Procurement & Operations ────────────────────────────────────
+export const getProcureAi = (params = {}) =>
+  apiClient.get('/api/procure-ai', { params }).then((r) => r.data);
 
+export const simulateProcureAi = (body = {}) =>
+  apiClient.post('/api/procure-ai/simulate', body).then((r) => r.data);
 
+export const getInventoryAlerts = (expiryDays = 30, slowDays = 60) =>
+  apiClient.get('/api/inventory-alerts', { params: { expiry_days: expiryDays, slow_days: slowDays } }).then((r) => r.data);
+
+export const postCfoChat = (question, history = []) =>
+  apiClient.post('/api/cfo-chat', { question, history }).then((r) => r.data);
+
+export const getCfoSuggestions = () =>
+  apiClient.get('/api/cfo-suggestions').then((r) => r.data);
+
+export const getPricingAdvisor = (params = {}) =>
+  apiClient.get('/api/pricing-advisor', { params }).then((r) => r.data);
+
+export const postNegotiation = (body = {}) =>
+  apiClient.post('/api/negotiation', body).then((r) => r.data);
+
+export const getGroupBuying = () =>
+  apiClient.get('/api/group-buying').then((r) => r.data);

@@ -23,7 +23,8 @@ import {
   IconScenarioPlanner,
   IconAccountantPortal,
   IconCashFlow,
-  IconWhatsApp,
+  IconCfoChat,
+  IconProcureAi,
 } from './Icons';
 import RiskBanner from './RiskBanner';
 import ElectricCreditGauge from './ElectricCreditGauge';
@@ -226,25 +227,46 @@ export default function DashboardMetrics() {
         </div>
 
         {/* Cross-Module Quick Jump Hub */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 mb-8">
+          <Link
+            to="/cfo-chat"
+            className="p-3.5 rounded-2xl bg-light/80 border border-border hover:border-violet-500/50 transition-all flex items-center gap-3 group cursor-pointer shadow-sm"
+            title="Converse with autonomous AI CFO on live company cash and credit"
+          >
+            <div className="size-9 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <IconCfoChat className="size-4.5" />
+            </div>
+            <div className="overflow-hidden flex-1">
+              <div className="text-xs font-semibold text-white group-hover:text-violet-300 transition-colors flex items-center justify-between">
+                <span>{t('nav_cfo_chat', 'AI CFO Chat')}</span>
+                <span className="text-[9px] text-violet-400 font-mono">
+                  {t('badge_copilot', 'Copilot')}
+                </span>
+              </div>
+              <div className="text-[10px] text-text-dark truncate">
+                {t('desc_cfo_chat_sub', 'Live financial Q&A')}
+              </div>
+            </div>
+          </Link>
+
           <Link
             to="/anomaly-guard"
-            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-rose-500/50 transition-all flex items-center gap-3.5 group cursor-pointer"
+            className="p-3.5 rounded-2xl bg-light/80 border border-border hover:border-rose-500/50 transition-all flex items-center gap-3 group cursor-pointer shadow-sm"
             title="Inspect detected duplicate invoices and expense outliers"
           >
-            <div className="size-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <IconAnomalyGuard className="size-5" />
+            <div className="size-9 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <IconAnomalyGuard className="size-4.5" />
             </div>
             <div className="overflow-hidden flex-1">
               <div className="text-xs font-semibold text-white group-hover:text-rose-300 transition-colors flex items-center justify-between">
                 <span>{t('module_anomaly', 'Anomaly Guard')}</span>
-                <span className="text-[10px] text-rose-400 font-mono">
+                <span className="text-[9px] text-rose-400 font-mono">
                   {overview.anomaliesCount !== null
                     ? `${overview.anomaliesCount} ${t('badge_flags', 'Flags')}`
                     : t('badge_active', 'Active')}
                 </span>
               </div>
-              <div className="text-[11px] text-text-dark truncate">
+              <div className="text-[10px] text-text-dark truncate">
                 {t('module_anomaly_sub', 'Duplicate & outlier audit')}
               </div>
             </div>
@@ -252,22 +274,22 @@ export default function DashboardMetrics() {
 
           <Link
             to="/tax-assistant"
-            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-emerald-500/50 transition-all flex items-center gap-3.5 group cursor-pointer"
+            className="p-3.5 rounded-2xl bg-light/80 border border-border hover:border-emerald-500/50 transition-all flex items-center gap-3 group cursor-pointer shadow-sm"
             title="View tax liability estimate & upcoming regulatory deadlines"
           >
-            <div className="size-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <IconTaxAssistant className="size-5" />
+            <div className="size-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <IconTaxAssistant className="size-4.5" />
             </div>
             <div className="overflow-hidden flex-1">
               <div className="text-xs font-semibold text-white group-hover:text-emerald-300 transition-colors flex items-center justify-between">
                 <span>{t('module_tax', 'Tax Assistant')}</span>
-                <span className="text-[10px] text-emerald-400 font-mono">
+                <span className="text-[9px] text-emerald-400 font-mono">
                   {overview.nextTax?.days_remaining !== undefined
                     ? `${overview.nextTax.days_remaining}d ${t('badge_due', 'Due')}`
                     : 'IRS 2024'}
                 </span>
               </div>
-              <div className="text-[11px] text-text-dark truncate">
+              <div className="text-[10px] text-text-dark truncate">
                 {t('module_tax_sub', 'Deductions & CPA memo')}
               </div>
             </div>
@@ -275,47 +297,66 @@ export default function DashboardMetrics() {
 
           <Link
             to="/scenario-planner"
-            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-secondary/50 transition-all flex items-center gap-3.5 group cursor-pointer"
+            className="p-3.5 rounded-2xl bg-light/80 border border-border hover:border-secondary/50 transition-all flex items-center gap-3 group cursor-pointer shadow-sm"
             title="Run Monte Carlo simulations for sales & cost shocks"
           >
-            <div className="size-10 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary-light flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <IconScenarioPlanner className="size-5" />
+            <div className="size-9 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary-light flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <IconScenarioPlanner className="size-4.5" />
             </div>
             <div className="overflow-hidden flex-1">
               <div className="text-xs font-semibold text-white group-hover:text-secondary-light transition-colors flex items-center justify-between">
                 <span>{t('module_scenario', 'Scenario Planner')}</span>
-                <span className="text-[10px] text-secondary-light font-mono">
+                <span className="text-[9px] text-secondary-light font-mono">
                   {t('badge_monte_carlo', 'Monte Carlo')}
                 </span>
               </div>
-              <div className="text-[11px] text-text-dark truncate">
-                {t('module_scenario_sub', 'Sales, hiring & price shocks')}
+              <div className="text-[10px] text-text-dark truncate">
+                {t('module_scenario_sub', 'Sales & cost shocks')}
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            to="/procure-ai"
+            className="p-3.5 rounded-2xl bg-light/80 border border-border hover:border-violet-500/50 transition-all flex items-center gap-3 group cursor-pointer shadow-sm"
+            title="Procurement spend intelligence & supplier timing"
+          >
+            <div className="size-9 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <IconProcureAi className="size-4.5" />
+            </div>
+            <div className="overflow-hidden flex-1">
+              <div className="text-xs font-semibold text-white group-hover:text-violet-300 transition-colors flex items-center justify-between">
+                <span>{t('nav_procure', 'ProcureAI')}</span>
+                <span className="text-[9px] text-violet-400 font-mono">
+                  {t('badge_tco', 'TCO Ops')}
+                </span>
+              </div>
+              <div className="text-[10px] text-text-dark truncate">
+                {t('desc_procure_sub', 'Supplier optimization')}
               </div>
             </div>
           </Link>
 
           <Link
             to="/accountant-portal"
-            className="p-4 rounded-2xl bg-light/80 border border-border hover:border-secondary/50 transition-all flex items-center gap-3.5 group cursor-pointer"
+            className="p-3.5 rounded-2xl bg-light/80 border border-border hover:border-secondary/50 transition-all flex items-center gap-3 group cursor-pointer shadow-sm"
             title="Access external auditor & lender verified portal"
           >
-            <div className="size-10 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <IconAccountantPortal className="size-5" />
+            <div className="size-9 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <IconAccountantPortal className="size-4.5" />
             </div>
             <div className="overflow-hidden flex-1">
               <div className="text-xs font-semibold text-white group-hover:text-secondary transition-colors flex items-center justify-between">
-                <span>{t('module_accountant', 'Accountant Portal')}</span>
-                <span className="text-[10px] text-secondary font-mono">
-                  {t('badge_gaap', 'GAAP Certified')}
+                <span>{t('module_accountant', 'Accountant')}</span>
+                <span className="text-[9px] text-secondary font-mono">
+                  {t('badge_gaap', 'GAAP')}
                 </span>
               </div>
-              <div className="text-[11px] text-text-dark truncate">
+              <div className="text-[10px] text-text-dark truncate">
                 {t('module_accountant_sub', 'Auditor & Lender exports')}
               </div>
             </div>
           </Link>
-
-
         </div>
 
         {/* Top 4 Metric Cards — Clickable with Skeleton Loading & Electric Current Hover */}

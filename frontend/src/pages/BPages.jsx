@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 /* Member B pages. Every number box is editable and recalculates live.
    Backend address: set VITE_API_URL in production, otherwise localhost. */
-const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const API = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/+$/, '');
 
 async function api(path, options) {
   const res = await fetch(API + path, options);
